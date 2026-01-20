@@ -50,5 +50,18 @@
     ],
     "ending_date": null,
     "winner": null
+  },
+  "ALIENS VS ACP": {
+    "name": "ALIENS VS ACP",
+    "date": "Jan 20, 2026",
+    "status": "Declaration Issued",
+    "side_a": [
+      "Aliens"
+    ],
+    "side_b": [
+      "Army of Club Penguin"
+    ],
+    "ending_date": null,
+    "winner": null
   }
 }
