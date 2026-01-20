@@ -105,10 +105,17 @@
             font-size: 0.85rem;
             cursor: pointer;
             transition: 0.2s;
-            width: 100%; /* Fixed width as requested */
+            
+            /* --- ALTERAÇÕES PARA RESPONSIVIDADE E 2 LINHAS --- */
+            width: 100%;             /* Ocupa a largura da coluna em vez de fixo */
             box-sizing: border-box;
-            white-space: nowrap;
-            overflow: hidden;
+            
+            white-space: normal;     /* Permite que o texto "caia" para baixo */
+            height: auto;            /* Altura automática */
+            min-height: 40px;        /* Altura mínima (para cartões de 1 linha) */
+            max-height: 55px;        /* Altura máxima (para impedir que cresça demais) */
+            line-height: 1.2;        /* Espaçamento entre linhas mais apertado */
+            overflow: hidden;        /* Corta o excesso se passar de 2 linhas */
         }
         
         .army-name {
