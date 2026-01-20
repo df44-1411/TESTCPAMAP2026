@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+   <style>
+    /* 1. FORÇAR GRID NO MAPA */
+    .highcharts-container, .highcharts-root, #container {
+        background: transparent !important;
+        background-color: transparent !important;
+        flex: 1;      /* Grow to fill the space */
+        width: 100% !important;  
+        height: 100% !important;
+        display: flex;
+    }
+    .map-wrapper {
+        background-color: #051020 !important;
+        background-image: 
+            linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px) !important;
+        background-size: 40px 40px !important;
+    }
+
+    /* 2. CORRIGIR PONTO VERDE */
+    .status-dot {
+        display: inline-block !important;
+        width: 12px !important;
+        height: 12px !important;
+        background-color: #00ff00 !important;
+        border-radius: 50% !important;
+        box-shadow: 0 0 10px #00ff00 !important;
+        margin-right: 10px;
+    }
+    
+    /* 3. RESETAR O CONTAINER IFRAME */
+    .iframe-container {
+        width: 100%;
+        height: 100%;
+        padding: 0 !important;
+        background: transparent !important;
+        border: none;
+    }
+
+    /* 4. ESTILO DAS ABAS (NOVO) */
+    .sidebar-tabs {
+        display: flex;
+        background: rgba(0,0,0,0.3);
+        border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+    }
+
+    .tab-btn {
+        flex: 1; /* Distribui espaço igualmente */
+        background: transparent;
+        border: none;
+        color: #94a3b8; /* Cor suave */
+        padding: 15px 5px;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.3s;
+    }
+
+    .tab-btn:hover {
+        color: #fff;
+        background: rgba(255,255,255,0.05);
+    }
+
+    .tab-btn.active {
+        color: #00f3ff; /* Neon Blue */
+        border-bottom: 2px solid #00f3ff;
+        background: rgba(0, 243, 255, 0.05);
+    }
+
+    /* Conteúdo das Abas */
+    .tab-content {
+        display: none; /* Escondido por defeito */
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .tab-content.active {
+        display: block; /* Mostra o ativo */
+    }
+
+    /* Placeholder para abas vazias */
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        color: #556;
+        text-align: center;
+        padding: 20px;
+    }
+    .empty-state h3 { margin: 0; color: #00f3ff; }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Club Penguin Armies: The Map</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="map.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div class="logo-section">
+            <h1>CPA: The Map <span style="font-size:0.5em; color:var(--neon-green); vertical-align: super;">LIVE</span></h1>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="active">Map</a>
+            <a href="https://cparmies.org/map-2025/server-map-rules/">Rules</a>
+            <a href="https://cparmies.org/category/top-ten-armies/">Top Tens</a>
+            <a href="https://discord.gg/cparmies">Discord</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        
+        <div class="map-wrapper">
+            <div class="map-header">
+                <span class="status-indicator"><div class="status-dot"></div> SYSTEMS ONLINE</span>
+            </div>
+            <div id="container" style="width:100%; height:100%;"></div>
+        </div>
+
+        <aside class="sidebar">
+    
+    <div class="sidebar-tabs">
+        <button class="tab-btn active" onclick="openTab(event, 'forces')">Active Forces</button>
+        <button class="tab-btn" onclick="openTab(event, 'wealth')">Wealth</button>
+        <button class="tab-btn" onclick="openTab(event, 'war')">Wars</button>
+    </div>
+    
+    <div id="forces" class="tab-content active">
+        <div class="iframe-container">
+            <iframe 
+                id="armyFrame"
+                frameborder="0" 
+                style="width: 100%; height: 100%; display: block;"
+                title="Army Codes">
+            </iframe>
+        </div>
+    </div>
+
+    <div id="wealth" class="tab-content">
+        <div class="iframe-container">
+            <iframe 
+                id="wealthFrame"
+                frameborder="0" 
+                style="width: 100%; height: 100%; display: block;"
+                title="Wealth Leaderboard">
+            </iframe>
+        </div>
+    </div>
+
+    <div id="war" class="tab-content">
+        <div class="iframe-container">
+            <iframe 
+                id="warFrame"
+                frameborder="0" 
+                style="width: 100%; height: 100%; display: block;"
+                title="Active Wars">
+            </iframe>
+        </div>
+    </div>
+    
+    <script>
+        // Calculate timestamp once
+        const timeStamp = new Date().getTime();
+
+        // Apply to Army Frame
+        const armyFrame = document.getElementById('armyFrame');
+        if (armyFrame) {
+            armyFrame.src = "army_code.html?v=" + timeStamp;
+        }
+
+        // Apply to Wealth Frame
+        const wealthFrame = document.getElementById('wealthFrame');
+        if (wealthFrame) {
+            wealthFrame.src = "wealth.html?v=" + timeStamp;
+        }
+
+       // Apply to War Frame
+        const warFrame = document.getElementById('warFrame');
+        if (warFrame) {
+            warFrame.src = "wars.html?v=" + timeStamp;
+        }
+    </script>
+</aside>
+
+    </div>
+
+    <div class="footer-text" style="text-align:center; padding: 10px; color: #555; font-size: 1rem;">
+        UI by df44 | Map by Dino for CPA
+    </div>
+
+    <script src="map.js"></script>
+    
+    <script>
+        // 1. Lógica das Abas
+        function openTab(evt, tabName) {
+            // Esconde todo o conteúdo
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+
+            // Remove a classe "active" de todos os botões
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+
+            // Mostra a aba atual e adiciona "active" ao botão clicado
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // 2. Interação Hover (Mantida)
+        window.addEventListener('message', function(event) {
+            if (!Highcharts.charts || Highcharts.charts.length === 0) return;
+            const chart = Highcharts.charts[0]; 
+
+            if (event.data.type === 'hoverArmy') {
+                const targetArmy = event.data.army.toLowerCase().trim();
+                chart.series[0].points.forEach(point => {
+                    if (!point.controller) {
+                        point.setState('inactive');
+                        return;
+                    }
+                    const mapOwner = point.controller.toLowerCase().trim();
+                    if (mapOwner.includes(targetArmy) || targetArmy.includes(mapOwner)) {
+                        point.setState('hover');
+                        point.graphic.toFront();
+                    } else {
+                        point.setState('inactive');
+                    }
+                });
+            } else if (event.data.type === 'resetMap') {
+                chart.series[0].points.forEach(point => {
+                    point.setState('');
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>

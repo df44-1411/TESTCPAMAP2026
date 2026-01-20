@@ -1,0 +1,362 @@
+/* style.css - Modern CPA Map Design */
+:root {
+    --bg-dark: #050510;
+    --bg-mapp: #003d62;
+    --panel-bg: rgba(20, 25, 40, 0.85);
+    --neon-blue: #00f3ff;
+    --neon-green: #00ff9d;
+    --text-main: #e0e6ed;
+    --text-muted: #94a3b8;
+    --border-color: rgba(0, 243, 255, 0.3);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-dark);
+    /* Padrão de Grelha Tática no Fundo */
+    background-image: 
+        linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    font-family: 'Rajdhani', sans-serif;
+    color: var(--text-main);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    overflow: hidden; /* Evita scroll na página inteira, apenas no mapa se necessário */
+}
+
+/* --- Navigation --- */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    height: 70px;
+    background: rgba(10, 10, 20, 0.95);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+    z-index: 1000;
+}
+
+.logo-section h1 {
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+    background: linear-gradient(90deg, #fff, var(--neon-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: var(--neon-blue);
+    background: rgba(0, 243, 255, 0.1);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+}
+
+/* --- Main Layout --- */
+.dashboard-container {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+    gap: 20px;
+    height: calc(100vh - 70px); /* Restante da altura */
+    box-sizing: border-box;
+}
+
+/* Mapa Container (O "Cartão" Central) */
+.map-wrapper {
+    flex: 3; /* Ocupa 3/4 do espaço */
+    background: var(--bg-mapp);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Headerzinho do Mapa */
+.map-header {
+    padding: 10px 20px;
+    background: rgba(0,0,0,0.3);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--neon-green);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--neon-green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--neon-green);
+}
+
+/* Área onde o Mapa do Highcharts/Leaflet vai viver */
+#map-container {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: transparent; /* Deixa a grid do body aparecer levemente se o mapa for transparente */
+}
+
+/* --- Sidebar (Leaderboard) --- */
+.sidebar {
+    flex: 1; /* Ocupa 1/4 do espaço */
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-width: 250px;
+    user-select: none;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    color: var(--neon-blue);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Exemplo de Cartão de Exército na Sidebar */
+.army-card {
+    background: rgba(255,255,255,0.03);
+    border-left: 3px solid transparent;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+.army-card:hover {
+    background: rgba(255,255,255,0.08);
+    border-left: 3px solid var(--neon-blue);
+}
+
+.army-name {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    user-select: none;
+}
+
+.progress-bar-bg {
+    background: rgba(255,255,255,0.1);
+    height: 6px;
+    border-radius: 3px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: var(--neon-green);
+    width: 70%; /* Exemplo */
+    box-shadow: 0 0 10px var(--neon-green);
+}
+
+/* --- Painel Flutuante (Army Codes/Legend) --- */
+/* Estilo para substituir o painel cinza antigo */
+.floating-panel {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    background: rgba(15, 20, 30, 0.95);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    color: #fff;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.panel-header {
+    background: rgba(0, 243, 255, 0.1);
+    padding: 10px 15px;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    cursor: move; /* Se for arrastável */
+}
+
+/* --- Tooltip Personalizado do Mapa --- */
+/* DESIGN DO TOOLTIP (CARTÃO) */
+.map-tooltip-card {
+    background: rgba(20, 30, 50, 0.95);
+    border: 1px solid rgba(0, 243, 255, 0.2);
+    padding: 10px 15px;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+    backdrop-filter: blur(5px);
+    font-family: 'Rajdhani', sans-serif;
+    color: #e0e6ed;
+    min-width: 200px;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.map-tooltip-header {
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 5px;
+    text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.map-tooltip-info {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #94a3b8;
+}
+
+.map-tooltip-info strong {
+    color: #fff;
+    font-weight: 600;
+}
+
+/* --- ANIMAÇÕES DE ATAQUE (BOMB/NUKE) --- */
+
+/* BOMB: Pisca a vermelho (Alerta de perigo) */
+.bomb-active {
+    animation: blink-red 1s infinite alternate;
+    stroke: #ff0000 !important;
+    stroke-width: 3px !important;
+    fill-opacity: 0.9;
+}
+
+/* NUKE: Pulsação Amarela Radioativa (Toxicidade) */
+.nuke-active {
+    animation: toxic-glow 2s infinite;
+    stroke: #ccff00 !important;
+    stroke-width: 4px !important;
+    fill: #2b331a !important;
+}
+
+@keyframes blink-red {
+    from { stroke: #ff0000; fill: #500000; }
+    to { stroke: #800000; fill: #200000; }
+}
+
+@keyframes toxic-glow {
+    0% { stroke: #ccff00; filter: drop-shadow(0 0 2px #ccff00); }
+    50% { stroke: #ffff00; filter: drop-shadow(0 0 8px #ff0000); }
+    100% { stroke: #ccff00; filter: drop-shadow(0 0 2px #ccff00); }
+}
+
+/* --- HOTSPOT SERVERS --- */
+.hotspot-active {
+    animation: gold-pulse 2s infinite alternate;
+    stroke: #FFD700 !important; /* Dourado */
+    stroke-width: 3px !important;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8)); /* Brilho Dourado */
+}
+
+@keyframes gold-pulse {
+    from { stroke-width: 2px; filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.5)); }
+    to { stroke-width: 4px; filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1)); }
+}
+
+/* --- Mobile Responsiveness --- */
+@media screen and (max-width: 768px) {
+    
+    /* Global box-sizing fix for mobile elements */
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        overflow-y: auto !important; 
+        height: auto !important;
+        display: block; /* Removes flex constraints so content flows naturally */
+    }
+    
+    .dashboard-container {
+        flex-direction: column;
+        padding: 10px; /* Reduced padding from 20px to give more space */
+        gap: 15px;     /* Consistent gap between Map and Sidebar */
+    }
+
+    .map-wrapper, .sidebar {
+        flex: none;
+        width: 100% !important; /* Forces exact same width */
+        margin: 0 !important;   /* Removes any rogue margins */
+        border-radius: 8px;     /* Matches corners */
+    }
+
+    .map-wrapper {
+        height: 50vh; /* Adjust map height (50% of screen) */
+    }
+
+    .sidebar {
+        height: auto;
+        min-height: 400px; /* Ensures sidebar has enough height */
+    }
+    .top-nav {
+        padding: 0 10px; /* Minimal padding on sides */
+        height: 60px;    /* Slightly shorter header */
+    }
+
+    .logo-section h1 {
+        font-size: 1rem; /* Smaller Logo Text */
+        letter-spacing: 0.5px;
+        white-space: nowrap; /* Prevents wrapping */
+    }
+
+    /* Adjust the "LIVE" badge position */
+    .logo-section h1 span {
+        font-size: 0.4em !important; 
+    }
+
+    .nav-links {
+        gap: 8px; /* Tighter gap between links */
+    }
+
+    .nav-links a {
+        font-size: 0.7rem; /* Smaller link text */
+        padding: 4px 6px;  /* Smaller touch targets */
+        letter-spacing: 0; /* Save space */
+    }
+}

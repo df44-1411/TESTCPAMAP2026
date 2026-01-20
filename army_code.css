@@ -1,0 +1,49 @@
+/* army_code.css - Estilo para a lista de exércitos no iframe */
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap');
+
+body {
+    background: transparent;
+    font-family: 'Rajdhani', sans-serif;
+    margin: 0;
+    padding: 5px;
+    overflow-x: hidden; /* Evita scroll horizontal */
+}
+
+/* O Estilo "Cool Box" */
+.army-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(20, 30, 50, 0.8); /* Fundo escuro semi-transparente */
+    border: 1px solid rgba(0, 243, 255, 0.2); /* Borda subtil ciano */
+    border-left-width: 4px; /* A borda colorida fica aqui */
+    margin-bottom: 8px;
+    padding: 10px 15px;
+    border-radius: 4px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    backdrop-filter: blur(4px);
+}
+
+.army-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    background: rgba(30, 40, 60, 0.9);
+}
+
+.army-name {
+    color: #e0e6ed; /* Texto sempre claro para leitura */
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+.army-count {
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    border: 1px solid rgba(255,255,255,0.1);
+}

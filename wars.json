@@ -1,0 +1,54 @@
+{
+  "Second War of Roman Subjugation": {
+    "name": "Second War of Roman Subjugation",
+    "date": "Jan 11, 2026",
+    "status": "Suspended",
+    "side_a": [
+      "Water Vikings"
+    ],
+    "side_b": [
+      "Romans"
+    ],
+    "ending_date": null,
+    "winner": null
+  },
+  "Siege of the Hollow Throne": {
+    "name": "Siege of the Hollow Throne",
+    "date": "Jan 11, 2026",
+    "status": "Declaration Issued",
+    "side_a": [
+      "Templars"
+    ],
+    "side_b": [
+      "Void Troops"
+    ],
+    "ending_date": null,
+    "winner": null
+  },
+  "Operation: First Day Out": {
+    "name": "Operation: First Day Out",
+    "date": "Jan 18, 2026",
+    "status": "Ongoing Conflict",
+    "side_a": [
+      "Teutons"
+    ],
+    "side_b": [
+      "Special Weapons and Tactics"
+    ],
+    "ending_date": null,
+    "winner": null
+  },
+  "ACP vs SR": {
+    "name": "ACP vs SR",
+    "date": "Jan 19, 2026",
+    "status": "Declaration Issued",
+    "side_a": [
+      "Army of Club Penguin"
+    ],
+    "side_b": [
+      "Scarlet Republic"
+    ],
+    "ending_date": null,
+    "winner": null
+  }
+}
