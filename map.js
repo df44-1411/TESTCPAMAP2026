@@ -748,7 +748,7 @@ Highcharts.mapChart('container', {
         buttonOptions: {
             verticalAlign: 'top',
             align: 'left',
-            x: 15,
+            x: 5,
             y: 40,
             width: 20,  
             height: 20, 
