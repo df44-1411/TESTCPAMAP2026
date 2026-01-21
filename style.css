@@ -299,87 +299,81 @@ body {
     to { stroke-width: 4px; filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1)); }
 }
 
-/* --- MOBILE & TABLET (VERTICAL / PORTRAIT) --- */
+/* --- Mobile Responsiveness --- */
 @media screen and (max-width: 1024px) {
     
-    /* 1. Estrutura Flex para fixar Rodapé e Nav */
+    /* 1. Global Reset & Box Sizing */
+    * {
+        box-sizing: border-box;
+    }
+
+    /* 2. Bloquear scroll da página inteira */
     html, body {
-        height: 100dvh;
+        height: 100%;
         margin: 0;
         padding: 0;
         overflow: hidden !important; 
-        display: flex !important;
-        flex-direction: column;
     }
 
-    /* 2. Nav fica fixa no topo */
+    /* 3. Ajustar a Barra de Navegação */
     .top-nav {
         height: 60px;
-        padding: 0 15px; /* Mais padding lateral em tablets */
+        padding: 0 10px;
         flex-shrink: 0;
         z-index: 10;
     }
-    
-    .logo-section h1 { font-size: 1.1rem; letter-spacing: 0.5px; white-space: nowrap; }
-    .nav-links a { font-size: 0.8rem; padding: 6px 10px; }
 
-    /* 3. Container Principal */
-    .dashboard-container {
-        flex: 1 !important; 
-        height: auto !important;
-        display: flex;
-        flex-direction: column;
-        padding: 15px !important; /* Mais margem em tablets */
-        gap: 15px !important;     /* Mais espaço entre mapa e lista */
-        margin: 0 !important;
-        overflow: hidden; 
+    .logo-section h1 {
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
     }
 
-    /* 4. Mapa (Topo) - AJUSTADO PARA TABLET */
+    .nav-links a {
+        font-size: 0.7rem;
+        padding: 4px 6px;
+    }
+
+    /* 4. Container Principal com Padding e Gap */
+    .dashboard-container {
+        display: flex;
+        flex-direction: column;
+        height: calc(100dvh - 60px); 
+        padding: 10px !important; 
+        gap: 10px !important;     
+        margin: 0 !important;
+    }
+
+    /* 5. Mapa (Topo) */
     .map-wrapper {
         flex: none;
         width: 100% !important;
-        
-        /* Em tablets (ecrãs maiores que 700px), damos 50% de altura ao mapa */
-        /* Em telemóveis, mantemos os ~38% para sobrar espaço para a lista */
-        height: 45%; 
-        
+        height: 38%; 
         margin: 0 !important;
         border-radius: 8px !important; 
+        
+        /* BORDA AZUL AQUI TAMBÉM */
         border: 1px solid var(--border-color) !important;
+        
         overflow: hidden;
         z-index: 1;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.4); 
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
     }
 
-    /* Regra específica para Telemóveis pequenos dentro deste bloco */
-    @media (max-height: 800px) {
-        .map-wrapper {
-            height: 38% !important; /* Volta ao tamanho de telemóvel se o ecrã for curto */
-        }
-    }
-
-    /* 5. Sidebar (Fundo - com scroll interno) */
+    /* 6. Sidebar (Fundo) */
     .sidebar {
         flex: 1; 
         width: 100% !important;
         margin: 0 !important;
         border-radius: 8px !important;
+        
+        /* BORDA AZUL CORRIGIDA */
         border: 1px solid var(--border-color) !important;
         background: rgba(13, 17, 23, 0.95);
         
+        /* Scroll interno */
         overflow-y: auto; 
         -webkit-overflow-scrolling: touch;
-    }
-    
-    /* 6. Rodapé */
-    .footer-text {
-        flex-shrink: 0;
-        padding: 5px !important;
-        font-size: 0.75rem !important;
-        background: #050510;
-        z-index: 10;
-        padding-bottom: env(safe-area-inset-bottom) !important;
     }
 }
 /* --- MODO HORIZONTAL (LANDSCAPE) --- */
