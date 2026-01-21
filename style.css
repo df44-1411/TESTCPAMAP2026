@@ -379,80 +379,75 @@ body {
 /* --- MODO HORIZONTAL (LANDSCAPE) --- */
 @media screen and (max-width: 920px) and (orientation: landscape) {
     
-    /* 1. Bloquear a página (Sem scroll geral no body) */
+    /* 1. Bloquear Scroll Geral */
     html, body {
         height: 100dvh !important;
+        width: 100vw !important;
         overflow: hidden !important;
         display: flex !important;
-        flex-direction: column;
+        flex-direction: column !important;
     }
 
-    /* 2. HEADER SUPER COMPACTO (35px) */
+    /* 2. HEADER MINIMALISTA */
     .top-nav {
-        height: 35px !important;     /* Altura mínima */
+        height: 35px !important;
         min-height: 35px !important;
+        flex-shrink: 0; /* Não deixa encolher */
         padding: 0 10px !important;
+        z-index: 50;
     }
+    .logo-section h1 { font-size: 0.9rem !important; line-height: 35px; }
+    .nav-links a { font-size: 0.65rem !important; padding: 2px 5px !important; line-height: 25px; }
 
-    /* Ajustar tamanho do texto para caber no header fino */
-    .logo-section h1 { 
-        font-size: 0.9rem !important; 
-        line-height: 35px; /* Centralizar verticalmente */
-    }
-    .nav-links a { 
-        font-size: 0.65rem !important; 
-        padding: 2px 5px !important;
-        line-height: 25px; 
-    }
-
-    /* 3. DASHBOARD (Ocupa o resto do espaço com precisão) */
+    /* 3. O CONTAINER AJUSTA-SE SOZINHO (A MUDANÇA IMPORTANTE) */
     .dashboard-container {
+        flex: 1 !important;        /* Ocupa exatamente o espaço entre Nav e Footer */
+        height: auto !important;   /* Removemos o calc() fixo */
+        min-height: 0 !important;  /* Crucial: permite que o conteúdo encolha se necessário */
+        
         flex-direction: row !important;
         align-items: stretch !important;
-        
-        /* CÁLCULO MÁGICO: 
-           100dvh (Total) 
-           - 35px (Nav) 
-           - 25px (Footer) 
-           - 10px (Padding total top/bottom) 
-           = Sobra espaço exato para o conteúdo */
-        height: calc(100dvh - 70px) !important; 
-        
-        padding: 5px 10px !important; /* Menos padding vertical */
+        padding: 5px 10px !important;
         gap: 10px !important;
         overflow: hidden !important;
     }
 
-    /* 4. Mapa (Esquerda) */
+    /* 4. MAPA (Esquerda) */
     .map-wrapper {
-        flex: 1.4 !important;    /* 58% largura */
-        height: 100% !important;
+        flex: 1.4 !important;
+        width: auto !important;
+        height: auto !important; /* Deixa o flex pai controlar a altura */
         margin: 0 !important;
         border-radius: 6px !important;
     }
 
-    /* 5. Sidebar (Direita - A CORREÇÃO DO CORTE) */
+    /* 5. SIDEBAR (Direita) */
     .sidebar {
-        flex: 1 !important;      /* 42% largura */
-        height: 100% !important; /* Força a altura do pai */
+        flex: 1 !important;
+        width: auto !important;
+        height: auto !important; /* Deixa o flex pai controlar a altura */
         margin: 0 !important;
         border-radius: 6px !important;
         
-        /* Garante que o conteúdo não é cortado */
-        overflow-y: auto !important; 
-        display: block !important; /* Garante comportamento de bloco para scroll */
+        /* Scroll Interno */
+        overflow-y: auto !important;
+        display: block !important;
     }
 
-    /* 6. Footer (Rodapé fino e visível) */
+    /* 6. FOOTER (Fixo em baixo) */
     .footer-text {
         height: 25px !important;
+        flex-shrink: 0; /* Não deixa encolher */
         font-size: 0.65rem !important;
         padding: 0 !important;
         display: flex;
         align-items: center;
         justify-content: center;
-        flex-shrink: 0;
-        background: #050510; /* Fundo para garantir leitura */
-        z-index: 20;
+        background: #050510;
+        z-index: 50;
+        
+        /* Proteção para iPhone (barra de baixo) */
+        padding-bottom: env(safe-area-inset-bottom) !important; 
+        height: calc(25px + env(safe-area-inset-bottom)) !important; 
     }
 }
