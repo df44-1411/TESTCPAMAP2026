@@ -1,112 +1,50 @@
 
-        <!DOCTYPE html>
-        <html>
-        <head>
-        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-        <meta http-equiv="Pragma" content="no-cache">
-        <meta http-equiv="Expires" content="0">
-
-        <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
         <style>
-            /* CUSTOM SCROLLBAR */
-            ::-webkit-scrollbar { width: 8px; }
-            ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 4px; }
-            ::-webkit-scrollbar-thumb { background: #1c3d5e; border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.1); }
-            ::-webkit-scrollbar-thumb:hover { background: #00f3ff; box-shadow: 0 0 10px #00f3ff; }
-            html { scrollbar-width: thin; scrollbar-color: #1c3d5e rgba(0, 0, 0, 0.2); }
-            
-            /* GENERAL STYLE */
+            @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap');
             body {
                 background: transparent;
                 font-family: 'Rajdhani', sans-serif;
                 margin: 0;
-                padding: 5px 10px 5px 5px;
+                padding: 5px;
+                color: white;
                 overflow-x: hidden;
-                overflow-y: auto;
                 user-select: none;
             }
-
-            .army-card {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                /* Default background removed here because it will be set inline */
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                border-left-width: 5px;
-                margin-bottom: 8px;
-                padding: 12px 15px;
-                border-radius: 4px;
-                backdrop-filter: blur(4px);
-                transition: transform 0.2s, background 0.2s;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-                cursor: default;
-            }
-
-            .army-card:hover {
-                transform: translateX(5px);
-                /* Hover will simply brighten the card slightly */
-                filter: brightness(1.2); 
-            }
-
-            .army-name {
-                color: #e0e6ed;
-                font-weight: 700;
-                font-size: 1rem;
+            .secret-msg {
+                color: #00f3ff;
                 text-transform: uppercase;
-                letter-spacing: 1px;
+                text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+                margin-bottom: 10px;
+                animation: pulse 2s infinite;
             }
-
-            .army-balance {
-                background: rgba(46, 204, 113, 0.15);
-                color: #2ecc71;
-                padding: 2px 8px;
-                border-radius: 10px;
-                font-size: 0.9rem;
-                font-weight: bold;
-                border: 1px solid rgba(46, 204, 113, 0.3);
+            .sub-msg {
+                color: #ff3333;
+                animation: pulse 2s infinite;
             }
-
-            .army-count {
-                background: rgba(0,0,0,0.6);
-                color: #fff;
-                padding: 2px 8px;
-                border-radius: 4px;
-                font-size: 0.9rem;
-                border: 1px solid rgba(255,255,255,0.1);
-                display: flex;
-                align-items: center;
-                /* --- A CORREÇÃO ESTÁ AQUI --- */
-                white-space: nowrap; /* Impede quebra de linha */
-                flex-shrink: 0;      /* Impede que a caixa encolha */
-                gap: 6px;
+            .empty-state {
+                text-align: center;
+                padding: 20px;
+                color: #aaa;
+                border: 1px dashed #444;
+                border-radius: 8px;
+                margin-top: 20px;
             }
-            .currency-icon {
-                width: 18px;
-                height: 18px;
-                vertical-align: middle;
-                object-fit: contain;
+            @keyframes pulse {
+                0% { opacity: 0.6; }
+                50% { opacity: 1; }
+                100% { opacity: 0.6; }
             }
         </style>
     </head>
     <body>
-    
-        <div class="army-card" style="border-left-color: #043acf;">
-            <span class="army-name">Water Vikings</span>
-            <span class="army-count" style="background: rgba(40, 160, 80, 0.4); border: 1px solid rgba(80, 255, 120, 0.6);"><img src="https://cdn.discordapp.com/emojis/1459572844567593128.png" class="currency-icon" alt="$"> 10,000</span>
-        </div>
-        
-    <script>
-        const cards = document.querySelectorAll('.army-card');
-        cards.forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                const name = card.querySelector('.army-name').innerText;
-                window.parent.postMessage({ type: 'hoverArmy', army: name }, '*');
-            });
-            card.addEventListener('mouseleave', () => {
-                window.parent.postMessage({ type: 'resetMap' }, '*');
-            });
-        });
-    </script>
+    <div class="empty-state">
+            <div class="secret-msg"><h3>WEALTH IS SECRET FOR THE CURRENT MAP RUN</h3></div>
+            <div class="sub-msg"><p>Anti-spy protocols active.</p></div>
+    </div>
     </body>
     </html>
     
