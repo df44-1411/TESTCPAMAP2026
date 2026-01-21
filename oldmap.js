@@ -269,7 +269,6 @@ Highcharts.mapChart('container', {
         // weight: 'auto',
         backgroundColor: 'transparent',
         type: 'map', // Trocado para 'map' para garantir que funciona bem
-        map: 'cpa',
 		margin: 0,
         spacing: [0, 0, 0, 0]
     },
