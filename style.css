@@ -376,3 +376,54 @@ body {
         -webkit-overflow-scrolling: touch;
     }
 }
+/* --- MODO HORIZONTAL (LANDSCAPE) "APP MODE" --- */
+/* Ativa-se apenas em telemóveis/tablets deitados */
+@media screen and (max-width: 920px) and (orientation: landscape) {
+    
+    /* 1. Manter a página bloqueada (Sem scroll geral) */
+    html, body {
+        height: 100dvh !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column;
+    }
+
+    /* 2. Container Principal volta a ser LADO A LADO */
+    .dashboard-container {
+        flex-direction: row !important;       /* Mapa Esquerda | Lista Direita */
+        align-items: stretch !important;
+        /* Altura total - Nav (60px) - Footer (~25px) - Padding (20px) */
+        height: calc(100dvh - 85px) !important; 
+        padding: 10px !important;
+        gap: 10px !important;
+        overflow: hidden !important;
+    }
+
+    /* 3. Ajuste do Mapa (Ganha destaque na largura) */
+    .map-wrapper {
+        flex: 1.5 !important;    /* Mapa ocupa 60% da largura */
+        width: auto !important;
+        height: 100% !important; /* Altura total disponível */
+        margin: 0 !important;
+    }
+
+    /* 4. Ajuste da Sidebar (Mais estreita, mas com altura total) */
+    .sidebar {
+        flex: 1 !important;      /* Sidebar ocupa 40% da largura */
+        width: auto !important;
+        height: 100% !important;
+        margin: 0 !important;
+        min-width: 220px;        /* Garante que não fica demasiado apertada */
+    }
+
+    /* 5. Footer pequenino para não roubar espaço */
+    .footer-text {
+        height: 25px;
+        font-size: 0.7rem !important;
+        padding: 0 !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+}
