@@ -312,14 +312,14 @@ body {
         height: 100%;
         margin: 0;
         padding: 0;
-        overflow: hidden !important; /* Impede o scroll "elástico" da página */
+        overflow: hidden !important; /* Continua a impedir o scroll da página */
     }
 
     /* 3. Ajustar a Barra de Navegação */
     .top-nav {
-        height: 60px; /* Altura fixa para cálculo */
+        height: 60px;
         padding: 0 10px;
-        flex-shrink: 0; /* Garante que não encolhe */
+        flex-shrink: 0;
         z-index: 10;
     }
 
@@ -334,41 +334,50 @@ body {
         padding: 4px 6px;
     }
 
-    /* 4. Container Principal ocupa o resto do ecrã */
+    /* 4. Container Principal com Padding e Gap */
     .dashboard-container {
         display: flex;
         flex-direction: column;
-        /* Altura total - altura da nav = Encaixe perfeito */
+        
+        /* Ocupa o ecrã todo menos a nav */
         height: calc(100dvh - 60px); 
-        padding: 0 !important; /* Remove espaços brancos à volta */
-        gap: 0 !important;     /* Remove espaço entre mapa e sidebar */
+        
+        /* AQUI ESTÁ A MUDANÇA: Espaço à volta e entre elementos */
+        padding: 10px !important; 
+        gap: 10px !important;     
+        
         margin: 0 !important;
-        position: relative;
     }
 
-    /* 5. Mapa (Topo - 40% do espaço disponível) */
+    /* 5. Mapa (Topo) */
     .map-wrapper {
         flex: none;
         width: 100% !important;
-        height: 40%; /* Ajuste este valor se quiser o mapa maior/menor */
-        border-radius: 0 !important; /* Remove cantos redondos para colar às bordas */
+        height: 38%; /* Reduzi ligeiramente de 40% para dar espaço ao gap */
         margin: 0 !important;
+        
+        /* Cantos redondos de volta */
+        border-radius: 8px !important; 
+        overflow: hidden;
         z-index: 1;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Sombra suave */
     }
 
-    /* 6. Sidebar (Fundo - Ocupa o resto do espaço) */
+    /* 6. Sidebar (Fundo) */
     .sidebar {
-        flex: 1; /* Ocupa todo o espaço restante automaticamente */
+        flex: 1; /* Ocupa o resto do espaço disponível */
         width: 100% !important;
         margin: 0 !important;
-        border-radius: 0 !important;
         
-        /* O segredo do scroll */
+        /* Cantos redondos de volta */
+        border-radius: 8px !important;
+        
+        /* Scroll interno */
         overflow-y: auto; 
-        -webkit-overflow-scrolling: touch; /* Scroll suave no iPhone */
+        -webkit-overflow-scrolling: touch;
         
         /* Visual */
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        background: rgba(13, 17, 23, 0.95); /* Fundo sólido para leitura */
+        background: rgba(13, 17, 23, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.05);
     }
 }
