@@ -1,4 +1,4 @@
-/* style.css - Modern CPA Map Design */
+/* style.css - Modern CPA Map Interface by df44 */
 :root {
     --bg-dark: #050510;
     --bg-mapp: #003d62;
@@ -376,11 +376,10 @@ body {
         -webkit-overflow-scrolling: touch;
     }
 }
-/* --- MODO HORIZONTAL (LANDSCAPE) "APP MODE" --- */
-/* Ativa-se apenas em telemóveis/tablets deitados */
+/* --- MODO HORIZONTAL (LANDSCAPE) --- */
 @media screen and (max-width: 920px) and (orientation: landscape) {
     
-    /* 1. Manter a página bloqueada (Sem scroll geral) */
+    /* 1. Bloquear a página (Sem scroll geral no body) */
     html, body {
         height: 100dvh !important;
         overflow: hidden !important;
@@ -388,42 +387,72 @@ body {
         flex-direction: column;
     }
 
-    /* 2. Container Principal volta a ser LADO A LADO */
+    /* 2. HEADER SUPER COMPACTO (35px) */
+    .top-nav {
+        height: 35px !important;     /* Altura mínima */
+        min-height: 35px !important;
+        padding: 0 10px !important;
+    }
+
+    /* Ajustar tamanho do texto para caber no header fino */
+    .logo-section h1 { 
+        font-size: 0.9rem !important; 
+        line-height: 35px; /* Centralizar verticalmente */
+    }
+    .nav-links a { 
+        font-size: 0.65rem !important; 
+        padding: 2px 5px !important;
+        line-height: 25px; 
+    }
+
+    /* 3. DASHBOARD (Ocupa o resto do espaço com precisão) */
     .dashboard-container {
-        flex-direction: row !important;       /* Mapa Esquerda | Lista Direita */
+        flex-direction: row !important;
         align-items: stretch !important;
-        /* Altura total - Nav (60px) - Footer (~25px) - Padding (20px) */
-        height: calc(100dvh - 85px) !important; 
-        padding: 10px !important;
+        
+        /* CÁLCULO MÁGICO: 
+           100dvh (Total) 
+           - 35px (Nav) 
+           - 25px (Footer) 
+           - 10px (Padding total top/bottom) 
+           = Sobra espaço exato para o conteúdo */
+        height: calc(100dvh - 70px) !important; 
+        
+        padding: 5px 10px !important; /* Menos padding vertical */
         gap: 10px !important;
         overflow: hidden !important;
     }
 
-    /* 3. Ajuste do Mapa (Ganha destaque na largura) */
+    /* 4. Mapa (Esquerda) */
     .map-wrapper {
-        flex: 1.5 !important;    /* Mapa ocupa 60% da largura */
-        width: auto !important;
-        height: 100% !important; /* Altura total disponível */
-        margin: 0 !important;
-    }
-
-    /* 4. Ajuste da Sidebar (Mais estreita, mas com altura total) */
-    .sidebar {
-        flex: 1 !important;      /* Sidebar ocupa 40% da largura */
-        width: auto !important;
+        flex: 1.4 !important;    /* 58% largura */
         height: 100% !important;
         margin: 0 !important;
-        min-width: 220px;        /* Garante que não fica demasiado apertada */
+        border-radius: 6px !important;
     }
 
-    /* 5. Footer pequenino para não roubar espaço */
+    /* 5. Sidebar (Direita - A CORREÇÃO DO CORTE) */
+    .sidebar {
+        flex: 1 !important;      /* 42% largura */
+        height: 100% !important; /* Força a altura do pai */
+        margin: 0 !important;
+        border-radius: 6px !important;
+        
+        /* Garante que o conteúdo não é cortado */
+        overflow-y: auto !important; 
+        display: block !important; /* Garante comportamento de bloco para scroll */
+    }
+
+    /* 6. Footer (Rodapé fino e visível) */
     .footer-text {
-        height: 25px;
-        font-size: 0.7rem !important;
+        height: 25px !important;
+        font-size: 0.65rem !important;
         padding: 0 !important;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
+        background: #050510; /* Fundo para garantir leitura */
+        z-index: 20;
     }
 }
