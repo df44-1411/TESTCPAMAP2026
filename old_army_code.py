@@ -153,10 +153,10 @@ html_content += """
 </html>
 """
 
-with open("army_code.html", 'w') as file:
+with open("old_army_code.html", 'w') as file:
     file.write(html_content)
-print("army_code.html updated. Logic fixed to exclude code comments/assignments.")
+print("old_army_code.html updated. Logic fixed to exclude code comments/assignments.")
 
-with open("army_code.html", 'w') as file:
+with open("old_army_code.html", 'w') as file:
     file.write(html_content)
-print("army_code.html updated with NO-CACHE tags.")
+print("old_army_code.html updated with NO-CACHE tags.")
