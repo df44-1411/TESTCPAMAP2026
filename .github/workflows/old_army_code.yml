@@ -33,7 +33,7 @@ jobs:
 
     - name: Generate HTML
       run: |
-        python army_code.py
+        python old_army_code.py
         # Creating this file tells GitHub Pages to skip the long Jekyll build process
         touch .nojekyll 
 
@@ -48,5 +48,5 @@ jobs:
     - name: Deploy (Commit & Push)
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: "Update army_code.html"
-        file_pattern: 'army_code.html .nojekyll'
+        commit_message: "Update old_army_code.html"
+        file_pattern: 'old_army_code.html .nojekyll'
