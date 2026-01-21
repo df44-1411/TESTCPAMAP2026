@@ -302,61 +302,73 @@ body {
 /* --- Mobile Responsiveness --- */
 @media screen and (max-width: 768px) {
     
-    /* Global box-sizing fix for mobile elements */
+    /* 1. Global Reset & Box Sizing */
     * {
         box-sizing: border-box;
     }
 
-    body {
-        overflow-y: auto !important; 
-        height: auto !important;
-        display: block; /* Removes flex constraints so content flows naturally */
-    }
-    
-    .dashboard-container {
-        flex-direction: column;
-        padding: 10px; /* Reduced padding from 20px to give more space */
-        gap: 15px;     /* Consistent gap between Map and Sidebar */
+    /* 2. Bloquear scroll da página inteira */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden !important; /* Impede o scroll "elástico" da página */
     }
 
-    .map-wrapper, .sidebar {
-        flex: none;
-        width: 100% !important; /* Forces exact same width */
-        margin: 0 !important;   /* Removes any rogue margins */
-        border-radius: 8px;     /* Matches corners */
-    }
-
-    .map-wrapper {
-        height: 50vh; /* Adjust map height (50% of screen) */
-    }
-
-    .sidebar {
-        height: auto;
-        min-height: 400px; /* Ensures sidebar has enough height */
-    }
+    /* 3. Ajustar a Barra de Navegação */
     .top-nav {
-        padding: 0 10px; /* Minimal padding on sides */
-        height: 60px;    /* Slightly shorter header */
+        height: 60px; /* Altura fixa para cálculo */
+        padding: 0 10px;
+        flex-shrink: 0; /* Garante que não encolhe */
+        z-index: 10;
     }
 
     .logo-section h1 {
-        font-size: 1rem; /* Smaller Logo Text */
+        font-size: 1rem;
         letter-spacing: 0.5px;
-        white-space: nowrap; /* Prevents wrapping */
-    }
-
-    /* Adjust the "LIVE" badge position */
-    .logo-section h1 span {
-        font-size: 0.4em !important; 
-    }
-
-    .nav-links {
-        gap: 8px; /* Tighter gap between links */
+        white-space: nowrap;
     }
 
     .nav-links a {
-        font-size: 0.7rem; /* Smaller link text */
-        padding: 4px 6px;  /* Smaller touch targets */
-        letter-spacing: 0; /* Save space */
+        font-size: 0.7rem;
+        padding: 4px 6px;
+    }
+
+    /* 4. Container Principal ocupa o resto do ecrã */
+    .dashboard-container {
+        display: flex;
+        flex-direction: column;
+        /* Altura total - altura da nav = Encaixe perfeito */
+        height: calc(100dvh - 60px); 
+        padding: 0 !important; /* Remove espaços brancos à volta */
+        gap: 0 !important;     /* Remove espaço entre mapa e sidebar */
+        margin: 0 !important;
+        position: relative;
+    }
+
+    /* 5. Mapa (Topo - 40% do espaço disponível) */
+    .map-wrapper {
+        flex: none;
+        width: 100% !important;
+        height: 40%; /* Ajuste este valor se quiser o mapa maior/menor */
+        border-radius: 0 !important; /* Remove cantos redondos para colar às bordas */
+        margin: 0 !important;
+        z-index: 1;
+    }
+
+    /* 6. Sidebar (Fundo - Ocupa o resto do espaço) */
+    .sidebar {
+        flex: 1; /* Ocupa todo o espaço restante automaticamente */
+        width: 100% !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        
+        /* O segredo do scroll */
+        overflow-y: auto; 
+        -webkit-overflow-scrolling: touch; /* Scroll suave no iPhone */
+        
+        /* Visual */
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(13, 17, 23, 0.95); /* Fundo sólido para leitura */
     }
 }
