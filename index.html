@@ -28,6 +28,15 @@
         box-shadow: 0 0 10px #00ff00 !important;
         margin-right: 10px;
     }
+    .status-dot-offline {
+        display: inline-block !important;
+        width: 12px !important;
+        height: 12px !important;
+        background-color: #ffa600 !important;
+        border-radius: 50% !important;
+        box-shadow: 0 0 10px #00ff00 !important;
+        margin-right: 10px;
+     }
     
     /* 3. RESETAR O CONTAINER IFRAME */
     .iframe-container {
@@ -174,15 +183,15 @@
         
         <div class="map-wrapper">
             <div class="map-header">
-                <span class="status-indicator"><div class="status-dot"></div> SYSTEMS ONLINE</span>
+                <span class="status-indicator"><div class="status-dot-offline"></div> SYSTEMS OFFLINE</span>
             </div>
             <div id="container" style="width:100%; height:100%;"></div>
             <div class="map-footer-tabs">
                 <div id="tab-new" class="map-tab" onclick="switchMap('new')">
-                    Current Map
+                    New Map
                 </div>
                 <div id="tab-old" class="map-tab" onclick="switchMap('old')">
-                    Old Map (Archive)
+                    Old Map
                 </div>
              </div>
         </div>
@@ -262,7 +271,7 @@
             setIframeSource('armyFrame', 'old_army_code.html'); // Old Army List
             
             // Update Header (Optional)
-            document.querySelector('.status-indicator').innerHTML = '<div class="status-dot" style="background:orange; box-shadow:0 0 10px orange;"></div> ARCHIVE VIEW';
+            document.querySelector('.status-indicator').innerHTML = '<div class="status-dot" style="background:orange; box-shadow:0 0 10px orange;"></div> SYSTEMS ONLINE';
         } else {
             // Set Tabs
             document.getElementById('tab-new').classList.add('active');
