@@ -312,7 +312,7 @@ body {
         height: 100%;
         margin: 0;
         padding: 0;
-        overflow: hidden !important; /* Continua a impedir o scroll da página */
+        overflow: hidden !important; 
     }
 
     /* 3. Ajustar a Barra de Navegação */
@@ -338,14 +338,9 @@ body {
     .dashboard-container {
         display: flex;
         flex-direction: column;
-        
-        /* Ocupa o ecrã todo menos a nav */
         height: calc(100dvh - 60px); 
-        
-        /* AQUI ESTÁ A MUDANÇA: Espaço à volta e entre elementos */
         padding: 10px !important; 
         gap: 10px !important;     
-        
         margin: 0 !important;
     }
 
@@ -353,31 +348,31 @@ body {
     .map-wrapper {
         flex: none;
         width: 100% !important;
-        height: 38%; /* Reduzi ligeiramente de 40% para dar espaço ao gap */
+        height: 38%; 
         margin: 0 !important;
-        
-        /* Cantos redondos de volta */
         border-radius: 8px !important; 
+        
+        /* BORDA AZUL AQUI TAMBÉM */
+        border: 1px solid var(--border-color) !important;
+        
         overflow: hidden;
         z-index: 1;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Sombra suave */
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
     }
 
     /* 6. Sidebar (Fundo) */
     .sidebar {
-        flex: 1; /* Ocupa o resto do espaço disponível */
+        flex: 1; 
         width: 100% !important;
         margin: 0 !important;
-        
-        /* Cantos redondos de volta */
         border-radius: 8px !important;
+        
+        /* BORDA AZUL CORRIGIDA */
+        border: 1px solid var(--border-color) !important;
+        background: rgba(13, 17, 23, 0.95);
         
         /* Scroll interno */
         overflow-y: auto; 
         -webkit-overflow-scrolling: touch;
-        
-        /* Visual */
-        background: rgba(13, 17, 23, 0.95);
-        border: 1px solid rgba(255, 255, 255, 0.05);
     }
 }
