@@ -34,7 +34,7 @@
         height: 12px !important;
         background-color: #ffa600 !important;
         border-radius: 50% !important;
-        box-shadow: 0 0 10px #00ff00 !important;
+        box-shadow: 0 0 10px #ffa600 !important;
         margin-right: 10px;
      }
     
@@ -173,9 +173,9 @@
         </div>
         <div class="nav-links">
             <a href="#" class="active">Map</a>
-            <a href="https://cparmies.org/map-2025/server-map-rules/">Rules</a>
-            <a href="https://cparmies.org/category/top-ten-armies/">Top Tens</a>
-            <a href="https://discord.gg/cparmies">Discord</a>
+            <a href="https://cparmies.org/map-2025/server-map-rules/" target="_blank" rel="noopener noreferrer">Rules</a>
+            <a href="https://cparmies.org/category/top-ten-armies/" target="_blank" rel="noopener noreferrer">Top Tens</a>
+            <a href="https://discord.gg/cparmies" target="_blank" rel="noopener noreferrer">Discord</a>
         </div>
     </nav>
 
@@ -183,7 +183,7 @@
         
         <div class="map-wrapper">
             <div class="map-header">
-                <span class="status-indicator"><div class="status-dot-offline"></div> SYSTEMS OFFLINE</span>
+                <span class="status-indicator-offline"><div class="status-dot-offline"></div> SYSTEMS OFFLINE</span>
             </div>
             <div id="container" style="width:100%; height:100%;"></div>
             <div class="map-footer-tabs">
@@ -271,7 +271,7 @@
             setIframeSource('armyFrame', 'old_army_code.html'); // Old Army List
             
             // Update Header (Optional)
-            document.querySelector('.status-indicator').innerHTML = '<div class="status-dot" style="background:orange; box-shadow:0 0 10px orange;"></div> SYSTEMS ONLINE';
+            document.querySelector('.status-indicator-offline').innerHTML = '<div class="status-dot"></div><div style="color:#00ff00;">SYSTEMS ONLINE</div>';
         } else {
             // Set Tabs
             document.getElementById('tab-new').classList.add('active');
