@@ -749,7 +749,7 @@ Highcharts.mapChart('container', {
         buttonOptions: {
             verticalAlign: 'top',
             align: 'right',
-            x: 0,
+            x: -10,
             y: 40,
             width: 20,  
             height: 20, 
