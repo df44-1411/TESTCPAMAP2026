@@ -183,7 +183,7 @@
         
         <div class="map-wrapper">
             <div class="map-header">
-                <span class="status-indicator-offline"><div class="status-dot-offline"></div> SYSTEMS OFFLINE</span>
+                <span class="status-indicator"><div class="status-dot"></div> SYSTEMS ONLINE</span>
             </div>
             <div id="container" style="width:100%; height:100%;"></div>
             <div class="map-footer-tabs">
@@ -271,7 +271,7 @@
             setIframeSource('armyFrame', 'old_army_code.html'); // Old Army List
             
             // Update Header (Optional)
-            document.querySelector('.status-indicator-offline').innerHTML = '<div class="status-dot"></div><div style="color:#00ff00;">SYSTEMS ONLINE</div>';
+            document.querySelector('.status-indicator').innerHTML = '<div class="status-dot-offline"></div><div style="color:red;">SYSTEMS OFFLINE - MAP IS DISABLED</div>';
         } else {
             // Set Tabs
             document.getElementById('tab-new').classList.add('active');
