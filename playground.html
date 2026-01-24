@@ -6,133 +6,171 @@
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="map.css"> <style>
-        /* CSS DOS CARTÕES BONITOS (Baseado no teu army_code.py) */
+    <link rel="stylesheet" href="map.css">
+    <style>
+        /* DESIGN DA SIDEBAR (Fiel ao army_code.py) */
         .army-card {
             display: flex; justify-content: space-between; align-items: center;
             background: rgba(20, 30, 50, 0.85); border: 1px solid rgba(255, 255, 255, 0.1);
             border-left-width: 5px; margin-bottom: 8px; padding: 12px 15px;
             border-radius: 4px; backdrop-filter: blur(4px); transition: 0.2s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3); cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
-        .army-card:hover { transform: translateX(5px); background: rgba(40, 50, 80, 0.95); }
-        .army-name { color: #e0e6ed; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .army-val { background: rgba(255,255,255,0.1); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 0.85rem; }
+        .army-name { color: #e0e6ed; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; }
+        .army-val { background: rgba(255,255,255,0.1); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
+        
+        /* Abas Estilizadas */
+        .tab-system { display: flex; gap: 5px; margin-bottom: 15px; border-bottom: 1px solid rgba(0, 243, 255, 0.2); padding-bottom: 10px; }
+        .tab-btn { flex: 1; background: #051020; border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 8px; font-family: 'Rajdhani'; cursor: pointer; font-size: 0.75rem; transition: 0.3s; }
+        .tab-btn.active { background: var(--neon-blue); color: #000; box-shadow: 0 0 10px var(--neon-blue); }
 
-        /* Estrutura */
-        .dashboard-container { display: flex; height: calc(100vh - 60px); }
-        .sidebar { width: 350px; background: rgba(5, 16, 32, 0.9); border-right: 1px solid var(--border-color); padding: 15px; display: flex; flex-direction: column; }
-        .map-area { flex: 1; position: relative; background: #030a14; }
-        #archiveMap { width: 100%; height: 100%; }
+        /* Content Layout */
+        .dashboard-container { display: flex; height: calc(100vh - 80px); gap: 20px; padding: 20px; }
+        .sidebar { width: 380px; display: flex; flex-direction: column; }
+        .map-wrapper { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); position: relative; display: flex; flex-direction: column; }
+        #archiveMapContainer { flex: 1; width: 100%; }
 
-        .tabs { display: flex; gap: 5px; margin-bottom: 15px; }
-        .tab-btn { flex: 1; padding: 8px; background: #051020; border: 1px solid var(--neon-blue); color: var(--neon-blue); font-family: 'Rajdhani'; cursor: pointer; font-size: 0.7em; }
-        .tab-btn.active { background: var(--neon-blue); color: #000; }
+        .archive-selector { background: #051020; color: var(--neon-blue); border: 1px solid var(--neon-blue); padding: 10px; font-family: 'Rajdhani'; width: 100%; margin-bottom: 15px; cursor: pointer; }
     </style>
 </head>
 <body>
     <nav class="top-nav">
-        <h1>CPA ARCHIVES</h1>
-        <div class="nav-links"><a href="index.html">Live Map</a></div>
+        <div class="logo-section"><h1>CPA ARCHIVES</h1></div>
+        <div class="nav-links">
+            <a href="index.html">Live Map</a>
+            <a href="#" class="active">Archive Engine</a>
+        </div>
     </nav>
 
     <div class="dashboard-container">
         <aside class="sidebar">
-            <select id="weekSelector" class="archive-selector" onchange="loadWeek(this.value)" style="width:100%; margin-bottom:15px;"></select>
+            <select id="weekSelector" class="archive-selector" onchange="changeWeek(this.value)"></select>
             
-            <div class="tabs">
-                <button class="tab-btn active" onclick="setTab('topten')">TOP 10</button>
-                <button class="tab-btn" onclick="setTab('forces')">FORCES</button>
-                <button class="tab-btn" onclick="setTab('wealth')">WEALTH</button>
+            <div class="tab-system">
+                <button class="tab-btn active" onclick="switchTab('topten', this)">Top 10</button>
+                <button class="tab-btn" onclick="switchTab('forces', this)">Forces</button>
+                <button class="tab-btn" onclick="switchTab('wealth', this)">Wealth</button>
             </div>
 
             <div id="leaderboardList" style="flex:1; overflow-y:auto;"></div>
         </aside>
 
-        <main class="map-area">
-            <div id="archiveMap"></div>
+        <main class="map-wrapper">
+            <div class="map-header">
+                <span class="status-indicator">
+                    <div class="status-dot" style="background:var(--neon-blue);"></div> 
+                    TEMPORAL SNAPSHOT: <span id="archiveDate" style="color:#fff;">-</span>
+                </span>
+            </div>
+            
+            <div class="stats-grid" style="padding:15px; border-bottom:1px solid var(--border-color);">
+                <div class="stat-card"><div class="stat-val" id="totalSpent">0</div><div class="stat-label">Spent</div></div>
+                <div class="stat-card"><div class="stat-val" id="totalAttacks">0</div><div class="stat-label">Attacks</div></div>
+                <div class="stat-card"><div class="stat-val" id="totalWars">0</div><div class="stat-label">Wars</div></div>
+            </div>
+
+            <div id="archiveMapContainer"></div>
         </main>
     </div>
 
     <script>
         let historyData = [];
-        let currentTab = 'topten';
+        let mapBaseData = [];
+        let currentWeek = 0;
+        let activeTab = 'topten';
         let chart;
-        let baseMapData = []; // Guardará a estrutura id/path de id0, id1...
 
-        // 1. Carregar estrutura base do mapa (map.js)
         async function init() {
-            const resp = await fetch('map.js');
-            const text = await resp.text();
-            const match = text.match(/var mapData = (\[.*?\]);/s);
-            baseMapData = JSON.parse(match[1]);
+            // 1. Carregar estrutura do mapa original
+            const mapResp = await fetch('map.js');
+            const mapText = await mapResp.text();
+            mapBaseData = JSON.parse(mapText.match(/var mapData = (\[.*?\]);/s)[1]);
 
-            const hResp = await fetch('history.json');
-            historyData = await hResp.json();
+            // 2. Carregar Histórico
+            const histResp = await fetch('history.json?v=' + Date.now());
+            historyData = await histResp.json();
             
-            const sel = document.getElementById('weekSelector');
-            historyData.forEach((w, i) => sel.innerHTML += `<option value="${i}">${w.id} (${w.date})</option>`);
-            
+            const selector = document.getElementById('weekSelector');
+            historyData.forEach((w, i) => {
+                selector.innerHTML += `<option value="${i}">${w.id} - ${w.date}</option>`;
+            });
+
             loadWeek(0);
         }
 
+        function loadWeek(idx) {
+            currentWeek = idx;
+            const week = historyData[idx];
+            document.getElementById('archiveDate').innerText = week.date;
+            document.getElementById('totalSpent').innerText = week.stats.global.spent.toLocaleString();
+            document.getElementById('totalAttacks').innerText = week.stats.global.attacks;
+            document.getElementById('totalWars').innerText = week.stats.global.wars;
+
+            renderMap(week.map_snapshot);
+            renderLeaderboard();
+        }
+
         function renderMap(snapshot) {
-            // Unir a estrutura geográfica com os donos do arquivo
-            const displayData = baseMapData.map(region => ({
+            const dataWithOwners = mapBaseData.map(region => ({
                 ...region,
                 controller: snapshot[region.name] || "None"
             }));
 
-            if (chart) chart.destroy();
+            if(chart) chart.destroy();
 
-            chart = Highcharts.mapChart('archiveMap', {
-                chart: { backgroundColor: 'transparent' },
-                title: { text: '' },
+            chart = Highcharts.mapChart('archiveMapContainer', {
+                chart: { backgroundColor: 'transparent', margin: 0 },
+                title: { text: null },
+                credits: { enabled: false },
+                legend: { enabled: false },
                 series: [{
-                    data: displayData,
-                    mapData: displayData,
+                    data: dataWithOwners,
+                    mapData: dataWithOwners,
                     joinBy: 'id',
-                    dataLabels: { enabled: true, color: '#fff', format: '{point.name}' }
+                    allAreas: false,
+                    dataLabels: { enabled: true, color: '#fff', style: { fontSize: '10px', textOutline: '1px black' }, format: '{point.name}' }
                 }],
                 tooltip: {
+                    backgroundColor: 'rgba(5, 16, 32, 0.9)',
+                    style: { color: '#fff' },
                     formatter: function() { return `<b>${this.point.name}</b><br>Owner: ${this.point.controller}`; }
                 }
             });
         }
 
-        function renderLeaderboard(week) {
+        function renderLeaderboard() {
+            const week = historyData[currentWeek];
             const list = document.getElementById('leaderboardList');
             list.innerHTML = "";
-            let data = [];
+            let displayItems = [];
 
-            if (currentTab === 'topten') {
-                data = week.leaderboard; // [{name, score}]
-            } else if (currentTab === 'forces') {
+            if (activeTab === 'topten') {
+                displayItems = week.leaderboard.map(e => ({ name: e.name, val: e.score + " PTS", color: "#ffd700" }));
+            } else if (activeTab === 'forces') {
                 const counts = {};
                 Object.values(week.map_snapshot).forEach(o => { if(o !== "None" && o !== "Freeland") counts[o] = (counts[o]||0)+1; });
-                data = Object.entries(counts).map(([name, val]) => ({name, score: val})).sort((a,b) => b.score - a.score);
+                displayItems = Object.entries(counts).sort((a,b) => b[1]-a[1]).map(([n, v]) => ({ name: n, val: v + " Servers", color: "#00f3ff" }));
+            } else if (activeTab === 'wealth' && week.wealth_snapshot) {
+                displayItems = Object.entries(week.wealth_snapshot).sort((a,b) => b[1]-a[1]).map(([n, v]) => ({ name: n, val: "$" + v.toLocaleString(), color: "#00ff9d" }));
             }
 
-            data.forEach((entry, i) => {
+            displayItems.forEach((item, i) => {
                 list.innerHTML += `
-                    <div class="army-card" style="border-left-color: #00f3ff">
-                        <span class="army-name">#${i+1} ${entry.name}</span>
-                        <span class="army-val">${entry.score}</span>
+                    <div class="army-card" style="border-left-color: ${item.color}">
+                        <span class="army-name">#${i+1} ${item.name}</span>
+                        <span class="army-val">${item.val}</span>
                     </div>`;
             });
         }
 
-        function loadWeek(idx) {
-            const week = historyData[idx];
-            renderMap(week.map_snapshot);
-            renderLeaderboard(week);
+        function switchTab(tab, btn) {
+            activeTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderLeaderboard();
         }
 
-        function setTab(t) {
-            currentTab = t;
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText.toLowerCase().includes(t)));
-            loadWeek(document.getElementById('weekSelector').value);
-        }
+        function changeWeek(val) { loadWeek(val); }
 
         init();
     </script>
