@@ -306,6 +306,16 @@ body {
     to { stroke-width: 4px; filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1)); }
 }
 
+@keyframes invasionFlash {
+  0% { opacity: 1; fill-opacity: 1; }
+  50% { opacity: 0.4; fill-opacity: 0.4; }
+  100% { opacity: 1; fill-opacity: 1; }
+}
+
+.invasion-flashing {
+  animation: invasionFlash 1s infinite steps(2); /* "Steps" dá aquele ar de falha técnica */
+}
+
 /* --- Mobile Responsiveness --- */
 @media screen and (max-width: 1024px) {
     
