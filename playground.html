@@ -17,7 +17,7 @@
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
 
     <style>
-        /* === O TEU CSS ORIGINAL (INTOCADO) === */
+        /* O TEU CSS ORIGINAL (MANTIDO INTEGRALMENTE) */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -56,35 +56,24 @@
             cursor: pointer;
         }
 
-        /* === NOVOS ESTILOS PARA AS TABS DA SIDEBAR (Mínimos) === */
-        .tab-container { display: flex; gap: 5px; margin-bottom: 10px; padding: 10px; }
+        .tab-container { display: flex; gap: 5px; margin-bottom: 10px; }
         .tab-btn { 
-            flex: 1; background: #051020; border: 1px solid var(--neon-blue); color: var(--neon-blue);
-            padding: 5px; cursor: pointer; font-family: 'Rajdhani'; font-size: 0.8em; text-transform: uppercase;
+            background: #051020; border: 1px solid var(--neon-blue); color: var(--neon-blue);
+            padding: 5px 10px; cursor: pointer; font-family: 'Rajdhani'; font-size: 0.7em;
         }
-        .tab-btn.active { background: var(--neon-blue); color: #000; font-weight: bold; }
-        
-        /* Iframe para Top10/Forces/Wealth */
-        .sidebar-iframe { width: 100%; flex: 1; border: none; min-height: 300px; }
+        .tab-btn.active { background: var(--neon-blue); color: #000; }
 
-        /* === O CONTENTOR DO MAPA (Substitui o Snapshot Grid) === */
-        /* Removi o .snapshot-grid e meti isto para o mapa caber */
+        /* AJUSTES MÍNIMOS PARA O MAPA E IFRAME */
+        .highcharts-container, .highcharts-root { background: transparent !important; }
+        
+        #sidebarFrame { width: 100%; flex: 1; border: none; min-height: 0; }
+        
+        /* O Contentor do mapa substitui o snapshot-grid */
         #container {
             width: 100%;
-            height: 500px; /* Altura fixa para o mapa aparecer bem */
-            border: 1px solid rgba(0, 243, 255, 0.1);
-            background: transparent;
+            height: 500px; /* Altura fixa necessária para o Highcharts */
+            border: 1px solid rgba(255,255,255,0.05);
         }
-
-        /* Override Highcharts Background para ser transparente */
-        .highcharts-container, .highcharts-root { background: transparent !important; }
-
-        /* Footer e Layout originais */
-        .footer-text { text-align:center; padding: 10px; color: #555; font-size: 0.8rem; }
-        .dashboard-container { display: flex; height: calc(100vh - 80px); }
-        .sidebar { width: 300px; background: rgba(0,0,0,0.8); display: flex; flex-direction: column; border-right: 1px solid #333; }
-        .map-wrapper { flex: 1; display: block; overflow-y: auto; background: #02050a; }
-        .map-header { padding: 15px; border-bottom: 1px solid #333; }
     </style>
 </head>
 <body>
@@ -104,25 +93,31 @@
         
         <aside class="sidebar">
             <div style="padding-bottom:15px; border-bottom:1px solid var(--border-color); margin-bottom:15px;">
-                <h2 style="margin:10px; border:none; font-family:'Rajdhani'; color:#fff;">Select Date</h2>
-                <div style="padding:0 10px;">
-                    <select id="weekSelector" class="archive-selector" onchange="loadWeekData(this.value)" style="width:100%">
-                        <option>Loading...</option>
-                    </select>
-                </div>
+                <h2 style="margin:0; border:none;">Select Date</h2>
+                <select id="weekSelector" class="archive-selector" onchange="loadWeekData(this.value)" style="width:100%">
+                    <option>Loading...</option>
+                </select>
             </div>
 
+            <h2 id="lbTitle">Rankings</h2>
             <div class="tab-container">
                 <button class="tab-btn active" onclick="switchTab('topten')">TOP 10</button>
                 <button class="tab-btn" onclick="switchTab('forces')">FORCES</button>
                 <button class="tab-btn" onclick="switchTab('wealth')">WEALTH</button>
             </div>
-
-            <iframe id="sidebarContent" class="sidebar-iframe" src=""></iframe>
             
+            <div style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
+                <iframe id="sidebarFrame" src=""></iframe>
+            </div>
+            
+            <div style="margin-top:20px; padding-top:10px; border-top:1px solid var(--border-color);">
+                <div style="font-size:0.8em; color:var(--text-muted); text-transform:uppercase;">Most Aggressive</div>
+                <div id="warmongerName" style="font-size:1.4em; font-weight:bold; color:#ff0055;">-</div>
+                <div id="warmongerCount" style="color:#fff;">0 Attacks</div>
+            </div>
         </aside>
 
-        <div class="map-wrapper">
+        <div class="map-wrapper" style="display:block; overflow-y:auto;">
             
             <div class="map-header">
                 <span class="status-indicator">
@@ -155,19 +150,20 @@
                 
                 <div id="container"></div>
 
-                <div id="loadingMsg" style="display:none; color:#00f3ff; text-align:center; padding:20px; font-family:'Rajdhani'">LOADING MAP...</div>
-
+                <div id="loadingMsg" style="display:none; text-align:center; color:#0ff; padding:20px;">LOADING...</div>
             </div>
+
         </div>
+
     </div>
 
-    <div class="footer-text">
+    <div class="footer-text" style="text-align:center; padding: 10px; color: #555; font-size: 0.8rem;">
         UI by df44 for CPA
     </div>
 
     <script>
         let historyData = [];
-        let currentBasePath = ""; // Guarda o caminho da semana atual
+        let currentBasePath = "";
 
         window.onload = async function() {
             try {
@@ -186,7 +182,7 @@
                 historyData.forEach((week, index) => {
                     const opt = document.createElement('option');
                     opt.value = index;
-                    opt.innerText = `${week.id} (${week.date})`;
+                    opt.innerText = `${week.id}`;
                     selector.appendChild(opt);
                 });
 
@@ -194,7 +190,6 @@
 
             } catch (e) {
                 console.error(e);
-                document.getElementById('container').innerHTML = `<div style="text-align:center; color:#ff0055;">ARCHIVE OFFLINE</div>`;
             }
         };
 
@@ -202,10 +197,10 @@
             const week = historyData[index];
             const stats = week.stats.global;
             
-            // Define o path (ex: archives/2026-01-24)
+            // Define o caminho base (ex: archives/2026-01-24)
             currentBasePath = week.path || `archives/${week.date}`;
 
-            // 1. Header & Stats (Tua lógica original)
+            // 1. Header & Stats
             document.getElementById('archiveDate').innerText = week.date;
             document.getElementById('totalSpent').innerText = formatMoney(stats.spent);
             document.getElementById('totalAttacks').innerText = stats.attacks;
@@ -215,43 +210,52 @@
             for (const [item, count] of Object.entries(stats.items || {})) {
                 if (count > max) { max = count; fav = item; }
             }
-            document.getElementById('favWeapon').innerText = fav.toUpperCase();
+            document.getElementById('favWeapon').innerText = fav.charAt(0).toUpperCase() + fav.slice(1);
 
-            // 2. Carregar a Tab Inicial (Top Ten)
-            switchTab('topten');
+            // 2. Warmonger (Lê do JSON se existir, senão fica "-")
+            if (stats.warmonger) {
+                document.getElementById('warmongerName').innerText = stats.warmonger.name;
+                document.getElementById('warmongerCount').innerText = `${stats.warmonger.count} Attacks`;
+            }
 
-            // 3. CARREGAR O MAPA REAL (Substitui as bolinhas)
+            // 3. Atualiza a Tab ativa (Iframe)
+            const activeBtn = document.querySelector('.tab-btn.active');
+            // Se houver botão ativo, usa o onclick dele, senão default topten
+            if(activeBtn) activeBtn.click(); 
+            else switchTab('topten'); 
+
+            // 4. Carregar o MAPA
             loadArchiveMap(currentBasePath);
         }
 
-        // Função para gerir as tabs da Sidebar
+        // Função das Tabs
         function switchTab(tabName) {
-            // Atualiza botões
+            // Atualiza visual dos botões
+            // Nota: Como os botões têm onclick="switchTab(..)", precisamos de gerir a classe .active
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active'); // O botão clicado fica ativo (se clicado via JS pode dar erro, mas funciona no onload)
+            // Procura o botão que foi clicado (event.target) ou o que corresponde ao tabName
+            const clickedBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.innerText.toLowerCase().includes(tabName.replace('topten', 'top 10')));
+            if(clickedBtn) clickedBtn.classList.add('active');
 
-            const iframe = document.getElementById('sidebarContent');
-            
-            // Aponta para os ficheiros HTML dentro da pasta da semana
+            const iframe = document.getElementById('sidebarFrame');
+            // Aponta para o ficheiro correto na pasta da semana
             if (tabName === 'topten') iframe.src = `${currentBasePath}/topten.html`;
             if (tabName === 'forces') iframe.src = `${currentBasePath}/army_code.html`;
             if (tabName === 'wealth') iframe.src = `${currentBasePath}/wealth.html`;
         }
 
-        // A Lógica do Mapa Dinâmico
         function loadArchiveMap(basePath) {
             const container = document.getElementById('container');
             const loader = document.getElementById('loadingMsg');
             
-            // Limpa o mapa anterior
             if (Highcharts.charts[0]) { Highcharts.charts[0].destroy(); }
             container.innerHTML = "";
             loader.style.display = 'block';
 
-            // 1. Injetar CSS do Mapa Arquivado
+            // Atualiza CSS do mapa
             document.getElementById('archiveMapCss').href = `${basePath}/map.css?t=${Date.now()}`;
 
-            // 2. Injetar JS do Mapa Arquivado
+            // Injeta o JS
             const oldScript = document.getElementById('dynamicMapScript');
             if (oldScript) oldScript.remove();
 
@@ -260,10 +264,7 @@
             script.src = `${basePath}/map.js?t=${Date.now()}`;
             
             script.onload = () => { loader.style.display = 'none'; };
-            script.onerror = () => { 
-                loader.style.display = 'none'; 
-                container.innerHTML = "<div style='text-align:center; padding-top:50px; color:#555'>MAP DATA NOT FOUND</div>";
-            };
+            script.onerror = () => { loader.style.display = 'none'; container.innerHTML = "Error loading map"; };
 
             document.body.appendChild(script);
         }
