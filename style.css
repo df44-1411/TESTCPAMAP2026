@@ -308,12 +308,14 @@ body {
 
 @keyframes invasionFlash {
   0% { opacity: 1; fill-opacity: 1; }
-  50% { opacity: 0.4; fill-opacity: 0.4; }
+  25% { opacity: 0.4; fill-opacity: 0.4; }
+  50% { opacity: 1; fill-opacity: 1; }
+  75% { opacity: 0.4; fill-opacity: 0.4; }
   100% { opacity: 1; fill-opacity: 1; }
 }
 
 .invasion-flashing {
-  animation: invasionFlash 0.5s infinite steps(2); /* "Steps" dá aquele ar de falha técnica */
+  animation: invasionFlash 0.5s infinite steps(4); /* "Steps" dá aquele ar de falha técnica */
 }
 
 /* --- Mobile Responsiveness --- */
