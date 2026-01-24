@@ -9,7 +9,7 @@
         :root {
             --bg-color: #0f1215;
             --panel-bg: rgba(26, 30, 35, 0.95);
-            --accent: #d4af37; /* Dourado */
+            --accent: #d4af37;
             --text-main: #e0e0e0;
             --text-muted: #888;
             --border: 1px solid #333;
@@ -48,10 +48,9 @@
             border-radius: 4px;
         }
 
-        /* GRID LAYOUT */
         .dashboard {
             display: grid;
-            grid-template-columns: 300px 1fr;
+            grid-template-columns: 350px 1fr;
             grid-template-rows: auto auto;
             gap: 20px;
             max-width: 1400px;
@@ -76,21 +75,27 @@
             font-weight: bold;
         }
 
-        /* LEADERBOARD (Left) */
+        /* LEADERBOARD */
         .leaderboard-row {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
+            align-items: center;
+            padding: 10px 0;
             border-bottom: 1px solid #222;
             transition: 0.2s;
         }
         .leaderboard-row:hover { background: rgba(255,255,255,0.05); padding-left: 5px; }
-        .rank { width: 30px; color: var(--text-muted); }
-        .army { flex-grow: 1; font-weight: bold; }
-        .money { color: #4cd137; }
-        .money.hidden { color: #e74c3c; letter-spacing: 2px; }
+        
+        .rank { width: 30px; color: var(--text-muted); font-weight: bold; }
+        .army { flex-grow: 1; font-weight: bold; font-size: 1.1em; }
+        
+        .value-box { text-align: right; }
+        .val-money { color: #4cd137; font-family: monospace; }
+        .val-score { color: #f1c40f; font-weight: bold; font-size: 1.1em; text-shadow: 0 0 5px rgba(241, 196, 15, 0.3); }
+        .val-hidden { color: #e74c3c; letter-spacing: 2px; font-family: monospace; }
+        .val-label { font-size: 0.7em; color: #666; display: block; }
 
-        /* STATS CARDS (Top Right) */
+        /* STATS CARDS */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -107,7 +112,7 @@
         .stat-val { font-size: 2em; font-weight: bold; color: white; }
         .stat-label { font-size: 0.8em; color: var(--text-muted); text-transform: uppercase; }
 
-        /* MAP SNAPSHOT (Bottom Right) */
+        /* MAP */
         .map-container {
             min-height: 400px;
             display: flex;
@@ -119,7 +124,6 @@
             background: #000;
             border-radius: 4px;
         }
-        
         .server-dot {
             width: 12px;
             height: 12px;
@@ -129,22 +133,13 @@
             transition: 0.2s;
         }
         .server-dot:hover { transform: scale(1.5); box-shadow: 0 0 5px white; z-index: 10; }
-        
-        /* Tooltip simples */
         .server-dot[title]:hover::after {
             content: attr(title);
             position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            white-space: nowrap;
-            font-size: 0.8em;
-            pointer-events: none;
-            border: 1px solid var(--accent);
+            bottom: 100%; left: 50%; transform: translateX(-50%);
+            background: #333; color: white; padding: 5px 10px;
+            border-radius: 4px; white-space: nowrap; font-size: 0.8em;
+            pointer-events: none; border: 1px solid var(--accent);
         }
 
     </style>
@@ -154,7 +149,7 @@
     <div class="header">
         <div>
             <h1>Warfare Archives</h1>
-            <div class="subtitle">Historical Records & Statistics</div>
+            <div class="subtitle">Official Historical Records</div>
         </div>
         <select id="weekSelector" onchange="loadWeekData(this.value)">
             <option>Loading Database...</option>
@@ -164,7 +159,7 @@
     <div class="dashboard">
         
         <div class="panel" style="grid-row: span 2;">
-            <div class="panel-title">🏆 Top 10 Wealth</div>
+            <div class="panel-title" id="lbTitle">🏆 Top 10</div>
             <div id="leaderboardList">
                 </div>
             
@@ -259,26 +254,47 @@
         document.getElementById('favWeapon').innerText = fav.charAt(0).toUpperCase() + fav.slice(1);
         document.getElementById('mapDate').innerText = `Archived: ${week.date}`;
 
-        // Leaderboard
+        // Leaderboard Logic
         const lbContainer = document.getElementById('leaderboardList');
+        const lbTitle = document.getElementById('lbTitle');
         lbContainer.innerHTML = "";
         
+        // Verifica o tipo de leaderboard (Manual ou Wealth)
+        const isManual = week.leaderboard.length > 0 && week.leaderboard[0].type === "manual";
+        lbTitle.innerText = isManual ? "🏆 Power Rankings" : "💰 Wealth Leaderboard";
+
         week.leaderboard.forEach((entry, i) => {
             const row = document.createElement('div');
             row.className = "leaderboard-row";
             
-            // Lógica do Anti-Spy: Se for -1, mostramos "HIDDEN"
-            let moneyDisplay = "";
-            if (entry.balance === -1) {
-                moneyDisplay = "<span class='money hidden'>???</span>";
+            let valHtml = "";
+            
+            if (isManual) {
+                // Modo PONTOS
+                valHtml = `
+                    <div class="value-box">
+                        <span class="val-score">${entry.score.toFixed(1)}</span>
+                        <span class="val-label">POINTS</span>
+                    </div>`;
             } else {
-                moneyDisplay = `<span class='money'>$${formatMoney(entry.balance)}</span>`;
+                // Modo DINHEIRO
+                if (entry.balance === -1) {
+                    valHtml = `<span class="val-hidden">HIDDEN</span>`;
+                } else {
+                    valHtml = `
+                        <div class="value-box">
+                            <span class="val-money">$${formatMoney(entry.balance)}</span>
+                            <span class="val-label">COINS</span>
+                        </div>`;
+                }
             }
 
             row.innerHTML = `
-                <span class="rank">#${i+1}</span>
-                <span class="army">${entry.name}</span>
-                ${moneyDisplay}
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span class="rank">#${i+1}</span>
+                    <span class="army">${entry.name}</span>
+                </div>
+                ${valHtml}
             `;
             lbContainer.appendChild(row);
         });
@@ -312,6 +328,7 @@
     }
 
     function formatMoney(amount) {
+        if (!amount) return "0";
         if (amount >= 1000000) return (amount / 1000000).toFixed(1) + 'M';
         if (amount >= 1000) return (amount / 1000).toFixed(1) + 'k';
         return amount.toLocaleString('en-US');
