@@ -313,7 +313,7 @@ body {
 }
 
 .invasion-flashing {
-  animation: invasionFlash 1s infinite steps(2); /* "Steps" dá aquele ar de falha técnica */
+  animation: invasionFlash 2s infinite steps(2); /* "Steps" dá aquele ar de falha técnica */
 }
 
 /* --- Mobile Responsiveness --- */
