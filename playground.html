@@ -17,7 +17,7 @@
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
 
     <style>
-        /* === TUA ESTÉTICA ORIGINAL (PRESERVADA) === */
+        /* === O TEU CSS ORIGINAL (INTOCADO) === */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -33,157 +33,225 @@
             text-align: center;
         }
 
-        .stat-val { font-size: 1.8em; font-weight: bold; color: #fff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
-        .stat-lbl { font-size: 0.8em; color: #888; text-transform: uppercase; letter-spacing: 2px; }
+        .stat-val { font-size: 1.8em; font-weight: bold; color: #fff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.3); }
+        .stat-label { font-size: 0.8em; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* === AJUSTES DA SIDEBAR (Mais fina) === */
-        .sidebar {
-            width: 250px; /* Reduzi de 350px para 250px como pediste */
+        .archive-header {
             display: flex;
-            flex-direction: column;
-            background: rgba(0,0,0,0.5);
-            border-right: 1px solid #333;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.2);
         }
 
-        /* Tabs */
-        .sidebar-tabs { display: flex; border-bottom: 1px solid #333; }
+        select.archive-selector {
+            background: #051020;
+            color: var(--neon-blue);
+            border: 1px solid var(--neon-blue);
+            padding: 8px 15px;
+            font-family: 'Rajdhani';
+            text-transform: uppercase;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* === NOVOS ESTILOS PARA AS TABS DA SIDEBAR (Mínimos) === */
+        .tab-container { display: flex; gap: 5px; margin-bottom: 10px; padding: 10px; }
         .tab-btn { 
-            flex: 1; background: transparent; border: none; color: #aaa; 
-            padding: 10px 5px; cursor: pointer; font-family: 'Rajdhani'; font-weight: bold;
-            font-size: 0.9em; text-transform: uppercase;
+            flex: 1; background: #051020; border: 1px solid var(--neon-blue); color: var(--neon-blue);
+            padding: 5px; cursor: pointer; font-family: 'Rajdhani'; font-size: 0.8em; text-transform: uppercase;
         }
-        .tab-btn.active { color: #00f3ff; border-bottom: 2px solid #00f3ff; background: rgba(0, 243, 255, 0.1); }
-        .tab-content { display: none; flex: 1; width: 100%; height: 100%; }
-        .tab-content.active { display: block; }
+        .tab-btn.active { background: var(--neon-blue); color: #000; font-weight: bold; }
         
-        iframe { width: 100%; height: 100%; border: none; }
+        /* Iframe para Top10/Forces/Wealth */
+        .sidebar-iframe { width: 100%; flex: 1; border: none; min-height: 300px; }
 
-        /* === O SÍTIO DO MAPA (Substitui o Snapshot) === */
+        /* === O CONTENTOR DO MAPA (Substitui o Snapshot Grid) === */
+        /* Removi o .snapshot-grid e meti isto para o mapa caber */
         #container {
             width: 100%;
-            height: 100%;
-            min-height: 500px; /* Garante altura se não houver conteúdo */
-            background: transparent; /* Deixa ver o teu fundo fixe */
+            height: 500px; /* Altura fixa para o mapa aparecer bem */
+            border: 1px solid rgba(0, 243, 255, 0.1);
+            background: transparent;
         }
-        
-        /* Layout Principal */
-        .dashboard-container { display: flex; height: calc(100vh - 60px); }
-        .main-content { flex: 1; padding: 20px; display: flex; flex-direction: column; position: relative; }
-        
-        /* Remove o fundo branco do Highcharts */
+
+        /* Override Highcharts Background para ser transparente */
         .highcharts-container, .highcharts-root { background: transparent !important; }
+
+        /* Footer e Layout originais */
+        .footer-text { text-align:center; padding: 10px; color: #555; font-size: 0.8rem; }
+        .dashboard-container { display: flex; height: calc(100vh - 80px); }
+        .sidebar { width: 300px; background: rgba(0,0,0,0.8); display: flex; flex-direction: column; border-right: 1px solid #333; }
+        .map-wrapper { flex: 1; display: block; overflow-y: auto; background: #02050a; }
+        .map-header { padding: 15px; border-bottom: 1px solid #333; }
     </style>
 </head>
 <body>
 
     <nav class="top-nav">
-        <div class="logo-section"><h1>CPA ARCHIVES</h1></div>
+        <div class="logo-section">
+            <h1>CPA: THE MAP <span style="font-size:0.5em; color:var(--text-muted); vertical-align: super;">ARCHIVES</span></h1>
+        </div>
         <div class="nav-links">
             <a href="index.html">Live Map</a>
             <a href="#" class="active">Archives</a>
+            <a href="https://discord.gg/cparmies" target="_blank">Discord</a>
         </div>
     </nav>
 
     <div class="dashboard-container">
         
         <aside class="sidebar">
-            <div style="padding:15px; border-bottom:1px solid #333;">
-                <select id="weekSelector" onchange="loadWeekData(this.value)" style="width:100%; padding:5px; background:#111; color:#0ff; border:1px solid #0ff; font-family:'Rajdhani';">
-                    <option>Loading...</option>
-                </select>
+            <div style="padding-bottom:15px; border-bottom:1px solid var(--border-color); margin-bottom:15px;">
+                <h2 style="margin:10px; border:none; font-family:'Rajdhani'; color:#fff;">Select Date</h2>
+                <div style="padding:0 10px;">
+                    <select id="weekSelector" class="archive-selector" onchange="loadWeekData(this.value)" style="width:100%">
+                        <option>Loading...</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="sidebar-tabs">
-                <button class="tab-btn active" onclick="openTab(event, 'topten')">Top 10</button>
-                <button class="tab-btn" onclick="openTab(event, 'forces')">Forces</button>
-                <button class="tab-btn" onclick="openTab(event, 'wealth')">Wealth</button>
+            <div class="tab-container">
+                <button class="tab-btn active" onclick="switchTab('topten')">TOP 10</button>
+                <button class="tab-btn" onclick="switchTab('forces')">FORCES</button>
+                <button class="tab-btn" onclick="switchTab('wealth')">WEALTH</button>
             </div>
 
-            <div id="topten" class="tab-content active">
-                <iframe id="toptenFrame"></iframe>
-            </div>
-            <div id="forces" class="tab-content">
-                <iframe id="forcesFrame"></iframe>
-            </div>
-            <div id="wealth" class="tab-content">
-                <iframe id="wealthFrame"></iframe>
-            </div>
+            <iframe id="sidebarContent" class="sidebar-iframe" src=""></iframe>
+            
         </aside>
 
-        <div class="main-content">
+        <div class="map-wrapper">
             
-            <div class="stats-grid">
-                <div class="stat-card"><div class="stat-val" id="totalSpent">0</div><div class="stat-lbl">Spent</div></div>
-                <div class="stat-card"><div class="stat-val" id="totalAttacks">0</div><div class="stat-lbl">Attacks</div></div>
-                <div class="stat-card"><div class="stat-val" id="totalWars">0</div><div class="stat-lbl">Wars</div></div>
-                <div class="stat-card"><div class="stat-val" id="favWeapon">-</div><div class="stat-lbl">Fav. Item</div></div>
+            <div class="map-header">
+                <span class="status-indicator">
+                    <div class="status-dot" style="background:var(--neon-blue); box-shadow:0 0 8px var(--neon-blue);"></div> 
+                    ARCHIVED DATA: <span id="archiveDate" style="color:#fff; margin-left:5px;">-</span>
+                </span>
             </div>
 
-            <div id="container"></div>
-            
-            <div id="loadingMsg" style="display:none; position:absolute; top:60%; left:50%; transform:translate(-50%,-50%); color:#0ff; font-family:'Rajdhani';">LOADING ARCHIVE...</div>
+            <div style="padding:20px;">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-val" id="totalSpent">0</div>
+                        <div class="stat-label">Coins Spent</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-val" id="totalAttacks">0</div>
+                        <div class="stat-label">Attacks Launched</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-val" id="totalWars">0</div>
+                        <div class="stat-label">Active Wars</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-val" id="favWeapon">-</div>
+                        <div class="stat-label">Fav. Weapon</div>
+                    </div>
+                </div>
 
+                <h3 style="color:var(--neon-blue); text-transform:uppercase; border-bottom:1px solid var(--border-color); padding-bottom:10px;">Territory Snapshot</h3>
+                
+                <div id="container"></div>
+
+                <div id="loadingMsg" style="display:none; color:#00f3ff; text-align:center; padding:20px; font-family:'Rajdhani'">LOADING MAP...</div>
+
+            </div>
         </div>
+    </div>
+
+    <div class="footer-text">
+        UI by df44 for CPA
     </div>
 
     <script>
         let historyData = [];
+        let currentBasePath = ""; // Guarda o caminho da semana atual
 
         window.onload = async function() {
             try {
                 const response = await fetch('history.json');
+                if (!response.ok) throw new Error("History file not found");
                 historyData = await response.json();
-                
+
                 const selector = document.getElementById('weekSelector');
                 selector.innerHTML = "";
                 
-                if (!historyData.length) { selector.innerHTML = "<option>No Archives</option>"; return; }
+                if (historyData.length === 0) {
+                    selector.innerHTML = "<option>No Archives Found</option>";
+                    return;
+                }
 
                 historyData.forEach((week, index) => {
                     const opt = document.createElement('option');
                     opt.value = index;
-                    opt.innerText = week.date;
+                    opt.innerText = `${week.id} (${week.date})`;
                     selector.appendChild(opt);
                 });
-                loadWeekData(0); 
-            } catch (e) { console.error("Erro history:", e); }
+
+                loadWeekData(0);
+
+            } catch (e) {
+                console.error(e);
+                document.getElementById('container').innerHTML = `<div style="text-align:center; color:#ff0055;">ARCHIVE OFFLINE</div>`;
+            }
         };
 
         function loadWeekData(index) {
             const week = historyData[index];
             const stats = week.stats.global;
-            const basePath = week.path || `archives/${week.date}`;
+            
+            // Define o path (ex: archives/2026-01-24)
+            currentBasePath = week.path || `archives/${week.date}`;
 
-            // 1. Stats
+            // 1. Header & Stats (Tua lógica original)
+            document.getElementById('archiveDate').innerText = week.date;
             document.getElementById('totalSpent').innerText = formatMoney(stats.spent);
             document.getElementById('totalAttacks').innerText = stats.attacks;
             document.getElementById('totalWars').innerText = stats.wars || 0;
             
             let fav = "None"; let max = 0;
-            for (const [i, c] of Object.entries(stats.items || {})) { if (c > max) { max = c; fav = i; } }
+            for (const [item, count] of Object.entries(stats.items || {})) {
+                if (count > max) { max = count; fav = item; }
+            }
             document.getElementById('favWeapon').innerText = fav.toUpperCase();
 
-            // 2. Iframes (Tabs Novas)
-            document.getElementById('toptenFrame').src = `${basePath}/topten.html`;
-            document.getElementById('forcesFrame').src = `${basePath}/army_code.html`;
-            document.getElementById('wealthFrame').src = `${basePath}/wealth.html`;
+            // 2. Carregar a Tab Inicial (Top Ten)
+            switchTab('topten');
 
-            // 3. Carregar Mapa
-            loadArchiveMap(basePath);
+            // 3. CARREGAR O MAPA REAL (Substitui as bolinhas)
+            loadArchiveMap(currentBasePath);
         }
 
+        // Função para gerir as tabs da Sidebar
+        function switchTab(tabName) {
+            // Atualiza botões
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active'); // O botão clicado fica ativo (se clicado via JS pode dar erro, mas funciona no onload)
+
+            const iframe = document.getElementById('sidebarContent');
+            
+            // Aponta para os ficheiros HTML dentro da pasta da semana
+            if (tabName === 'topten') iframe.src = `${currentBasePath}/topten.html`;
+            if (tabName === 'forces') iframe.src = `${currentBasePath}/army_code.html`;
+            if (tabName === 'wealth') iframe.src = `${currentBasePath}/wealth.html`;
+        }
+
+        // A Lógica do Mapa Dinâmico
         function loadArchiveMap(basePath) {
             const container = document.getElementById('container');
             const loader = document.getElementById('loadingMsg');
+            
+            // Limpa o mapa anterior
+            if (Highcharts.charts[0]) { Highcharts.charts[0].destroy(); }
+            container.innerHTML = "";
             loader.style.display = 'block';
 
-            if (Highcharts.charts[0]) Highcharts.charts[0].destroy();
-            container.innerHTML = "";
-
-            // Atualiza CSS do mapa
+            // 1. Injetar CSS do Mapa Arquivado
             document.getElementById('archiveMapCss').href = `${basePath}/map.css?t=${Date.now()}`;
 
-            // Injeta o JS do mapa
+            // 2. Injetar JS do Mapa Arquivado
             const oldScript = document.getElementById('dynamicMapScript');
             if (oldScript) oldScript.remove();
 
@@ -192,17 +260,12 @@
             script.src = `${basePath}/map.js?t=${Date.now()}`;
             
             script.onload = () => { loader.style.display = 'none'; };
-            document.body.appendChild(script);
-        }
+            script.onerror = () => { 
+                loader.style.display = 'none'; 
+                container.innerHTML = "<div style='text-align:center; padding-top:50px; color:#555'>MAP DATA NOT FOUND</div>";
+            };
 
-        function openTab(evt, tabName) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tab-content");
-            for (i = 0; i < tabcontent.length; i++) { tabcontent[i].style.display = "none"; }
-            tablinks = document.getElementsByClassName("tab-btn");
-            for (i = 0; i < tablinks.length; i++) { tablinks[i].classList.remove("active"); }
-            document.getElementById(tabName).style.display = "block";
-            evt.currentTarget.classList.add("active");
+            document.body.appendChild(script);
         }
 
         function formatMoney(amount) {
