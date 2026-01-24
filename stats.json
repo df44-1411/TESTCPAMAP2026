@@ -6,5 +6,11 @@
     "items": {}
   },
   "armies": {},
-  "servers": {}
+  "servers": {},
+  "pending_ranks": {
+    "1": {
+      "name": "Water Vikings",
+      "score": 88.9
+    }
+  }
 }
