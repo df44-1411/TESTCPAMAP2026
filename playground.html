@@ -10,92 +10,59 @@
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css"> 
-    <link rel="stylesheet" href="map.css">
+    
+    <link id="archiveMapCss" rel="stylesheet" href="map.css">
+
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
 
     <style>
-        /* Ajustes Específicos para a Página de Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .stat-card {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(0, 243, 255, 0.1);
-            padding: 15px;
-            border-radius: 4px;
-            text-align: center;
-        }
-
-        .stat-val { font-size: 1.8em; font-weight: bold; color: #fff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.3); }
-        .stat-label { font-size: 0.8em; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-
-        .archive-header {
+        /* === ESTILOS IMPORTADOS DO INDEX.HTML (Para o mapa ficar igual) === */
+        .highcharts-container, .highcharts-root, #container {
+            background: transparent !important;
+            width: 100% !important;  
+            height: 100% !important;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(0,0,0,0.2);
-        }
-
-        select.archive-selector {
-            background: #051020;
-            color: var(--neon-blue);
-            border: 1px solid var(--neon-blue);
-            padding: 8px 15px;
-            font-family: 'Rajdhani';
-            text-transform: uppercase;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* Leaderboard Styling */
-        .lb-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            align-items: center;
-        }
-        .lb-rank { color: var(--neon-blue); font-weight: bold; width: 30px; }
-        .lb-name { flex: 1; font-weight: 600; }
-        .lb-val { font-family: monospace; letter-spacing: 1px; }
-        
-        .val-hidden { color: #ff0055; letter-spacing: 2px; }
-        .val-points { color: #ffd700; text-shadow: 0 0 5px #ffd700; }
-
-        /* Map Snapshot Grid */
-        .snapshot-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            padding: 20px;
-            justify-content: center;
-            overflow-y: auto;
-            max-height: 400px;
         }
         
-        .snap-dot {
-            width: 14px;
-            height: 14px;
-            background: #222;
-            border: 1px solid rgba(255,255,255,0.1);
-            cursor: help;
+        /* Fundo com Grid Tático */
+        .map-wrapper {
+            background-color: #051020 !important;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px) !important;
+            background-size: 40px 40px !important;
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Importante para o mapa não estourar */
         }
-        .snap-dot:hover {
-            transform: scale(1.5);
-            border-color: #fff;
-            z-index: 10;
+
+        /* === ESTILOS ESPECÍFICOS DO ARQUIVO === */
+        .dashboard-container { height: calc(100vh - 60px); display: flex; overflow: hidden; }
+        .sidebar { width: 350px; display: flex; flex-direction: column; background: #02050a; border-left: 1px solid #333; z-index: 10; }
+
+        /* Barra de Stats (Overlay no topo do mapa) */
+        .stats-bar {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; 
+            padding: 10px; background: rgba(0,0,0,0.6); border-bottom: 1px solid #00f3ff33;
+            z-index: 5;
         }
-		.tab-container { display: flex; gap: 5px; margin-bottom: 10px; }
-		.tab-btn { 
-			background: #051020; border: 1px solid var(--neon-blue); color: var(--neon-blue);
-			padding: 5px 10px; cursor: pointer; font-family: 'Rajdhani'; font-size: 0.7em;
-		}
-		.tab-btn.active { background: var(--neon-blue); color: #000; }
+        .stat-item { text-align: center; }
+        .stat-val { font-size: 1.2em; font-weight: bold; color: #fff; font-family: 'Rajdhani'; }
+        .stat-lbl { font-size: 0.7em; color: #00f3ff; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Tabs da Sidebar */
+        .sidebar-tabs { display: flex; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(0, 243, 255, 0.3); }
+        .tab-btn { flex: 1; background: transparent; border: none; color: #94a3b8; padding: 10px; font-family: 'Rajdhani'; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
+        .tab-btn.active { color: #00f3ff; border-bottom: 2px solid #00f3ff; background: rgba(0, 243, 255, 0.1); }
+        
+        .tab-content { display: none; flex: 1; width: 100%; height: 100%; }
+        .tab-content.active { display: block; }
+        
+        /* Iframe para conteúdos secundários (Wealth, Wars, etc) */
+        .content-frame { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
@@ -113,70 +80,46 @@
 
     <div class="dashboard-container">
         
+        <div class="map-wrapper">
+            <div class="stats-bar">
+                <div class="stat-item"><div class="stat-val" id="totalSpent">0</div><div class="stat-lbl">Coins Spent</div></div>
+                <div class="stat-item"><div class="stat-val" id="totalAttacks">0</div><div class="stat-lbl">Attacks</div></div>
+                <div class="stat-item"><div class="stat-val" id="totalWars">0</div><div class="stat-lbl">Active Wars</div></div>
+                <div class="stat-item"><div class="stat-val" id="favWeapon">-</div><div class="stat-lbl">Fav. Weapon</div></div>
+            </div>
+
+            <div id="container"></div>
+            
+            <div id="loadingOverlay" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:#00f3ff; font-family:'Rajdhani';">
+                LOADING ARCHIVE...
+            </div>
+        </div>
+
         <aside class="sidebar">
-            <div style="padding-bottom:15px; border-bottom:1px solid var(--border-color); margin-bottom:15px;">
-                <h2 style="margin:0; border:none;">Select Date</h2>
-                <select id="weekSelector" class="archive-selector" onchange="loadWeekData(this.value)" style="width:100%">
+            <div style="padding:15px; border-bottom:1px solid #333;">
+                <h3 style="margin:0 0 10px 0; font-family:'Rajdhani'; color:#fff;">SELECT WEEK</h3>
+                <select id="weekSelector" onchange="loadWeekData(this.value)" style="width:100%; padding:8px; background:#051020; color:#00f3ff; border:1px solid #00f3ff; font-family:'Rajdhani'; font-weight:bold; cursor:pointer;">
                     <option>Loading...</option>
                 </select>
             </div>
 
-            <h2 id="lbTitle">Rankings</h2>
-			<div class="tab-container">
-				<button class="tab-btn active" onclick="switchTab('topten')">TOP 10</button>
-				<button class="tab-btn" onclick="switchTab('forces')">FORCES</button>
-				<button class="tab-btn" onclick="switchTab('wealth')">WEALTH</button>
-			</div>
-            <div id="leaderboardList" style="flex:1; overflow-y:auto;">
-                </div>
-            
-            <div style="margin-top:20px; padding-top:10px; border-top:1px solid var(--border-color);">
-                <div style="font-size:0.8em; color:var(--text-muted); text-transform:uppercase;">Most Aggressive</div>
-                <div id="warmongerName" style="font-size:1.4em; font-weight:bold; color:#ff0055;">-</div>
-                <div id="warmongerCount" style="color:#fff;">0 Attacks</div>
+            <div class="sidebar-tabs">
+                <button class="tab-btn active" onclick="openTab(event, 'wealth')">Wealth</button>
+                <button class="tab-btn" onclick="openTab(event, 'forces')">Forces</button>
+                <button class="tab-btn" onclick="openTab(event, 'wars')">Wars</button>
+            </div>
+
+            <div id="wealth" class="tab-content active">
+                <iframe id="wealthFrame" class="content-frame"></iframe>
+            </div>
+            <div id="forces" class="tab-content">
+                <iframe id="forcesFrame" class="content-frame"></iframe>
+            </div>
+            <div id="wars" class="tab-content">
+                <iframe id="warsFrame" class="content-frame"></iframe>
             </div>
         </aside>
 
-        <div class="map-wrapper" style="display:block; overflow-y:auto;">
-            
-            <div class="map-header">
-                <span class="status-indicator">
-                    <div class="status-dot" style="background:var(--neon-blue); box-shadow:0 0 8px var(--neon-blue);"></div> 
-                    ARCHIVED DATA: <span id="archiveDate" style="color:#fff; margin-left:5px;">-</span>
-                </span>
-            </div>
-
-            <div style="padding:20px;">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-val" id="totalSpent">0</div>
-                        <div class="stat-label">Coins Spent</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-val" id="totalAttacks">0</div>
-                        <div class="stat-label">Attacks Launched</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-val" id="totalWars">0</div>
-                        <div class="stat-label">Active Wars</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-val" id="favWeapon">-</div>
-                        <div class="stat-label">Fav. Weapon</div>
-                    </div>
-                </div>
-
-                <h3 style="color:var(--neon-blue); text-transform:uppercase; border-bottom:1px solid var(--border-color); padding-bottom:10px;">Territory Snapshot</h3>
-                <div id="mapSnapshot" class="snapshot-grid">
-                    </div>
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="footer-text" style="text-align:center; padding: 10px; color: #555; font-size: 0.8rem;">
-        UI by df44 for CPA
     </div>
 
     <script>
@@ -199,101 +142,97 @@
                 historyData.forEach((week, index) => {
                     const opt = document.createElement('option');
                     opt.value = index;
-                    opt.innerText = `${week.id}`;
+                    // Mostra a data e o ID (semana)
+                    opt.innerText = `${week.date}`; 
                     selector.appendChild(opt);
                 });
 
+                // Carrega a semana mais recente (índice 0)
                 loadWeekData(0);
 
             } catch (e) {
                 console.error(e);
-                document.querySelector('.dashboard-container').innerHTML = 
-                    `<div style="width:100%; text-align:center; padding-top:100px; color:#ff0055;">
-                        <h2>ARCHIVE OFFLINE</h2>
-                        <p>No history data generated yet.</p>
-                    </div>`;
+                document.getElementById('container').innerHTML = `<div style="text-align:center; padding-top:50px; color:#ff0055;">ERROR LOADING HISTORY</div>`;
             }
         };
 
         function loadWeekData(index) {
             const week = historyData[index];
             const stats = week.stats.global;
-            const armies = week.stats.armies;
+            const basePath = week.path || `archives/${week.date}`;
 
-            // Header
-            document.getElementById('archiveDate').innerText = week.date;
-
-            // Stats
+            // 1. Atualizar Números (Stats Bar)
             document.getElementById('totalSpent').innerText = formatMoney(stats.spent);
             document.getElementById('totalAttacks').innerText = stats.attacks;
-            document.getElementById('totalWars').innerText = stats.wars;
+            document.getElementById('totalWars').innerText = stats.wars || 0;
             
-            let fav = "None";
-            let maxUsage = 0;
+            let fav = "None"; let max = 0;
             for (const [item, count] of Object.entries(stats.items || {})) {
-                if (count > maxUsage) { maxUsage = count; fav = item; }
+                if (count > max) { max = count; fav = item; }
             }
-            document.getElementById('favWeapon').innerText = fav.charAt(0).toUpperCase() + fav.slice(1);
-	
-            // Leaderboard
-            const lbContainer = document.getElementById('leaderboardList');
-            const lbTitle = document.getElementById('lbTitle');
-            lbContainer.innerHTML = "";
+            document.getElementById('favWeapon').innerText = fav.toUpperCase();
+
+            // 2. Carregar Iframes Laterais
+            document.getElementById('wealthFrame').src = `${basePath}/wealth.html`;
+            document.getElementById('forcesFrame').src = `${basePath}/army_code.html`;
+            document.getElementById('warsFrame').src = `${basePath}/wars.html`;
+
+            // 3. CARREGAR O MAPA (A Lógica Pesada)
+            loadArchiveMap(basePath);
+        }
+
+        function loadArchiveMap(basePath) {
+            const container = document.getElementById('container');
+            const loader = document.getElementById('loadingOverlay');
             
-            const isManual = week.leaderboard.length > 0 && week.leaderboard[0].type === "manual";
-            lbTitle.innerText = isManual ? "🏆 Power Rankings" : "💰 Wealth Leaderboard";
+            // Mostrar Loading
+            loader.style.display = 'block';
 
-            week.leaderboard.forEach((entry, i) => {
-                const row = document.createElement('div');
-                row.className = "lb-row";
-                
-                let valHtml = "";
-                if (isManual) {
-                    valHtml = `<span class="lb-val val-points">${entry.score.toFixed(1)} PTS</span>`;
-                } else {
-                    if (entry.balance === -1) {
-                        valHtml = `<span class="lb-val val-hidden">HIDDEN</span>`;
-                    } else {
-                        valHtml = `<span class="lb-val" style="color:#00ff9d">$${formatMoney(entry.balance)}</span>`;
-                    }
-                }
-
-                row.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <span class="lb-rank">#${i+1}</span>
-                        <span class="lb-name">${entry.name}</span>
-                    </div>
-                    ${valHtml}
-                `;
-                lbContainer.appendChild(row);
-            });
-
-            // Warmonger
-            let warmestArmy = "-";
-            let maxAttacks = 0;
-            for (const [name, data] of Object.entries(armies)) {
-                if (data.attacks > maxAttacks) { maxAttacks = data.attacks; warmestArmy = name; }
+            // A. Limpar Mapa Antigo
+            // Se já houver um chart instanciado, destruí-lo para limpar memória e eventos
+            if (Highcharts.charts[0]) {
+                Highcharts.charts[0].destroy();
             }
-            document.getElementById('warmongerName').innerText = warmestArmy;
-            document.getElementById('warmongerCount').innerText = `${maxAttacks} Attacks`;
+            container.innerHTML = ""; // Limpa qualquer resíduo HTML
 
-            // Map Snapshot
-            const mapContainer = document.getElementById('mapSnapshot');
-            mapContainer.innerHTML = "";
+            // B. Trocar o CSS do Mapa
+            const cssLink = document.getElementById('archiveMapCss');
+            cssLink.href = `${basePath}/map.css?t=${new Date().getTime()}`; // Timestamp para evitar cache
+
+            // C. Trocar o Script do Mapa (JS)
+            // Primeiro removemos o script antigo se existir
+            const oldScript = document.getElementById('dynamicMapScript');
+            if (oldScript) oldScript.remove();
+
+            // Criamos o novo script
+            const script = document.createElement('script');
+            script.id = 'dynamicMapScript';
+            script.src = `${basePath}/map.js?t=${new Date().getTime()}`;
             
-            const sortedServers = Object.keys(week.map_snapshot).sort();
-            sortedServers.forEach(serverName => {
-                const owner = week.map_snapshot[serverName];
-                let color = stringToColor(owner);
-                if (owner === "Freeland") color = "#222"; 
-                if (owner === "None") color = "#111";
+            script.onload = function() {
+                loader.style.display = 'none';
+                console.log("Archive Map Loaded: " + basePath);
+                // Nota: O map.js executa automaticamente e procura por id="container", 
+                // que nós já temos no HTML acima.
+            };
 
-                const dot = document.createElement('div');
-                dot.className = "snap-dot";
-                dot.style.backgroundColor = color;
-                dot.title = `${serverName}: ${owner}`;
-                mapContainer.appendChild(dot);
-            });
+            script.onerror = function() {
+                loader.style.display = 'none';
+                container.innerHTML = `<div style="text-align:center; padding-top:50px; color:#ff0055;">FAILED TO LOAD MAP DATA</div>`;
+            };
+
+            document.body.appendChild(script);
+        }
+
+        // Funções Utilitárias
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) { tabcontent[i].style.display = "none"; }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) { tablinks[i].classList.remove("active"); }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.classList.add("active");
         }
 
         function formatMoney(amount) {
@@ -301,20 +240,6 @@
             if (amount >= 1000000) return (amount / 1000000).toFixed(1) + 'M';
             if (amount >= 1000) return (amount / 1000).toFixed(1) + 'k';
             return amount.toLocaleString('en-US');
-        }
-
-        function stringToColor(str) {
-            if (!str) return "#333";
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                hash = str.charCodeAt(i) + ((hash << 5) - hash);
-            }
-            let color = '#';
-            for (let i = 0; i < 3; i++) {
-                let value = (hash >> (i * 8)) & 0xFF;
-                color += ('00' + value.toString(16)).substr(-2);
-            }
-            return color;
         }
     </script>
 </body>
