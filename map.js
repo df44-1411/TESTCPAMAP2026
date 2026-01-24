@@ -1005,6 +1005,9 @@ function(chart) {
 	 if (point.hotspot === true) {
         point.graphic.addClass('hotspot-active');
     }
+	 if (point.underInvasion === true) {
+        point.graphic.addClass('invasion-flashing');
+    }
     
   });
 });
