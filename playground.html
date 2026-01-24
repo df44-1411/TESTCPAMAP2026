@@ -3,139 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CPA Archives</title>
+    <title>Club Penguin Armies: The Archive</title>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css"> 
     <link rel="stylesheet" href="map.css">
 
     <style>
-        /* Sidebar e Tabs */
-        .sidebar { display: flex; flex-direction: column; gap: 10px; max-height: 90vh; }
-        
+        /* Ajustes Específicos para a Página de Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(0, 243, 255, 0.1);
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .stat-val { font-size: 1.8em; font-weight: bold; color: #fff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.3); }
+        .stat-label { font-size: 0.8em; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        .archive-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.2);
+        }
+
+        select.archive-selector {
+            background: #051020;
+            color: var(--neon-blue);
+            border: 1px solid var(--neon-blue);
+            padding: 8px 15px;
+            font-family: 'Rajdhani';
+            text-transform: uppercase;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* Leaderboard / Tabs Styling */
         .tab-buttons {
             display: flex;
             gap: 5px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
             margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
         }
-
+        
         .tab-btn {
-            background: rgba(0,0,0,0.3);
+            flex: 1;
+            background: rgba(0,0,0,0.4);
             border: 1px solid var(--border-color);
-            color: #aaa;
-            padding: 8px;
+            color: #888;
+            padding: 5px;
             cursor: pointer;
             font-family: 'Rajdhani';
             font-weight: bold;
-            flex: 1;
-            transition: 0.3s;
+            font-size: 0.8rem;
+            transition: 0.2s;
         }
-
+        
         .tab-btn.active {
             background: var(--neon-blue);
             color: #000;
-            box-shadow: 0 0 10px var(--neon-blue);
+            border-color: var(--neon-blue);
         }
 
-        /* Lista de Items (Top 10 / Wealth) */
-        .list-container { flex: 1; overflow-y: auto; padding-right: 5px; }
-
-        .rank-card {
-            background: rgba(0,20,40,0.6);
-            border-left: 3px solid var(--neon-blue);
-            padding: 10px;
-            margin-bottom: 8px;
+        .lb-row {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-        }
-        
-        .rank-pos { font-size: 1.2em; font-weight: bold; width: 30px; color: #fff; }
-        .rank-info { flex: 1; text-align: left; }
-        .rank-name { font-weight: bold; color: var(--neon-blue); font-size: 1.1em; }
-        .rank-val { font-family: monospace; color: #ffd700; }
-
-        /* Snapshot do Mapa */
-        .map-snapshot-container {
-            position: relative;
-            width: 100%;
-            height: 500px; /* Ajusta conforme necessário */
-            background: #051020;
-            border: 1px solid var(--border-color);
-            display: flex;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
             align-items: center;
-            justify-content: center;
+            font-size: 0.9em;
+        }
+        .lb-rank { color: var(--neon-blue); font-weight: bold; width: 25px; }
+        .lb-name { flex: 1; font-weight: 600; color: #ddd; }
+        .lb-val { font-family: monospace; letter-spacing: 1px; font-weight: bold; }
+        
+        .val-hidden { color: #ff0055; letter-spacing: 2px; font-size: 0.8em; }
+        .val-points { color: #00ff9d; }
+        .val-gold { color: #ffd700; }
+
+        /* Map Snapshot Grid */
+        .snapshot-grid {
+            display: flex;
             flex-wrap: wrap;
+            gap: 4px;
             padding: 20px;
+            justify-content: center;
             overflow-y: auto;
-            gap: 5px;
+            max-height: 500px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
         }
         
         .snap-dot {
-            width: 15px; height: 15px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: transform 0.2s;
+            width: 14px;
+            height: 14px;
+            background: #222;
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: help;
+            transition: transform 0.1s;
         }
-        .snap-dot:hover { transform: scale(1.5); z-index: 10; border-color: #fff; }
+        .snap-dot:hover {
+            transform: scale(1.5);
+            border-color: #fff;
+            z-index: 10;
+        }
 
-        /* Ajustes Mobile */
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .dashboard-container { flex-direction: column; }
-            .sidebar { max-height: 400px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
 
     <nav class="top-nav">
-        <div class="logo-section"><h1>CPA ARCHIVES</h1></div>
+        <div class="logo-section">
+            <h1>CPA: THE MAP <span style="font-size:0.5em; color:var(--text-muted); vertical-align: super;">ARCHIVES</span></h1>
+        </div>
         <div class="nav-links">
             <a href="index.html">Live Map</a>
             <a href="#" class="active">Archives</a>
+            <a href="https://discord.gg/cparmies" target="_blank">Discord</a>
         </div>
     </nav>
 
     <div class="dashboard-container">
         
         <aside class="sidebar">
-            <div style="margin-bottom:15px;">
-                <label style="color:#aaa; font-size:0.8em;">SELECT ARCHIVE DATE</label>
-                <select id="weekSelector" class="archive-selector" onchange="loadWeekData(this.value)" style="width:100%; margin-top:5px;">
+            <div style="padding-bottom:15px; border-bottom:1px solid var(--border-color); margin-bottom:15px;">
+                <h2 style="margin:0 0 10px 0; border:none; font-size:1em; color:#aaa;">SELECT ARCHIVE</h2>
+                <select id="weekSelector" class="archive-selector" onchange="loadWeekData(this.value)">
                     <option>Loading History...</option>
                 </select>
             </div>
 
             <div class="tab-buttons">
                 <button class="tab-btn active" onclick="switchTab('top10')">TOP 10</button>
-                <button class="tab-btn" onclick="switchTab('active')">FORCES</button>
                 <button class="tab-btn" onclick="switchTab('wealth')">WEALTH</button>
+                <button class="tab-btn" onclick="switchTab('active')">FORCES</button>
             </div>
 
-            <div id="sidebarContent" class="list-container">
+            <h2 id="lbTitle" style="font-size:1.1em; color:var(--neon-blue); border-bottom:1px solid var(--neon-blue); padding-bottom:5px;">Rankings</h2>
+            
+            <div id="leaderboardList" style="flex:1; overflow-y:auto; min-height: 300px;">
                 </div>
+            
+            <div style="margin-top:20px; padding-top:10px; border-top:1px solid var(--border-color);">
+                <div style="font-size:0.8em; color:var(--text-muted); text-transform:uppercase;">Weekly Warmonger</div>
+                <div id="warmongerName" style="font-size:1.4em; font-weight:bold; color:#ff0055;">-</div>
+                <div id="warmongerCount" style="color:#fff;">0 Attacks</div>
+            </div>
         </aside>
 
-        <div class="map-wrapper">
+        <div class="map-wrapper" style="display:block; overflow-y:auto;">
+            
             <div class="map-header">
                 <span class="status-indicator">
-                    <div class="status-dot"></div> 
-                    ARCHIVED STATE: <span id="archiveLabel" style="color:#fff; margin-left:5px;">-</span>
+                    <div class="status-dot" style="background:var(--neon-blue); box-shadow:0 0 8px var(--neon-blue);"></div> 
+                    ARCHIVED DATA: <span id="archiveDate" style="color:#fff; margin-left:5px;">-</span>
                 </span>
             </div>
 
             <div style="padding:20px;">
-                <h3 style="color:var(--neon-blue);">TERRITORY SNAPSHOT</h3>
-                <p style="color:#aaa; font-size:0.9em; margin-bottom:15px;">Visual representation of territory control at the time of archiving.</p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-val" id="totalSpent">0</div>
+                        <div class="stat-label">Coins Spent</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-val" id="totalAttacks">0</div>
+                        <div class="stat-label">Attacks Launched</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-val" id="totalWars">0</div>
+                        <div class="stat-label">Active Wars</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-val" id="favWeapon">-</div>
+                        <div class="stat-label">Fav. Weapon</div>
+                    </div>
+                </div>
+
+                <h3 style="color:var(--neon-blue); text-transform:uppercase; border-bottom:1px solid var(--border-color); padding-bottom:10px; margin-top:30px;">
+                    Territory Snapshot
+                </h3>
                 
-                <div id="mapSnapshot" class="map-snapshot-container">
-                    <div style="color:#666;">Select a date to load snapshot...</div>
+                <div id="mapSnapshot" class="snapshot-grid">
+                    <div style="color:#aaa;">Select a date to load map state...</div>
                 </div>
             </div>
+
         </div>
 
+    </div>
+
+    <div class="footer-text" style="text-align:center; padding: 10px; color: #555; font-size: 0.8rem;">
+        CPA Archives System
     </div>
 
     <script>
@@ -143,26 +222,20 @@
         let currentWeek = null;
         let currentTab = 'top10';
 
-        // 1. Carregar History.json ao iniciar
         window.onload = async function() {
             try {
-                // Tenta carregar history.json. Se não existir, usa array vazio para não crashar
                 const response = await fetch('history.json');
-                if (response.ok) {
-                    historyData = await response.json();
-                } else {
-                    console.warn("history.json not found.");
-                }
+                if (!response.ok) throw new Error("History file not found");
+                historyData = await response.json();
 
                 const selector = document.getElementById('weekSelector');
                 selector.innerHTML = "";
-
+                
                 if (historyData.length === 0) {
                     selector.innerHTML = "<option>No Archives Found</option>";
                     return;
                 }
 
-                // Preencher Dropdown
                 historyData.forEach((week, index) => {
                     const opt = document.createElement('option');
                     opt.value = index;
@@ -170,135 +243,130 @@
                     selector.appendChild(opt);
                 });
 
-                // Carregar o primeiro (mais recente)
                 loadWeekData(0);
 
             } catch (e) {
                 console.error(e);
+                document.querySelector('.dashboard-container').innerHTML = 
+                    `<div style="width:100%; text-align:center; padding-top:100px; color:#ff0055;">
+                        <h2>ARCHIVE OFFLINE</h2>
+                        <p>No history data generated yet.</p>
+                    </div>`;
             }
         };
 
-        // 2. Carregar Dados da Semana Selecionada
         function loadWeekData(index) {
             currentWeek = historyData[index];
-            document.getElementById('archiveLabel').innerText = currentWeek.id;
+            const stats = currentWeek.stats || {};
             
-            // Atualizar Sidebar (depende da tab ativa)
+            // Header
+            document.getElementById('archiveDate').innerText = currentWeek.date;
+
+            // Preencher os Teus Stats Cards
+            document.getElementById('totalSpent').innerText = formatMoney(stats.spent || 0);
+            document.getElementById('totalAttacks').innerText = stats.attacks || 0;
+            document.getElementById('totalWars').innerText = stats.wars || 0;
+            document.getElementById('favWeapon').innerText = stats.fav_weapon || "None";
+
+            // Warmonger (Preencher a tua sidebar)
+            document.getElementById('warmongerName').innerText = stats.warmonger_name || "-";
+            document.getElementById('warmongerCount').innerText = (stats.warmonger_count || 0) + " Attacks";
+
+            // Renderizar Sidebar (Tabs)
             renderSidebar();
 
-            // Atualizar Mapa Snapshot
-            renderMapSnapshot(currentWeek.map_snapshot);
+            // Renderizar Mapa (Snapshot)
+            const mapContainer = document.getElementById('mapSnapshot');
+            mapContainer.innerHTML = "";
+            
+            if (currentWeek.map_snapshot) {
+                const sortedServers = Object.keys(currentWeek.map_snapshot).sort();
+                sortedServers.forEach(serverName => {
+                    const owner = currentWeek.map_snapshot[serverName];
+                    let color = getArmyColor(owner);
+                    
+                    const dot = document.createElement('div');
+                    dot.className = "snap-dot";
+                    dot.style.backgroundColor = color;
+                    dot.title = `${serverName}: ${owner}`;
+                    mapContainer.appendChild(dot);
+                });
+            }
         }
 
-        // 3. Sistema de Tabs
+        // Lógica das Tabs
         function switchTab(tabName) {
             currentTab = tabName;
-            
-            // Atualizar Botões (Visual)
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-
             renderSidebar();
         }
 
         function renderSidebar() {
-            const container = document.getElementById('sidebarContent');
+            const container = document.getElementById('leaderboardList');
+            const title = document.getElementById('lbTitle');
             container.innerHTML = "";
 
             if (!currentWeek) return;
 
             let data = [];
-            let type = "";
-
+            
             if (currentTab === 'top10') {
+                title.innerText = "🏆 Top 10 Armies";
                 data = currentWeek.top_ten || [];
-                type = "top10";
-            } else if (currentTab === 'active') {
-                data = currentWeek.active_forces || [];
-                type = "active";
             } else if (currentTab === 'wealth') {
+                title.innerText = "💰 Wealth Ranking";
                 data = currentWeek.wealth || [];
-                type = "wealth";
+            } else if (currentTab === 'active') {
+                title.innerText = "⚔️ Active Forces";
+                data = currentWeek.active_forces || [];
             }
 
             if (data.length === 0) {
-                container.innerHTML = "<div style='color:#666; text-align:center; margin-top:20px;'>No Data Available</div>";
+                container.innerHTML = "<div style='padding:10px; color:#666; text-align:center;'>No data available.</div>";
                 return;
             }
 
-            data.forEach((item, index) => {
+            data.forEach((item, i) => {
                 const row = document.createElement('div');
-                row.className = "rank-card";
+                row.className = "lb-row";
                 
-                let rank = index + 1;
-                let valueHtml = "";
+                let rankDisplay = i + 1;
+                let valHtml = "";
 
-                // Lógica Específica por Tab
-                if (type === 'top10') {
-                    rank = item.rank; // Usa o rank manual
-                    valueHtml = `<span class="rank-val" style="color:var(--neon-blue)">${item.points} PTS</span>`;
-                } 
-                else if (type === 'active') {
-                    valueHtml = `<span class="rank-val">${item.servers} SERVERS</span>`;
-                }
-                else if (type === 'wealth') {
-                    valueHtml = `<span class="rank-val" style="color:#ffd700">$${formatMoney(item.balance)}</span>`;
+                // Formatação dependente da Tab
+                if (currentTab === 'top10') {
+                    rankDisplay = item.rank;
+                    valHtml = `<span class="lb-val val-points">${item.points} PTS</span>`;
+                } else if (currentTab === 'wealth') {
+                    valHtml = `<span class="lb-val val-gold">$${formatMoney(item.balance)}</span>`;
+                } else if (currentTab === 'active') {
+                    valHtml = `<span class="lb-val" style="color:#fff;">${item.servers} Serv.</span>`;
                 }
 
                 row.innerHTML = `
-                    <div class="rank-pos">#${rank}</div>
-                    <div class="rank-info">
-                        <div class="rank-name">${item.name}</div>
+                    <div style="display:flex; align-items:center; gap:10px; flex:1;">
+                        <span class="lb-rank">#${rankDisplay}</span>
+                        <span class="lb-name">${item.name}</span>
                     </div>
-                    ${valueHtml}
+                    ${valHtml}
                 `;
                 container.appendChild(row);
             });
         }
 
-        // 4. Renderizador do Snapshot do Mapa
-        function renderMapSnapshot(snapshotData) {
-            const container = document.getElementById('mapSnapshot');
-            container.innerHTML = "";
-
-            if (!snapshotData) return;
-
-            // Ordenar alfabeticamente para ficar bonito no grid
-            const territories = Object.keys(snapshotData).sort();
-
-            territories.forEach(terrName => {
-                const owner = snapshotData[terrName];
-                
-                const dot = document.createElement('div');
-                dot.className = "snap-dot";
-                dot.style.backgroundColor = getArmyColor(owner);
-                dot.title = `${terrName}: ${owner}`; // Tooltip nativo
-                
-                container.appendChild(dot);
-            });
-        }
-
-        // Funções Utilitárias
+        // Helpers
         function formatMoney(amount) {
+            if (!amount) return "0";
             if (amount >= 1000000) return (amount / 1000000).toFixed(1) + 'M';
             if (amount >= 1000) return (amount / 1000).toFixed(1) + 'k';
-            return amount;
+            return amount.toLocaleString('en-US');
         }
 
         function getArmyColor(name) {
-            // Podes adicionar hardcode de cores populares aqui ou usar o hash generator
-            const colors = {
-                "Freeland": "#222",
-                "None": "#111",
-                "Templars": "#d6a600",
-                "Elite Guardians": "#004400",
-                "Water Vikings": "#0066ff",
-                "Rebel Penguin Federation": "#000000",
-                "Army of Club Penguin": "#006400",
-                "Help Force": "#0000ff"
-            };
-            
-            if (colors[name]) return colors[name];
+            // Se tiveres cores fixas podes adicionar aqui, senão gera automático
+            if (name === "Freeland") return "#222";
+            if (name === "None") return "#111";
             return stringToColor(name);
         }
 
