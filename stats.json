@@ -1,1 +1,10 @@
-
+{
+  "global": {
+    "spent": 0,
+    "attacks": 0,
+    "wars": 0,
+    "items": {}
+  },
+  "armies": {},
+  "servers": {}
+}
