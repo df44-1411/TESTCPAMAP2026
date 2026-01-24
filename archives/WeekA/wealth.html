@@ -1,0 +1,50 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap');
+            body {
+                background: transparent;
+                font-family: 'Rajdhani', sans-serif;
+                margin: 0;
+                padding: 5px;
+                color: white;
+                overflow-x: hidden;
+                user-select: none;
+            }
+            .secret-msg {
+                color: #00f3ff;
+                text-transform: uppercase;
+                text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+                margin-bottom: 10px;
+                animation: pulse 2s infinite;
+            }
+            .sub-msg {
+                color: #ff3333;
+                animation: pulse 2s infinite;
+            }
+            .empty-state {
+                text-align: center;
+                padding: 20px;
+                color: #aaa;
+                border: 1px dashed #444;
+                border-radius: 8px;
+                margin-top: 20px;
+            }
+            @keyframes pulse {
+                0% { opacity: 0.6; }
+                50% { opacity: 1; }
+                100% { opacity: 0.6; }
+            }
+        </style>
+    </head>
+    <body>
+    <div class="empty-state">
+            <div class="secret-msg"><h3>WEALTH IS SECRET FOR THE CURRENT MAP RUN</h3></div>
+            <div class="sub-msg"><p>Anti-spy protocols active.</p></div>
+    </div>
+    </body>
+    </html>
+    
