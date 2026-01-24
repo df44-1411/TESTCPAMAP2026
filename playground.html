@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club Penguin Armies: The Archive</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="map.css">
+
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+    
+    <script src="map.js"></script> 
+
+    <style>
+        /* Ajustes para o layout de Arquivo */
+        html, body { height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        
+        .archive-nav {
+            height: 60px;
+            background: rgba(10, 10, 20, 0.95);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 100;
+        }
+
+        .week-select {
+            background: #051020;
+            color: var(--neon-blue);
+            border: 1px solid var(--neon-blue);
+            padding: 5px 15px;
+            font-family: 'Rajdhani';
+            font-size: 1rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Container Principal igual ao index.html */
+        .main-layout {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 60px);
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .map-panel {
+            flex: 3;
+            background: var(--bg-mapp); /* Azul escuro do mapa */
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .sidebar-panel {
+            flex: 1;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Tabs da Sidebar */
+        .sidebar-tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #888;
+            padding: 15px 0;
+            cursor: pointer;
+            font-family: 'Rajdhani';
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .tab-btn.active {
+            color: var(--neon-blue);
+            background: rgba(0, 243, 255, 0.1);
+            border-bottom: 2px solid var(--neon-blue);
+        }
+
+        .tab-content {
+            display: none;
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+        .tab-content.active { display: block; }
+
+        /* Estilos dos Cartões (Top Ten, Army Code) */
+        .rank-card {
+            background: rgba(255,255,255,0.03);
+            border-left: 3px solid transparent;
+            padding: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .rank-card.top3 { background: rgba(255, 215, 0, 0.05); border-left-color: #ffd700; }
+        
+        .rank-num { font-size: 1.2em; font-weight: bold; width: 30px; color: #888; }
+        .top3 .rank-num { color: #ffd700; }
+        
+        .rank-name { flex: 1; font-weight: bold; font-size: 1.1em; }
+        .rank-score { color: var(--neon-green); font-weight: bold; }
+        .rank-change { font-size: 0.8em; margin-left: 10px; width: 40px; text-align: right; }
+        .change-pos { color: #4cd137; }
+        .change-neg { color: #e74c3c; }
+        .change-new { color: #f39c12; font-weight: bold; }
+
+        /* Estilo Wealth */
+        .wealth-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .val-hidden { color: #e74c3c; letter-spacing: 2px; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="archive-nav">
+        <div style="font-size: 1.5rem; font-weight: bold; color: white;">
+            CPA: THE MAP <span style="font-size:0.5em; color:#888;">ARCHIVES</span>
+        </div>
+        <div>
+            <label style="color:#888; margin-right:10px;">SELECT DATE:</label>
+            <select id="weekSelector" class="week-select" onchange="loadWeek(this.value)">
+                <option>Loading...</option>
+            </select>
+        </div>
+        <div>
+            <a href="index.html" style="color:var(--neon-blue); text-decoration:none; font-weight:bold;">RETURN TO LIVE MAP</a>
+        </div>
+    </nav>
+
+    <div class="main-layout">
+        
+        <div class="map-panel">
+            <div id="mapContainer" style="width:100%; height:100%; background:transparent;"></div>
+            <div style="position:absolute; bottom:10px; left:10px; background:rgba(0,0,0,0.7); padding:5px 10px; border-radius:4px; font-size:0.8em; color:#aaa;">
+                Snapshot Date: <span id="snapDate" style="color:white;">-</span>
+            </div>
+        </div>
+
+        <div class="sidebar-panel">
+            <div class="sidebar-tabs">
+                <button class="tab-btn active" onclick="setTab('topten')">Top Tens</button>
+                <button class="tab-btn" onclick="setTab('forces')">Forces</button>
+                <button class="tab-btn" onclick="setTab('wealth')">Wealth</button>
+                <button class="tab-btn" onclick="setTab('wars')">Wars</button>
+            </div>
+
+            <div id="tab-topten" class="tab-content active">
+                <div id="topTenList"></div>
+            </div>
+
+            <div id="tab-forces" class="tab-content">
+                <div id="forcesList"></div>
+            </div>
+
+            <div id="tab-wealth" class="tab-content">
+                <div id="wealthList"></div>
+            </div>
+
+            <div id="tab-wars" class="tab-content">
+                <div id="warsList"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let historyData = [];
+        let mapChart = null;
+
+        // --- 1. Inicialização ---
+        window.onload = async function() {
+            try {
+                const response = await fetch('history.json');
+                if (!response.ok) throw new Error("No history found");
+                historyData = await response.json();
+
+                const selector = document.getElementById('weekSelector');
+                selector.innerHTML = "";
+
+                if (historyData.length === 0) {
+                    selector.innerHTML = "<option>No Data</option>";
+                    return;
+                }
+
+                historyData.forEach((week, index) => {
+                    const opt = document.createElement('option');
+                    opt.value = index;
+                    opt.innerText = `${week.id} (${week.date})`;
+                    selector.appendChild(opt);
+                });
+
+                // Carregar a primeira semana
+                loadWeek(0);
+
+            } catch (e) {
+                console.error(e);
+                alert("History database is empty or missing. Run /income to generate data.");
+            }
+        };
+
+        // --- 2. Carregar Semana ---
+        function loadWeek(index) {
+            const week = historyData[index];
+            document.getElementById('snapDate').innerText = week.date;
+
+            // A. Desenhar Mapa (Com Highcharts e dados do mapData + snapshot)
+            drawMap(week.map_snapshot);
+
+            // B. Preencher Abas
+            renderTopTen(week.top_ten || []);
+            renderForces(week.map_snapshot);
+            renderWealth(week.wealth || []);
+            renderWars(week.wars_snapshot || {});
+        }
+
+        // --- 3. Lógica do Mapa ---
+        function drawMap(snapshot) {
+            // Se já existe, destrói para criar novo (simples e eficaz)
+            /* Nota: mapData vem do map.js que foi importado no <head> */
+            
+            // Prepara os dados: fundir geometria (mapData) com donos (snapshot)
+            const seriesData = mapData.map(t => {
+                const owner = snapshot[t.name] || "Freeland"; // Se não estiver no snapshot, é Freeland
+                let color = stringToColor(owner);
+                if (owner === "Freeland") color = "#2a2a2a"; // Cinza escuro
+                if (owner === "None") color = "#1a1a1a";
+
+                return {
+                    ...t, // Mantém paths e geometria
+                    color: color,
+                    controller: owner, // Para tooltip
+                    value: 1
+                };
+            });
+
+            if (mapChart) {
+                mapChart.series[0].setData(seriesData);
+                return;
+            }
+
+            mapChart = Highcharts.mapChart('mapContainer', {
+                chart: { backgroundColor: 'transparent' },
+                title: { text: '' },
+                legend: { enabled: false },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    style: { color: '#fff' },
+                    formatter: function() {
+                        return `<b>${this.point.name}</b><br>Controlled by: <span style="color:${this.point.color}">●</span> ${this.point.controller}`;
+                    }
+                },
+                series: [{
+                    data: seriesData,
+                    borderColor: 'rgba(0, 243, 255, 0.2)',
+                    borderWidth: 1,
+                    states: {
+                        hover: { color: '#ffffff' } // Highlight ao passar rato
+                    }
+                }]
+            });
+        }
+
+        // --- 4. Renderizadores das Abas ---
+
+        function renderTopTen(list) {
+            const container = document.getElementById('topTenList');
+            container.innerHTML = "";
+            if (!list || list.length === 0) {
+                container.innerHTML = "<div style='text-align:center; color:#555;'>No Top Ten data for this week.</div>";
+                return;
+            }
+
+            // Ordena por rank
+            list.sort((a,b) => a.rank - b.rank);
+
+            list.forEach(item => {
+                const isTop3 = item.rank <= 3 ? "top3" : "";
+                
+                // Formatação da mudança (Change)
+                let changeHtml = "";
+                if (item.change === "NEW") changeHtml = `<span class="change-new">NEW</span>`;
+                else {
+                    const chg = parseInt(item.change);
+                    if (chg > 0) changeHtml = `<span class="change-pos">▲${chg}</span>`;
+                    else if (chg < 0) changeHtml = `<span class="change-neg">▼${Math.abs(chg)}</span>`;
+                    else changeHtml = `<span style="color:#555;">-</span>`;
+                }
+
+                container.innerHTML += `
+                    <div class="rank-card ${isTop3}">
+                        <div class="rank-num">${item.rank}</div>
+                        <div class="rank-name">${item.name}</div>
+                        <div class="rank-score">${item.score.toFixed(2)}</div>
+                        <div class="rank-change">${changeHtml}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderForces(snapshot) {
+            // Calcular territórios
+            const counts = {};
+            for (const svr in snapshot) {
+                const owner = snapshot[svr];
+                if (owner !== "Freeland" && owner !== "None") {
+                    counts[owner] = (counts[owner] || 0) + 1;
+                }
+            }
+            
+            // Ordenar
+            const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+            
+            const container = document.getElementById('forcesList');
+            container.innerHTML = "";
+            
+            sorted.forEach(([army, count]) => {
+                container.innerHTML += `
+                    <div class="rank-card">
+                        <div class="rank-name">${army}</div>
+                        <div style="color:var(--neon-blue); font-weight:bold;">${count} Servers</div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderWealth(list) {
+            const container = document.getElementById('wealthList');
+            container.innerHTML = "";
+            
+            list.forEach(item => {
+                let valHtml = "";
+                if (item.balance === -1) valHtml = "<span class='val-hidden'>HIDDEN</span>";
+                else valHtml = `<span style='color:#00ff9d'>$${item.balance.toLocaleString()}</span>`;
+
+                container.innerHTML += `
+                    <div class="wealth-row">
+                        <span style="font-weight:bold;">${item.name}</span>
+                        ${valHtml}
+                    </div>
+                `;
+            });
+        }
+
+        function renderWars(warsDict) {
+            const container = document.getElementById('warsList');
+            container.innerHTML = "";
+            const wars = Object.entries(warsDict);
+            
+            if (wars.length === 0) {
+                container.innerHTML = "<div style='text-align:center; color:#555;'>No active wars in this era.</div>";
+                return;
+            }
+
+            wars.forEach(([name, data]) => {
+                container.innerHTML += `
+                    <div style="background:rgba(255,0,0,0.1); border:1px solid rgba(255,0,0,0.3); padding:10px; margin-bottom:10px; border-radius:4px;">
+                        <div style="color:#ff5555; font-weight:bold; text-transform:uppercase;">${name}</div>
+                        <div style="font-size:0.85em; color:#ccc;">
+                            ${data.side_a.join(", ")} <span style="color:#888;">VS</span> ${data.side_b.join(", ")}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- Helpers ---
+        function setTab(name) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            // Encontra o botão certo (hack simples via texto ou ordem, ou onclick direto)
+            // Aqui usamos o evento onclick que já passou o nome
+            event.target.classList.add('active');
+            document.getElementById('tab-' + name).classList.add('active');
+        }
+
+        function stringToColor(str) {
+            if (!str) return "#333";
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            let color = '#';
+            for (let i = 0; i < 3; i++) {
+                let value = (hash >> (i * 8)) & 0xFF;
+                color += ('00' + value.toString(16)).substr(-2);
+            }
+            return color;
+        }
+    </script>
+</body>
+</html>
