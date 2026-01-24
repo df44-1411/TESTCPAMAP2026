@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPA: THE STATS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #121212; color: #e0e0e0; font-family: 'Rajdhani', sans-serif; }
+        .card { background-color: #1e1e1e; border: 1px solid #333; margin-bottom: 20px; }
+        .card-header { background-color: #252525; border-bottom: 1px solid #333; font-weight: bold; text-transform: uppercase; color: #ffcc00; }
+        .stat-val { font-size: 1.5em; font-weight: bold; color: #fff; }
+        .stat-label { font-size: 0.8em; color: #aaa; text-transform: uppercase; }
+        
+        /* Mini Map Grid Simulation */
+        .map-grid { display: flex; flex-wrap: wrap; gap: 2px; justify-content: center; }
+        .map-dot { width: 15px; height: 15px; border-radius: 2px; background: #333; cursor: pointer; }
+        .map-dot:hover { transform: scale(1.5); border: 1px solid white; }
+
+        /* Army Colors (Defaults) */
+        .army-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #333; }
+        .army-name { font-weight: bold; }
+        select { background: #333; color: white; border: 1px solid #555; padding: 5px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-6 fw-bold text-warning">WARFARE ARCHIVES</h1>
+            <p class="text-muted">Historical data access terminal</p>
+        </div>
+        <div>
+            <label for="weekSelector" class="me-2">SELECT ERA:</label>
+            <select id="weekSelector" onchange="loadWeekData(this.value)">
+                <option>Loading...</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Weekly Activity</div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6 mb-3">
+                            <div class="stat-val" id="totalSpent">0</div>
+                            <div class="stat-label">Coins Spent</div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="stat-val" id="totalAttacks">0</div>
+                            <div class="stat-label">Attacks Launched</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-val" id="totalWars">0</div>
+                            <div class="stat-label">Wars Declared</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-val" id="favWeapon">-</div>
+                            <div class="stat-label">Fav. Weapon</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">🏆 Top 10 Wealthiest (End of Week)</div>
+                <div class="card-body" id="leaderboardList">
+                    </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">⚔️ Most Aggressive Army</div>
+                <div class="card-body text-center">
+                    <h3 class="text-danger" id="warmongerName">-</h3>
+                    <p class="text-muted" id="warmongerCount">0 Attacks</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between">
+                    <span>🗺️ Map State Snapshot</span>
+                    <span id="mapDate" class="text-muted small"></span>
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted mb-3">Visual representation of territory control at the end of the selected week.</p>
+                    
+                    <div id="mapContainer" class="map-grid">
+                        </div>
+                    
+                    <div id="serverList" class="mt-4 row small text-muted">
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let historyData = [];
+
+    // Carregar dados ao iniciar
+    window.onload = async function() {
+        try {
+            // Tenta carregar o history.json (criado pelo bot)
+            const response = await fetch('history.json');
+            if (!response.ok) throw new Error("History file not found");
+            historyData = await response.json();
+
+            // Preencher o menu
+            const selector = document.getElementById('weekSelector');
+            selector.innerHTML = "";
+            
+            historyData.forEach((week, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.innerText = `${week.id} (${week.date})`;
+                selector.appendChild(opt);
+            });
+
+            // Carregar a primeira semana (a mais recente)
+            if (historyData.length > 0) loadWeekData(0);
+
+        } catch (e) {
+            console.error(e);
+            document.querySelector('.container').innerHTML = `<h2 class="text-danger text-center mt-5">History Database Offline<br><small class="text-white fs-6">Run /income to generate the first snapshot.</small></h2>`;
+        }
+    };
+
+    function loadWeekData(index) {
+        const week = historyData[index];
+        const stats = week.stats.global;
+        const armies = week.stats.armies;
+
+        // 1. Fill Global Stats
+        document.getElementById('totalSpent').innerText = formatMoney(stats.spent);
+        document.getElementById('totalAttacks').innerText = stats.attacks;
+        document.getElementById('totalWars').innerText = stats.wars;
+        
+        // Favorite Weapon logic
+        let fav = "None";
+        let maxUsage = 0;
+        for (const [item, count] of Object.entries(stats.items || {})) {
+            if (count > maxUsage) { maxUsage = count; fav = item; }
+        }
+        document.getElementById('favWeapon').innerText = fav.charAt(0).toUpperCase() + fav.slice(1);
+        document.getElementById('mapDate').innerText = `Archived: ${week.date}`;
+
+        // 2. Fill Leaderboard
+        const lbContainer = document.getElementById('leaderboardList');
+        lbContainer.innerHTML = "";
+        week.leaderboard.forEach((entry, i) => {
+            const row = document.createElement('div');
+            row.className = "army-row";
+            row.innerHTML = `
+                <span class="army-name ${i < 3 ? 'text-warning' : ''}">#${i+1} ${entry.name}</span>
+                <span>$${formatMoney(entry.balance)}</span>
+            `;
+            lbContainer.appendChild(row);
+        });
+
+        // 3. Warmonger
+        let warmestArmy = "-";
+        let maxAttacks = 0;
+        for (const [name, data] of Object.entries(armies)) {
+            if (data.attacks > maxAttacks) { maxAttacks = data.attacks; warmestArmy = name; }
+        }
+        document.getElementById('warmongerName').innerText = warmestArmy;
+        document.getElementById('warmongerCount').innerText = `${maxAttacks} Attacks`;
+
+        // 4. Render Map (Grid Mode)
+        const mapContainer = document.getElementById('mapContainer');
+        mapContainer.innerHTML = "";
+        
+        // Ordenar servidores por nome para ficar bonito
+        const sortedServers = Object.keys(week.map_snapshot).sort();
+
+        sortedServers.forEach(serverName => {
+            const owner = week.map_snapshot[serverName];
+            
+            // Tenta adivinhar a cor (No futuro, o history.json devia ter a cor guardada tb)
+            // Aqui usamos um hash simples para gerar cor ou cinzento para Freeland
+            let color = stringToColor(owner);
+            if (owner === "Freeland") color = "#444";
+            if (owner === "None") color = "#222";
+
+            const dot = document.createElement('div');
+            dot.className = "map-dot";
+            dot.style.backgroundColor = color;
+            dot.title = `${serverName}: ${owner}`; // Tooltip
+            dot.setAttribute('data-bs-toggle', 'tooltip');
+            mapContainer.appendChild(dot);
+        });
+    }
+
+    function formatMoney(amount) {
+        return amount.toLocaleString('en-US');
+    }
+
+    // Helper simples para cores baseadas no nome (para não ter de guardar hex codes no json)
+    function stringToColor(str) {
+        if (!str) return "#333";
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        let color = '#';
+        for (let i = 0; i < 3; i++) {
+            let value = (hash >> (i * 8)) & 0xFF;
+            color += ('00' + value.toString(16)).substr(-2);
+        }
+        return color;
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
