@@ -2,367 +2,139 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CPA: The Archive</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>CPA: THE ARCHIVE</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="style.css"> 
-    <link rel="stylesheet" href="map.css">
-
-    <style>
-        /* UI Específica para Abas e Sidebar */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="map.css"> <style>
+        /* CSS DOS CARTÕES BONITOS (Baseado no teu army_code.py) */
+        .army-card {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(20, 30, 50, 0.85); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-left-width: 5px; margin-bottom: 8px; padding: 12px 15px;
+            border-radius: 4px; backdrop-filter: blur(4px); transition: 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); cursor: pointer;
         }
+        .army-card:hover { transform: translateX(5px); background: rgba(40, 50, 80, 0.95); }
+        .army-name { color: #e0e6ed; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .army-val { background: rgba(255,255,255,0.1); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 0.85rem; }
 
-        .stat-card {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(0, 243, 255, 0.1);
-            padding: 15px;
-            border-radius: 4px;
-            text-align: center;
-        }
+        /* Estrutura */
+        .dashboard-container { display: flex; height: calc(100vh - 60px); }
+        .sidebar { width: 350px; background: rgba(5, 16, 32, 0.9); border-right: 1px solid var(--border-color); padding: 15px; display: flex; flex-direction: column; }
+        .map-area { flex: 1; position: relative; background: #030a14; }
+        #archiveMap { width: 100%; height: 100%; }
 
-        .stat-val { font-size: 1.8em; font-weight: bold; color: #fff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.3); }
-        .stat-label { font-size: 0.8em; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-
-        /* Sistema de Abas */
-        .tab-system {
-            display: flex;
-            gap: 5px;
-            margin: 10px 0;
-            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
-            padding-bottom: 10px;
-        }
-
-        .tab-btn {
-            background: rgba(20, 30, 50, 0.6);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            color: var(--neon-blue);
-            padding: 5px 12px;
-            font-family: 'Rajdhani';
-            cursor: pointer;
-            font-size: 0.8em;
-            text-transform: uppercase;
-            transition: 0.2s;
-        }
-
-        .tab-btn.active {
-            background: var(--neon-blue);
-            color: #000;
-            box-shadow: 0 0 10px var(--neon-blue);
-        }
-
-        /* Leaderboard Styling */
-        .lb-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            align-items: center;
-            transition: background 0.2s;
-        }
-        .lb-row:hover { background: rgba(255,255,255,0.03); }
-        .lb-rank { color: var(--neon-blue); font-weight: bold; width: 30px; }
-        .lb-name { flex: 1; font-weight: 600; color: #e0e6ed; }
-        .lb-val { font-family: monospace; letter-spacing: 1px; font-weight: bold; }
-        
-        .val-points { color: #ffd700; text-shadow: 0 0 5px rgba(255, 215, 0, 0.4); }
-        .val-servers { color: #00ff9d; }
-        .val-wealth { color: #2ecc71; }
-
-        /* Snapshot dot Grid */
-        .snapshot-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            padding: 20px;
-            justify-content: center;
-            overflow-y: auto;
-            max-height: 400px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 8px;
-        }
-        
-        .snap-dot {
-            width: 16px;
-            height: 16px;
-            border-radius: 2px;
-            border: 1px solid rgba(255,255,255,0.1);
-            cursor: help;
-        }
-
-        .archive-selector {
-            background: #051020;
-            color: var(--neon-blue);
-            border: 1px solid var(--neon-blue);
-            padding: 10px;
-            font-family: 'Rajdhani';
-            text-transform: uppercase;
-            font-weight: bold;
-            width: 100%;
-        }
+        .tabs { display: flex; gap: 5px; margin-bottom: 15px; }
+        .tab-btn { flex: 1; padding: 8px; background: #051020; border: 1px solid var(--neon-blue); color: var(--neon-blue); font-family: 'Rajdhani'; cursor: pointer; font-size: 0.7em; }
+        .tab-btn.active { background: var(--neon-blue); color: #000; }
     </style>
 </head>
 <body>
-
     <nav class="top-nav">
-        <div class="logo-section">
-            <h1>CPA: THE MAP <span style="font-size:0.5em; color:var(--text-muted); vertical-align: super;">ARCHIVES</span></h1>
-        </div>
-        <div class="nav-links">
-            <a href="index.html">Live Map</a>
-            <a href="#" class="active">Archives</a>
-            <a href="https://discord.gg/cparmies" target="_blank">Discord</a>
-        </div>
+        <h1>CPA ARCHIVES</h1>
+        <div class="nav-links"><a href="index.html">Live Map</a></div>
     </nav>
 
     <div class="dashboard-container">
-        
         <aside class="sidebar">
-            <div style="margin-bottom:20px;">
-                <h2 style="margin:0 0 10px 0; border:none; font-size: 1em;">Select Record</h2>
-                <select id="weekSelector" class="archive-selector" onchange="loadWeekData(this.value)">
-                    <option>Loading history...</option>
-                </select>
-            </div>
-
-            <div class="tab-system">
-                <button class="tab-btn active" onclick="switchTab('topten', this)">Top 10</button>
-                <button class="tab-btn" onclick="switchTab('forces', this)">Forces</button>
-                <button class="tab-btn" onclick="switchTab('wealth', this)">Wealth</button>
-            </div>
-
-            <div id="leaderboardList" style="flex:1; overflow-y:auto; min-height: 300px;">
-                </div>
+            <select id="weekSelector" class="archive-selector" onchange="loadWeek(this.value)" style="width:100%; margin-bottom:15px;"></select>
             
-            <div style="margin-top:20px; padding-top:10px; border-top:1px solid var(--border-color);">
-                <div style="font-size:0.8em; color:var(--text-muted); text-transform:uppercase;">Aggression Leader</div>
-                <div id="warmongerName" style="font-size:1.4em; font-weight:bold; color:#ff0055;">-</div>
-                <div id="warmongerCount" style="color:#fff;">0 Attacks</div>
+            <div class="tabs">
+                <button class="tab-btn active" onclick="setTab('topten')">TOP 10</button>
+                <button class="tab-btn" onclick="setTab('forces')">FORCES</button>
+                <button class="tab-btn" onclick="setTab('wealth')">WEALTH</button>
             </div>
+
+            <div id="leaderboardList" style="flex:1; overflow-y:auto;"></div>
         </aside>
 
-        <div class="map-wrapper" style="display:block; overflow-y:auto;">
-            
-            <div class="map-header">
-                <span class="status-indicator">
-                    <div class="status-dot" style="background:var(--neon-blue); box-shadow:0 0 8px var(--neon-blue);"></div> 
-                    TEMPORAL SNAPSHOT: <span id="archiveDate" style="color:#fff; margin-left:5px;">-</span>
-                </span>
-                <button onclick="viewFullArchiveMap()" class="tab-btn" style="border-radius:4px;">Open Full Map</button>
-            </div>
-
-            <div style="padding:20px;">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-val" id="totalSpent">0</div>
-                        <div class="stat-label">Coins Spent</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-val" id="totalAttacks">0</div>
-                        <div class="stat-label">Attacks</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-val" id="totalWars">0</div>
-                        <div class="stat-label">Conflicts</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-val" id="favWeapon">-</div>
-                        <div class="stat-label">Fav. Weapon</div>
-                    </div>
-                </div>
-
-                <h3 style="color:var(--neon-blue); text-transform:uppercase; border-bottom:1px solid var(--border-color); padding-bottom:10px; font-size: 1.1em;">
-                    Territory Grid Snapshot
-                </h3>
-                <div id="mapSnapshot" class="snapshot-grid">
-                    </div>
-            </div>
-        </div>
+        <main class="map-area">
+            <div id="archiveMap"></div>
+        </main>
     </div>
 
     <script>
         let historyData = [];
-        let currentWeekIndex = 0;
-        let activeTab = 'topten';
+        let currentTab = 'topten';
+        let chart;
+        let baseMapData = []; // Guardará a estrutura id/path de id0, id1...
 
-        window.onload = async function() {
-            try {
-                // Forçamos o fetch sem cache para ver sempre o history.json mais recente
-                const response = await fetch('history.json?t=' + Date.now());
-                if (!response.ok) throw new Error("History file not found");
-                historyData = await response.json();
+        // 1. Carregar estrutura base do mapa (map.js)
+        async function init() {
+            const resp = await fetch('map.js');
+            const text = await resp.text();
+            const match = text.match(/var mapData = (\[.*?\]);/s);
+            baseMapData = JSON.parse(match[1]);
 
-                const selector = document.getElementById('weekSelector');
-                selector.innerHTML = "";
-                
-                if (historyData.length === 0) {
-                    selector.innerHTML = "<option>No Records Found</option>";
-                    return;
-                }
-
-                historyData.forEach((week, index) => {
-                    const opt = document.createElement('option');
-                    opt.value = index;
-                    opt.innerText = `${week.id} (${week.date})`;
-                    selector.appendChild(opt);
-                });
-
-                loadWeekData(0);
-
-            } catch (e) {
-                console.error(e);
-                document.querySelector('.dashboard-container').innerHTML = 
-                    `<div style="width:100%; text-align:center; padding-top:100px; color:#ff0055;">
-                        <h2>ARCHIVE DATA OFFLINE</h2>
-                        <p>Waiting for the first /archive_week command to populate history.json</p>
-                    </div>`;
-            }
-        };
-
-        function switchTab(tab, btn) {
-            activeTab = tab;
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderLeaderboard();
-        }
-
-        function loadWeekData(index) {
-            currentWeekIndex = index;
-            const week = historyData[index];
-            const stats = week.stats.global;
-
-            // Dados Header e Stats
-            document.getElementById('archiveDate').innerText = week.date;
-            document.getElementById('totalSpent').innerText = formatMoney(stats.spent);
-            document.getElementById('totalAttacks').innerText = stats.attacks;
-            document.getElementById('totalWars').innerText = stats.wars;
+            const hResp = await fetch('history.json');
+            historyData = await hResp.json();
             
-            // Lógica Arma Favorita
-            let fav = "None";
-            let maxUsage = 0;
-            if (stats.items) {
-                for (const [item, count] of Object.entries(stats.items)) {
-                    if (count > maxUsage) { maxUsage = count; fav = item; }
-                }
-            }
-            document.getElementById('favWeapon').innerText = fav !== "None" ? fav.toUpperCase() : "-";
-
-            // Warmonger (Quem atacou mais)
-            let topAttacker = "-";
-            let maxAttacks = 0;
-            for (const [name, data] of Object.entries(week.stats.armies || {})) {
-                if (data.attacks > maxAttacks) { maxAttacks = data.attacks; topAttacker = name; }
-            }
-            document.getElementById('warmongerName').innerText = topAttacker;
-            document.getElementById('warmongerCount').innerText = `${maxAttacks} Attacks`;
-
-            renderLeaderboard();
-            renderSnapshot();
-        }
-
-        function renderLeaderboard() {
-            const week = historyData[currentWeekIndex];
-            const container = document.getElementById('leaderboardList');
-            container.innerHTML = "";
-
-            if (activeTab === 'topten') {
-                // TOP TEN (Vem do /set_top_ten salvo no leaderboard)
-                week.leaderboard.forEach((entry, i) => {
-                    container.innerHTML += createLBRow(i+1, entry.name, `${entry.score.toFixed(1)} PTS`, "val-points");
-                });
-            } else if (activeTab === 'forces') {
-                // ACTIVE FORCES (Calculado dinamicamente do Snapshot)
-                const counts = {};
-                Object.values(week.map_snapshot).forEach(owner => {
-                    if(owner !== "None" && owner !== "Freeland" && owner !== "Locked Land") {
-                        counts[owner] = (counts[owner] || 0) + 1;
-                    }
-                });
-                const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
-                sorted.forEach(([name, count], i) => {
-                    container.innerHTML += createLBRow(i+1, name, `${count} Servers`, "val-servers");
-                });
-            } else if (activeTab === 'wealth') {
-                // WEALTH (Se salvo no snapshot)
-                if (week.wealth_snapshot) {
-                    const sortedWealth = Object.entries(week.wealth_snapshot).sort((a,b) => b[1] - a[1]);
-                    sortedWealth.forEach(([name, balance], i) => {
-                        container.innerHTML += createLBRow(i+1, name, `$${formatMoney(balance)}`, "val-wealth");
-                    });
-                } else {
-                    container.innerHTML = "<div style='padding:20px; color:#555;'>No wealth data for this record.</div>";
-                }
-            }
-        }
-
-        function renderSnapshot() {
-            const week = historyData[currentWeekIndex];
-            const container = document.getElementById('mapSnapshot');
-            container.innerHTML = "";
+            const sel = document.getElementById('weekSelector');
+            historyData.forEach((w, i) => sel.innerHTML += `<option value="${i}">${w.id} (${w.date})</option>`);
             
-            const sortedServers = Object.keys(week.map_snapshot).sort();
-            sortedServers.forEach(serverName => {
-                const owner = week.map_snapshot[serverName];
-                let color = "#333"; // Cor default
-                
-                // Mapeamento simples de cores para o grid
-                if (owner === "Locked Land") color = "#051020";
-                else if (owner === "Freeland") color = "#666";
-                else color = stringToColor(owner);
+            loadWeek(0);
+        }
 
-                const dot = document.createElement('div');
-                dot.className = "snap-dot";
-                dot.style.backgroundColor = color;
-                dot.title = `${serverName}: ${owner}`;
-                container.appendChild(dot);
+        function renderMap(snapshot) {
+            // Unir a estrutura geográfica com os donos do arquivo
+            const displayData = baseMapData.map(region => ({
+                ...region,
+                controller: snapshot[region.name] || "None"
+            }));
+
+            if (chart) chart.destroy();
+
+            chart = Highcharts.mapChart('archiveMap', {
+                chart: { backgroundColor: 'transparent' },
+                title: { text: '' },
+                series: [{
+                    data: displayData,
+                    mapData: displayData,
+                    joinBy: 'id',
+                    dataLabels: { enabled: true, color: '#fff', format: '{point.name}' }
+                }],
+                tooltip: {
+                    formatter: function() { return `<b>${this.point.name}</b><br>Owner: ${this.point.controller}`; }
+                }
             });
         }
 
-        function createLBRow(rank, name, val, cssClass) {
-            return `
-                <div class="lb-row">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <span class="lb-rank">#${rank}</span>
-                        <span class="lb-name">${name}</span>
-                    </div>
-                    <span class="lb-val ${cssClass}">${val}</span>
-                </div>`;
-        }
+        function renderLeaderboard(week) {
+            const list = document.getElementById('leaderboardList');
+            list.innerHTML = "";
+            let data = [];
 
-        function formatMoney(amount) {
-            if (!amount || amount === -1) return "0";
-            if (amount >= 1000000) return (amount / 1000000).toFixed(1) + 'M';
-            if (amount >= 1000) return (amount / 1000).toFixed(1) + 'k';
-            return amount.toLocaleString('en-US');
-        }
-
-        function stringToColor(str) {
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            if (currentTab === 'topten') {
+                data = week.leaderboard; // [{name, score}]
+            } else if (currentTab === 'forces') {
+                const counts = {};
+                Object.values(week.map_snapshot).forEach(o => { if(o !== "None" && o !== "Freeland") counts[o] = (counts[o]||0)+1; });
+                data = Object.entries(counts).map(([name, val]) => ({name, score: val})).sort((a,b) => b.score - a.score);
             }
-            let color = '#';
-            for (let i = 0; i < 3; i++) {
-                let value = (hash >> (i * 8)) & 0xFF;
-                color += ('00' + value.toString(16)).substr(-2);
-            }
-            return color;
+
+            data.forEach((entry, i) => {
+                list.innerHTML += `
+                    <div class="army-card" style="border-left-color: #00f3ff">
+                        <span class="army-name">#${i+1} ${entry.name}</span>
+                        <span class="army-val">${entry.score}</span>
+                    </div>`;
+            });
         }
 
-        function viewFullArchiveMap() {
-            const week = historyData[currentWeekIndex];
-            // Abre o index.html principal mas injetando os ficheiros da pasta de arquivo
-            // Necessário ajustar o index.html para aceitar parâmetros de URL ou criar um visualizador
-            alert("To view the full map, check the directory: archives/" + week.date);
+        function loadWeek(idx) {
+            const week = historyData[idx];
+            renderMap(week.map_snapshot);
+            renderLeaderboard(week);
         }
+
+        function setTab(t) {
+            currentTab = t;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText.toLowerCase().includes(t)));
+            loadWeek(document.getElementById('weekSelector').value);
+        }
+
+        init();
     </script>
 </body>
 </html>
