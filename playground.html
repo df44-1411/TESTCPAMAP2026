@@ -123,9 +123,9 @@
 
             <h2 id="lbTitle">Rankings</h2>
 			<div class="tab-container">
-			<button class="tab-btn active" onclick="switchTab('topten')">TOP 10</button>
-			<button class="tab-btn" onclick="switchTab('forces')">FORCES</button>
-			<button class="tab-btn" onclick="switchTab('wealth')">WEALTH</button>
+				<button class="tab-btn active" onclick="switchTab('topten')">TOP 10</button>
+				<button class="tab-btn" onclick="switchTab('forces')">FORCES</button>
+				<button class="tab-btn" onclick="switchTab('wealth')">WEALTH</button>
 			</div>
             <div id="leaderboardList" style="flex:1; overflow-y:auto;">
                 </div>
@@ -234,7 +234,7 @@
                 if (count > maxUsage) { maxUsage = count; fav = item; }
             }
             document.getElementById('favWeapon').innerText = fav.charAt(0).toUpperCase() + fav.slice(1);
-
+	
             // Leaderboard
             const lbContainer = document.getElementById('leaderboardList');
             const lbTitle = document.getElementById('lbTitle');
