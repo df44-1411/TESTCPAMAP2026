@@ -15,110 +15,114 @@
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
 
     <style>
-        /* === 1. MANTER A TUA ESTÉTICA ORIGINAL === */
-        
-        /* Grid das Stats (Os teus cartões bonitos) */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-            z-index: 10;
-            position: relative;
-        }
-
-        .stat-card {
-            background: rgba(0,0,0,0.6); /* Um pouco mais escuro para ler sobre o mapa */
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            padding: 15px;
-            border-radius: 4px;
-            text-align: center;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
-        }
-
-        .stat-val { font-family: 'Rajdhani'; font-size: 1.8em; font-weight: bold; color: #fff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
-        .stat-label { font-family: 'Rajdhani'; font-size: 0.9em; color: #00f3ff; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* Ajustes de Layout */
-        .dashboard-container { height: calc(100vh - 80px); display: flex; overflow: hidden; }
-        
+        /* === BACKGROUND AZUL "FIXE" (GRID TÁTICO) === */
         .map-wrapper { 
             flex: 1; 
             display: flex; 
             flex-direction: column; 
             position: relative;
-            background: #051020; /* Fundo base caso o mapa demore */
-            padding: 20px;
+            
+            /* O Teu Fundo Azul Tech */
+            background-color: #051020 !important;
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.1) 1px, transparent 1px) !important;
+            background-size: 40px 40px !important;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.8); /* Vinheta para dar profundidade */
         }
 
-        /* O Contentor do Highcharts (Substitui o mapSnapshot) */
+        /* === SIDEBAR MAIS FINA === */
+        .sidebar {
+            width: 260px; /* Reduzido de 350px para 260px */
+            background: rgba(2, 5, 10, 0.95);
+            border-right: 1px solid rgba(0, 243, 255, 0.15);
+            display: flex;
+            flex-direction: column;
+            z-index: 20;
+        }
+
+        /* === CARTÕES DE STATS === */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 15px;
+            z-index: 10;
+        }
+
+        .stat-card {
+            background: rgba(0, 20, 40, 0.7); /* Azul escuro translúcido */
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .stat-val { font-family: 'Rajdhani'; font-size: 1.5em; font-weight: bold; color: #fff; text-shadow: 0 0 8px rgba(0, 243, 255, 0.6); }
+        .stat-label { font-family: 'Rajdhani'; font-size: 0.8em; color: #00f3ff; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Contentor do Mapa */
         #container {
             flex: 1;
             width: 100%;
             height: 100%;
             background: transparent !important;
-            border: 1px solid rgba(0, 243, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
         }
 
-        /* === 2. SIDEBAR COM TABS (Estilo Index mas adaptado ao teu tema) === */
-        .sidebar {
-            width: 320px;
-            background: rgba(2, 5, 10, 0.95);
-            border-right: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            flex-direction: column;
-            padding: 0;
-        }
+        /* Layout Geral */
+        .dashboard-container { height: calc(100vh - 80px); display: flex; overflow: hidden; }
 
+        /* Header da Sidebar */
         .archive-header {
-            padding: 20px;
+            padding: 15px;
             border-bottom: 1px solid rgba(0, 243, 255, 0.2);
             background: rgba(0, 243, 255, 0.05);
         }
 
         select.archive-selector {
-            background: #051020;
+            background: #02050a;
             color: #00f3ff;
             border: 1px solid #00f3ff;
-            padding: 10px;
+            padding: 5px;
             font-family: 'Rajdhani';
-            font-size: 1.1em;
+            font-size: 1em;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
-            outline: none;
             text-transform: uppercase;
         }
 
-        /* Tabs Estilizadas */
+        /* TABS (Top Ten | Forces | Wealth) */
         .tab-container { display: flex; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .tab-btn { 
             flex: 1;
             background: transparent;
             border: none;
-            color: #666;
-            padding: 15px 5px;
+            color: #557;
+            padding: 12px 2px;
             font-family: 'Rajdhani';
             font-weight: 700;
-            font-size: 1em;
+            font-size: 0.9em;
             cursor: pointer;
             transition: 0.3s;
             text-transform: uppercase;
+            border-bottom: 2px solid transparent;
         }
         .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
-        .tab-btn.active { color: #00f3ff; border-bottom: 2px solid #00f3ff; background: linear-gradient(to top, rgba(0, 243, 255, 0.1), transparent); }
+        .tab-btn.active { 
+            color: #00f3ff; 
+            border-bottom: 2px solid #00f3ff; 
+            background: linear-gradient(to top, rgba(0, 243, 255, 0.1), transparent); 
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
+        }
 
         .tab-content { display: none; flex: 1; width: 100%; height: 100%; }
         .tab-content.active { display: block; }
-        
         .content-frame { width: 100%; height: 100%; border: none; }
 
-        /* Override Highcharts Background */
+        /* Override Highcharts */
         .highcharts-container, .highcharts-root { background: transparent !important; }
-
     </style>
 </head>
 <body>
@@ -138,38 +142,31 @@
         
         <aside class="sidebar">
             <div class="archive-header">
-                <div style="font-family:'Rajdhani'; font-size:0.8em; color:#888; margin-bottom:5px;">SELECT TIMEFRAME</div>
+                <div style="font-family:'Rajdhani'; font-size:0.7em; color:#668; margin-bottom:5px; letter-spacing:1px;">SELECT WEEK</div>
                 <select id="weekSelector" class="archive-selector" onchange="loadWeekData(this.value)">
                     <option>Loading...</option>
                 </select>
             </div>
 
             <div class="tab-container">
-                <button class="tab-btn active" onclick="openTab(event, 'wealth')">Wealth</button>
+                <button class="tab-btn active" onclick="openTab(event, 'topten')">Top Ten</button>
                 <button class="tab-btn" onclick="openTab(event, 'forces')">Forces</button>
-                <button class="tab-btn" onclick="openTab(event, 'wars')">Wars</button>
+                <button class="tab-btn" onclick="openTab(event, 'wealth')">Wealth</button>
             </div>
 
-            <div id="wealth" class="tab-content active">
-                <iframe id="wealthFrame" class="content-frame"></iframe>
+            <div id="topten" class="tab-content active">
+                <iframe id="toptenFrame" class="content-frame"></iframe>
             </div>
             <div id="forces" class="tab-content">
                 <iframe id="forcesFrame" class="content-frame"></iframe>
             </div>
-            <div id="wars" class="tab-content">
-                <iframe id="warsFrame" class="content-frame"></iframe>
+            <div id="wealth" class="tab-content">
+                <iframe id="wealthFrame" class="content-frame"></iframe>
             </div>
         </aside>
 
         <div class="map-wrapper">
             
-            <div class="map-header" style="margin-bottom:15px; display:flex; justify-content:space-between; align-items:center;">
-                <span class="status-indicator">
-                    <div class="status-dot" style="background:#00f3ff; box-shadow:0 0 10px #00f3ff;"></div> 
-                    ARCHIVED DATA: <span id="archiveDate" style="color:#fff; font-weight:bold; margin-left:10px;">-</span>
-                </span>
-            </div>
-
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-val" id="totalSpent">0</div>
@@ -177,11 +174,11 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-val" id="totalAttacks">0</div>
-                    <div class="stat-label">Attacks Launched</div>
+                    <div class="stat-label">Attacks</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-val" id="totalWars">0</div>
-                    <div class="stat-label">Active Wars</div>
+                    <div class="stat-label">Wars</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-val" id="favWeapon">-</div>
@@ -189,12 +186,15 @@
                 </div>
             </div>
 
+            <div style="position:absolute; top:10px; right:10px; z-index:5; font-family:'Rajdhani'; font-size:0.8em; color:rgba(255,255,255,0.5);">
+                ARCHIVED DATA: <span id="archiveDate" style="color:#00f3ff; font-weight:bold;">-</span>
+            </div>
+
             <div id="container"></div>
 
             <div id="loadingOverlay" style="display:none; position:absolute; top:60%; left:50%; transform:translate(-50%,-50%); color:#00f3ff; font-family:'Rajdhani'; font-size:1.5em; text-shadow:0 0 10px #00f3ff;">
-                RETRIEVING ARCHIVE...
+                LOADING DATA...
             </div>
-
         </div>
 
     </div>
@@ -212,7 +212,7 @@
                 selector.innerHTML = "";
                 
                 if (historyData.length === 0) {
-                    selector.innerHTML = "<option>No Archives Found</option>";
+                    selector.innerHTML = "<option>No Archives</option>";
                     return;
                 }
 
@@ -234,10 +234,10 @@
             const week = historyData[index];
             const stats = week.stats.global;
             
-            // Path base (compatibilidade com versões antigas ou novas do teu backend)
+            // Define o caminho base da pasta arquivada
             const basePath = week.path || `archives/${week.date}`;
 
-            // 1. Header & Stats
+            // 1. Atualizar Stats (Topo)
             document.getElementById('archiveDate').innerText = week.date;
             document.getElementById('totalSpent').innerText = formatMoney(stats.spent);
             document.getElementById('totalAttacks').innerText = stats.attacks;
@@ -249,12 +249,13 @@
             }
             document.getElementById('favWeapon').innerText = fav.toUpperCase();
 
-            // 2. Carregar Iframes da Sidebar
-            document.getElementById('wealthFrame').src = `${basePath}/wealth.html`;
+            // 2. Atualizar IFRAMES das Tabs (Nova Ordem)
+            // Certifica-te que tens um ficheiro topten.html (ou ajusta o nome aqui)
+            document.getElementById('toptenFrame').src = `${basePath}/topten.html`; 
             document.getElementById('forcesFrame').src = `${basePath}/army_code.html`;
-            document.getElementById('warsFrame').src = `${basePath}/wars.html`;
+            document.getElementById('wealthFrame').src = `${basePath}/wealth.html`;
 
-            // 3. Carregar o Mapa
+            // 3. Carregar o Mapa Dinâmico
             loadArchiveMap(basePath);
         }
 
@@ -264,15 +265,15 @@
             
             loader.style.display = 'block';
 
-            // Destruir mapa anterior
+            // Limpeza
             if (Highcharts.charts[0]) { Highcharts.charts[0].destroy(); }
             container.innerHTML = ""; 
 
-            // Trocar CSS
+            // Carregar CSS do Mapa Arquivado
             const cssLink = document.getElementById('archiveMapCss');
             cssLink.href = `${basePath}/map.css?t=${Date.now()}`;
 
-            // Trocar JS
+            // Carregar JS do Mapa Arquivado
             const oldScript = document.getElementById('dynamicMapScript');
             if (oldScript) oldScript.remove();
 
@@ -285,7 +286,7 @@
             };
             script.onerror = function() {
                 loader.style.display = 'none';
-                container.innerHTML = `<div style="display:flex; justify-content:center; align-items:center; height:100%; color:#ff0055; font-family:'Rajdhani'">DATA CORRUPTED OR MISSING</div>`;
+                container.innerHTML = `<div style="display:flex; justify-content:center; align-items:center; height:100%; color:#ff0055; font-family:'Rajdhani'">DATA UNAVAILABLE</div>`;
             };
 
             document.body.appendChild(script);
