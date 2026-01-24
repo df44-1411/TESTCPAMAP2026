@@ -180,51 +180,184 @@
     </div>
 
     <script>
-        let currentWeekIndex = 0;
-		let currentTab = 'topten';
+        let historyData = [];
 
-		function switchTab(tab) {
-			currentTab = tab;
-			document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-			event.target.classList.add('active');
-			renderLeaderboard();
-		}
+        window.onload = async function() {
+            try {
+                const response = await fetch('history.json');
+                if (!response.ok) throw new Error("History file not found");
+                historyData = await response.json();
 
-		function renderLeaderboard() {
-			const week = historyData[currentWeekIndex];
-			const lbContainer = document.getElementById('leaderboardList');
-			lbContainer.innerHTML = "";
+                const selector = document.getElementById('weekSelector');
+                selector.innerHTML = "";
+                
+                if (historyData.length === 0) {
+                    selector.innerHTML = "<option>No Archives Found</option>";
+                    return;
+                }
 
-			if (currentTab === 'topten') {
-				week.leaderboard.forEach((entry, i) => {
-					lbContainer.innerHTML += createRow(i+1, entry.name, `${entry.score.toFixed(1)} PTS`, "val-points");
-				});
-			} else if (currentTab === 'forces') {
-				// Gerado dinamicamente a partir do snapshot do mapa
-				const counts = {};
-				Object.values(week.map_snapshot).forEach(owner => {
-					if(owner !== "None" && owner !== "Freeland") counts[owner] = (counts[owner] || 0) + 1;
-				});
-				const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
-				sorted.forEach(([name, count], i) => {
-					lbContainer.innerHTML += createRow(i+1, name, `${count} Servers`, "");
-				});
-			} else if (currentTab === 'wealth') {
-				// Se não salvou a wealth no json, pode mostrar "Data not archived" ou integrar no archive_week
-				lbContainer.innerHTML = "<div style='padding:20px; color:#555;'>Wealth history not available for this run.</div>";
+                historyData.forEach((week, index) => {
+                    const opt = document.createElement('option');
+                    opt.value = index;
+                    opt.innerText = `${week.id}`;
+                    selector.appendChild(opt);
+                });
+
+                loadWeekData(0);
+
+            } catch (e) {
+                console.error(e);
+                document.querySelector('.dashboard-container').innerHTML = 
+                    `<div style="width:100%; text-align:center; padding-top:100px; color:#ff0055;">
+                        <h2>ARCHIVE OFFLINE</h2>
+                        <p>No history data generated yet.</p>
+                    </div>`;
+            }
+        };
+
+        function loadWeekData(index) {
+            const week = historyData[index];
+            const stats = week.stats.global;
+            const armies = week.stats.armies;
+
+            // Header
+            document.getElementById('archiveDate').innerText = week.date;
+
+            // Stats
+            document.getElementById('totalSpent').innerText = formatMoney(stats.spent);
+            document.getElementById('totalAttacks').innerText = stats.attacks;
+            document.getElementById('totalWars').innerText = stats.wars;
+            
+            let fav = "None";
+            let maxUsage = 0;
+            for (const [item, count] of Object.entries(stats.items || {})) {
+                if (count > maxUsage) { maxUsage = count; fav = item; }
+            }
+            document.getElementById('favWeapon').innerText = fav.charAt(0).toUpperCase() + fav.slice(1);
+			let currentTab = 'topten';
+
+			function switchTab(tab) {
+				currentTab = tab;
+				document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+				event.target.classList.add('active');
+				renderLeaderboard();
 			}
-		}
 
-		function createRow(rank, name, val, valClass) {
-			return `
-				<div class="lb-row">
-					<div style="display:flex; align-items:center; gap:10px;">
-						<span class="lb-rank">#${rank}</span>
-						<span class="lb-name">${name}</span>
-					</div>
-					<span class="lb-val ${valClass}">${val}</span>
-				</div>`;
-		}
+			function renderLeaderboard() {
+				const week = historyData[currentWeekIndex];
+				const lbContainer = document.getElementById('leaderboardList');
+				lbContainer.innerHTML = "";
+
+				if (currentTab === 'topten') {
+					week.leaderboard.forEach((entry, i) => {
+						lbContainer.innerHTML += createRow(i+1, entry.name, `${entry.score.toFixed(1)} PTS`, "val-points");
+					});
+				} else if (currentTab === 'forces') {
+					// Gerado dinamicamente a partir do snapshot do mapa
+					const counts = {};
+					Object.values(week.map_snapshot).forEach(owner => {
+						if(owner !== "None" && owner !== "Freeland") counts[owner] = (counts[owner] || 0) + 1;
+					});
+					const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+					sorted.forEach(([name, count], i) => {
+						lbContainer.innerHTML += createRow(i+1, name, `${count} Servers`, "");
+					});
+				} else if (currentTab === 'wealth') {
+					// Se não salvou a wealth no json, pode mostrar "Data not archived" ou integrar no archive_week
+					lbContainer.innerHTML = "<div style='padding:20px; color:#555;'>Wealth history not available for this run.</div>";
+				}
+			}
+
+			function createRow(rank, name, val, valClass) {
+				return `
+					<div class="lb-row">
+						<div style="display:flex; align-items:center; gap:10px;">
+							<span class="lb-rank">#${rank}</span>
+							<span class="lb-name">${name}</span>
+						</div>
+						<span class="lb-val ${valClass}">${val}</span>
+					</div>`;
+            // Leaderboard
+            const lbContainer = document.getElementById('leaderboardList');
+            const lbTitle = document.getElementById('lbTitle');
+            lbContainer.innerHTML = "";
+            
+            const isManual = week.leaderboard.length > 0 && week.leaderboard[0].type === "manual";
+            lbTitle.innerText = isManual ? "🏆 Power Rankings" : "💰 Wealth Leaderboard";
+
+            week.leaderboard.forEach((entry, i) => {
+                const row = document.createElement('div');
+                row.className = "lb-row";
+                
+                let valHtml = "";
+                if (isManual) {
+                    valHtml = `<span class="lb-val val-points">${entry.score.toFixed(1)} PTS</span>`;
+                } else {
+                    if (entry.balance === -1) {
+                        valHtml = `<span class="lb-val val-hidden">HIDDEN</span>`;
+                    } else {
+                        valHtml = `<span class="lb-val" style="color:#00ff9d">$${formatMoney(entry.balance)}</span>`;
+                    }
+                }
+
+                row.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span class="lb-rank">#${i+1}</span>
+                        <span class="lb-name">${entry.name}</span>
+                    </div>
+                    ${valHtml}
+                `;
+                lbContainer.appendChild(row);
+            });
+
+            // Warmonger
+            let warmestArmy = "-";
+            let maxAttacks = 0;
+            for (const [name, data] of Object.entries(armies)) {
+                if (data.attacks > maxAttacks) { maxAttacks = data.attacks; warmestArmy = name; }
+            }
+            document.getElementById('warmongerName').innerText = warmestArmy;
+            document.getElementById('warmongerCount').innerText = `${maxAttacks} Attacks`;
+
+            // Map Snapshot
+            const mapContainer = document.getElementById('mapSnapshot');
+            mapContainer.innerHTML = "";
+            
+            const sortedServers = Object.keys(week.map_snapshot).sort();
+            sortedServers.forEach(serverName => {
+                const owner = week.map_snapshot[serverName];
+                let color = stringToColor(owner);
+                if (owner === "Freeland") color = "#222"; 
+                if (owner === "None") color = "#111";
+
+                const dot = document.createElement('div');
+                dot.className = "snap-dot";
+                dot.style.backgroundColor = color;
+                dot.title = `${serverName}: ${owner}`;
+                mapContainer.appendChild(dot);
+            });
+        }
+
+        function formatMoney(amount) {
+            if (!amount) return "0";
+            if (amount >= 1000000) return (amount / 1000000).toFixed(1) + 'M';
+            if (amount >= 1000) return (amount / 1000).toFixed(1) + 'k';
+            return amount.toLocaleString('en-US');
+        }
+
+        function stringToColor(str) {
+            if (!str) return "#333";
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            let color = '#';
+            for (let i = 0; i < 3; i++) {
+                let value = (hash >> (i * 8)) & 0xFF;
+                color += ('00' + value.toString(16)).substr(-2);
+            }
+            return color;
+        }
     </script>
 </body>
 </html>
