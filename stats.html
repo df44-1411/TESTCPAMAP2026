@@ -3,120 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CPA: THE STATS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Warfare Archives</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #121212; color: #e0e0e0; font-family: 'Rajdhani', sans-serif; }
-        .card { background-color: #1e1e1e; border: 1px solid #333; margin-bottom: 20px; }
-        .card-header { background-color: #252525; border-bottom: 1px solid #333; font-weight: bold; text-transform: uppercase; color: #ffcc00; }
-        .stat-val { font-size: 1.5em; font-weight: bold; color: #fff; }
-        .stat-label { font-size: 0.8em; color: #aaa; text-transform: uppercase; }
-        
-        /* Mini Map Grid Simulation */
-        .map-grid { display: flex; flex-wrap: wrap; gap: 2px; justify-content: center; }
-        .map-dot { width: 15px; height: 15px; border-radius: 2px; background: #333; cursor: pointer; }
-        .map-dot:hover { transform: scale(1.5); border: 1px solid white; }
+        :root {
+            --bg-color: #0f1215;
+            --panel-bg: rgba(26, 30, 35, 0.95);
+            --accent: #d4af37; /* Dourado */
+            --text-main: #e0e0e0;
+            --text-muted: #888;
+            --border: 1px solid #333;
+        }
 
-        /* Army Colors (Defaults) */
-        .army-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #333; }
-        .army-name { font-weight: bold; }
-        select { background: #333; color: white; border: 1px solid #555; padding: 5px; border-radius: 5px; }
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at top, #1a202c, #0f1215);
+            color: var(--text-main);
+            font-family: 'Rajdhani', sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 15px;
+        }
+
+        h1 { margin: 0; font-size: 2.5em; text-transform: uppercase; letter-spacing: 2px; color: white; }
+        .subtitle { color: var(--accent); font-size: 1em; letter-spacing: 1px; }
+
+        select {
+            background: #222;
+            color: white;
+            padding: 10px 20px;
+            border: 1px solid var(--accent);
+            font-family: inherit;
+            font-size: 1.1em;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        /* GRID LAYOUT */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            grid-template-rows: auto auto;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .panel {
+            background: var(--panel-bg);
+            border: var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .panel-title {
+            font-size: 1.2em;
+            color: var(--accent);
+            text-transform: uppercase;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        /* LEADERBOARD (Left) */
+        .leaderboard-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #222;
+            transition: 0.2s;
+        }
+        .leaderboard-row:hover { background: rgba(255,255,255,0.05); padding-left: 5px; }
+        .rank { width: 30px; color: var(--text-muted); }
+        .army { flex-grow: 1; font-weight: bold; }
+        .money { color: #4cd137; }
+        .money.hidden { color: #e74c3c; letter-spacing: 2px; }
+
+        /* STATS CARDS (Top Right) */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+        .stat-val { font-size: 2em; font-weight: bold; color: white; }
+        .stat-label { font-size: 0.8em; color: var(--text-muted); text-transform: uppercase; }
+
+        /* MAP SNAPSHOT (Bottom Right) */
+        .map-container {
+            min-height: 400px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            justify-content: center;
+            align-content: flex-start;
+            padding: 20px;
+            background: #000;
+            border-radius: 4px;
+        }
+        
+        .server-dot {
+            width: 12px;
+            height: 12px;
+            background: #333;
+            border-radius: 2px;
+            cursor: help;
+            transition: 0.2s;
+        }
+        .server-dot:hover { transform: scale(1.5); box-shadow: 0 0 5px white; z-index: 10; }
+        
+        /* Tooltip simples */
+        .server-dot[title]:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            white-space: nowrap;
+            font-size: 0.8em;
+            pointer-events: none;
+            border: 1px solid var(--accent);
+        }
+
     </style>
 </head>
 <body>
 
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="header">
         <div>
-            <h1 class="display-6 fw-bold text-warning">WARFARE ARCHIVES</h1>
-            <p class="text-muted">Historical data access terminal</p>
+            <h1>Warfare Archives</h1>
+            <div class="subtitle">Historical Records & Statistics</div>
         </div>
-        <div>
-            <label for="weekSelector" class="me-2">SELECT ERA:</label>
-            <select id="weekSelector" onchange="loadWeekData(this.value)">
-                <option>Loading...</option>
-            </select>
-        </div>
+        <select id="weekSelector" onchange="loadWeekData(this.value)">
+            <option>Loading Database...</option>
+        </select>
     </div>
 
-    <div class="row">
+    <div class="dashboard">
         
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">Weekly Activity</div>
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-6 mb-3">
-                            <div class="stat-val" id="totalSpent">0</div>
-                            <div class="stat-label">Coins Spent</div>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <div class="stat-val" id="totalAttacks">0</div>
-                            <div class="stat-label">Attacks Launched</div>
-                        </div>
-                        <div class="col-6">
-                            <div class="stat-val" id="totalWars">0</div>
-                            <div class="stat-label">Wars Declared</div>
-                        </div>
-                        <div class="col-6">
-                            <div class="stat-val" id="favWeapon">-</div>
-                            <div class="stat-label">Fav. Weapon</div>
-                        </div>
-                    </div>
+        <div class="panel" style="grid-row: span 2;">
+            <div class="panel-title">🏆 Top 10 Wealth</div>
+            <div id="leaderboardList">
                 </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">🏆 Top 10 Wealthiest (End of Week)</div>
-                <div class="card-body" id="leaderboardList">
-                    </div>
-            </div>
             
-            <div class="card">
-                <div class="card-header">⚔️ Most Aggressive Army</div>
-                <div class="card-body text-center">
-                    <h3 class="text-danger" id="warmongerName">-</h3>
-                    <p class="text-muted" id="warmongerCount">0 Attacks</p>
+            <div class="panel-title" style="margin-top: 30px;">🔥 Aggression Report</div>
+            <div style="text-align: center;">
+                <div style="font-size: 0.9em; color: #888;">Most Aggressive Army</div>
+                <div id="warmongerName" style="font-size: 1.5em; font-weight: bold; color: #e74c3c;">-</div>
+                <div id="warmongerCount" style="color: white;">0 Attacks</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">🌍 Global Activity</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-val" id="totalSpent">0</div>
+                    <div class="stat-label">Coins Spent</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-val" id="totalAttacks">0</div>
+                    <div class="stat-label">Attacks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-val" id="totalWars">0</div>
+                    <div class="stat-label">Wars Declared</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-val" id="favWeapon">-</div>
+                    <div class="stat-label">Fav. Weapon</div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-8">
-            <div class="card h-100">
-                <div class="card-header d-flex justify-content-between">
-                    <span>🗺️ Map State Snapshot</span>
-                    <span id="mapDate" class="text-muted small"></span>
-                </div>
-                <div class="card-body">
-                    <p class="small text-muted mb-3">Visual representation of territory control at the end of the selected week.</p>
-                    
-                    <div id="mapContainer" class="map-grid">
-                        </div>
-                    
-                    <div id="serverList" class="mt-4 row small text-muted">
-                        </div>
-                </div>
+        <div class="panel">
+            <div class="panel-title">
+                🗺️ Map Snapshot 
+                <span id="mapDate" style="float: right; font-size: 0.7em; color: #666; font-weight: normal;"></span>
             </div>
+            <div id="mapContainer" class="map-container">
+                </div>
         </div>
+
     </div>
-</div>
 
 <script>
     let historyData = [];
 
-    // Carregar dados ao iniciar
     window.onload = async function() {
         try {
-            // Tenta carregar o history.json (criado pelo bot)
             const response = await fetch('history.json');
             if (!response.ok) throw new Error("History file not found");
             historyData = await response.json();
 
-            // Preencher o menu
             const selector = document.getElementById('weekSelector');
             selector.innerHTML = "";
             
+            if (historyData.length === 0) {
+                selector.innerHTML = "<option>No Archives Found</option>";
+                return;
+            }
+
             historyData.forEach((week, index) => {
                 const opt = document.createElement('option');
                 opt.value = index;
@@ -124,12 +233,11 @@
                 selector.appendChild(opt);
             });
 
-            // Carregar a primeira semana (a mais recente)
-            if (historyData.length > 0) loadWeekData(0);
+            loadWeekData(0);
 
         } catch (e) {
             console.error(e);
-            document.querySelector('.container').innerHTML = `<h2 class="text-danger text-center mt-5">History Database Offline<br><small class="text-white fs-6">Run /income to generate the first snapshot.</small></h2>`;
+            document.querySelector('.dashboard').innerHTML = `<h2 style="text-align:center; color:#e74c3c;">NO DATA FOUND<br><small style="color:white; font-size:0.5em;">Run /income to archive the first week.</small></h2>`;
         }
     };
 
@@ -138,12 +246,11 @@
         const stats = week.stats.global;
         const armies = week.stats.armies;
 
-        // 1. Fill Global Stats
+        // Stats
         document.getElementById('totalSpent').innerText = formatMoney(stats.spent);
         document.getElementById('totalAttacks').innerText = stats.attacks;
         document.getElementById('totalWars').innerText = stats.wars;
         
-        // Favorite Weapon logic
         let fav = "None";
         let maxUsage = 0;
         for (const [item, count] of Object.entries(stats.items || {})) {
@@ -152,20 +259,31 @@
         document.getElementById('favWeapon').innerText = fav.charAt(0).toUpperCase() + fav.slice(1);
         document.getElementById('mapDate').innerText = `Archived: ${week.date}`;
 
-        // 2. Fill Leaderboard
+        // Leaderboard
         const lbContainer = document.getElementById('leaderboardList');
         lbContainer.innerHTML = "";
+        
         week.leaderboard.forEach((entry, i) => {
             const row = document.createElement('div');
-            row.className = "army-row";
+            row.className = "leaderboard-row";
+            
+            // Lógica do Anti-Spy: Se for -1, mostramos "HIDDEN"
+            let moneyDisplay = "";
+            if (entry.balance === -1) {
+                moneyDisplay = "<span class='money hidden'>???</span>";
+            } else {
+                moneyDisplay = `<span class='money'>$${formatMoney(entry.balance)}</span>`;
+            }
+
             row.innerHTML = `
-                <span class="army-name ${i < 3 ? 'text-warning' : ''}">#${i+1} ${entry.name}</span>
-                <span>$${formatMoney(entry.balance)}</span>
+                <span class="rank">#${i+1}</span>
+                <span class="army">${entry.name}</span>
+                ${moneyDisplay}
             `;
             lbContainer.appendChild(row);
         });
 
-        // 3. Warmonger
+        // Warmonger
         let warmestArmy = "-";
         let maxAttacks = 0;
         for (const [name, data] of Object.entries(armies)) {
@@ -174,36 +292,31 @@
         document.getElementById('warmongerName').innerText = warmestArmy;
         document.getElementById('warmongerCount').innerText = `${maxAttacks} Attacks`;
 
-        // 4. Render Map (Grid Mode)
+        // Map
         const mapContainer = document.getElementById('mapContainer');
         mapContainer.innerHTML = "";
         
-        // Ordenar servidores por nome para ficar bonito
         const sortedServers = Object.keys(week.map_snapshot).sort();
-
         sortedServers.forEach(serverName => {
             const owner = week.map_snapshot[serverName];
-            
-            // Tenta adivinhar a cor (No futuro, o history.json devia ter a cor guardada tb)
-            // Aqui usamos um hash simples para gerar cor ou cinzento para Freeland
             let color = stringToColor(owner);
-            if (owner === "Freeland") color = "#444";
-            if (owner === "None") color = "#222";
+            if (owner === "Freeland") color = "#333";
+            if (owner === "None") color = "#111";
 
             const dot = document.createElement('div');
-            dot.className = "map-dot";
+            dot.className = "server-dot";
             dot.style.backgroundColor = color;
-            dot.title = `${serverName}: ${owner}`; // Tooltip
-            dot.setAttribute('data-bs-toggle', 'tooltip');
+            dot.title = `${serverName}: ${owner}`;
             mapContainer.appendChild(dot);
         });
     }
 
     function formatMoney(amount) {
+        if (amount >= 1000000) return (amount / 1000000).toFixed(1) + 'M';
+        if (amount >= 1000) return (amount / 1000).toFixed(1) + 'k';
         return amount.toLocaleString('en-US');
     }
 
-    // Helper simples para cores baseadas no nome (para não ter de guardar hex codes no json)
     function stringToColor(str) {
         if (!str) return "#333";
         let hash = 0;
@@ -218,6 +331,5 @@
         return color;
     }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
