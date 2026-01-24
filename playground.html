@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Club Penguin Armies: The Archive</title>
+    <title>CPA: The Archive</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="map.css">
 
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-    
     <script src="map.js"></script> 
 
     <style>
-        /* Ajustes para o layout de Arquivo */
-        html, body { height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-        
+        /* Ajustes para a navegação do Arquivo */
         .archive-nav {
             height: 60px;
             background: rgba(10, 10, 20, 0.95);
@@ -28,7 +28,7 @@
             z-index: 100;
         }
 
-        .week-select {
+        .archive-selector {
             background: #051020;
             color: var(--neon-blue);
             border: 1px solid var(--neon-blue);
@@ -40,38 +40,11 @@
             cursor: pointer;
         }
 
-        /* Container Principal igual ao index.html */
-        .main-layout {
-            display: flex;
-            flex: 1;
-            height: calc(100vh - 60px);
-            padding: 20px;
-            gap: 20px;
-        }
-
-        .map-panel {
-            flex: 3;
-            background: var(--bg-mapp); /* Azul escuro do mapa */
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .sidebar-panel {
-            flex: 1;
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        /* Tabs da Sidebar */
+        /* Tabs da Sidebar (Estilo Igual ao teu index.html) */
         .sidebar-tabs {
             display: flex;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.3);
         }
         .tab-btn {
             flex: 1;
@@ -84,10 +57,12 @@
             font-weight: bold;
             text-transform: uppercase;
             transition: 0.3s;
+            border-bottom: 2px solid transparent;
         }
+        .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
         .tab-btn.active {
             color: var(--neon-blue);
-            background: rgba(0, 243, 255, 0.1);
+            background: rgba(0, 243, 255, 0.05);
             border-bottom: 2px solid var(--neon-blue);
         }
 
@@ -99,7 +74,7 @@
         }
         .tab-content.active { display: block; }
 
-        /* Estilos dos Cartões (Top Ten, Army Code) */
+        /* Cartões de Rank (Para Top Ten e Forces) */
         .rank-card {
             background: rgba(255,255,255,0.03);
             border-left: 3px solid transparent;
@@ -108,6 +83,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            border-radius: 4px;
         }
         .rank-card.top3 { background: rgba(255, 215, 0, 0.05); border-left-color: #ffd700; }
         
@@ -115,13 +91,14 @@
         .top3 .rank-num { color: #ffd700; }
         
         .rank-name { flex: 1; font-weight: bold; font-size: 1.1em; }
-        .rank-score { color: var(--neon-green); font-weight: bold; }
+        .rank-val { color: var(--neon-green); font-weight: bold; font-family: monospace;}
         .rank-change { font-size: 0.8em; margin-left: 10px; width: 40px; text-align: right; }
+        
         .change-pos { color: #4cd137; }
         .change-neg { color: #e74c3c; }
         .change-new { color: #f39c12; font-weight: bold; }
 
-        /* Estilo Wealth */
+        /* Wealth Row */
         .wealth-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .val-hidden { color: #e74c3c; letter-spacing: 2px; }
 
@@ -131,31 +108,35 @@
 
     <nav class="archive-nav">
         <div style="font-size: 1.5rem; font-weight: bold; color: white;">
-            CPA: THE MAP <span style="font-size:0.5em; color:#888;">ARCHIVES</span>
+            CPA: ARCHIVES <span style="font-size:0.5em; color:#888;">READ-ONLY</span>
         </div>
         <div>
-            <label style="color:#888; margin-right:10px;">SELECT DATE:</label>
-            <select id="weekSelector" class="week-select" onchange="loadWeek(this.value)">
+            <label style="color:#888; margin-right:10px;">SELECT ERA:</label>
+            <select id="weekSelector" class="archive-selector" onchange="loadWeek(this.value)">
                 <option>Loading...</option>
             </select>
         </div>
-        <div>
-            <a href="index.html" style="color:var(--neon-blue); text-decoration:none; font-weight:bold;">RETURN TO LIVE MAP</a>
+        <div class="nav-links" style="display:flex; gap:20px;">
+            <a href="index.html" style="color:var(--text-muted); text-decoration:none; font-weight:bold; text-transform:uppercase;">Live Map</a>
+            <a href="#" style="color:var(--neon-blue); text-decoration:none; font-weight:bold; text-transform:uppercase;">Archives</a>
         </div>
     </nav>
 
-    <div class="main-layout">
+    <div class="dashboard-container">
         
-        <div class="map-panel">
-            <div id="mapContainer" style="width:100%; height:100%; background:transparent;"></div>
-            <div style="position:absolute; bottom:10px; left:10px; background:rgba(0,0,0,0.7); padding:5px 10px; border-radius:4px; font-size:0.8em; color:#aaa;">
-                Snapshot Date: <span id="snapDate" style="color:white;">-</span>
+        <div class="map-wrapper">
+            <div class="map-header">
+                <span class="status-indicator">
+                    <div class="status-dot" style="background:var(--neon-blue); box-shadow:0 0 8px var(--neon-blue);"></div> 
+                    SNAPSHOT DATE: <span id="snapDate" style="color:#fff; margin-left:5px;">-</span>
+                </span>
             </div>
+            <div id="mapContainer" style="width:100%; height:100%; background:transparent;"></div>
         </div>
 
-        <div class="sidebar-panel">
+        <aside class="sidebar" style="padding:0;">
             <div class="sidebar-tabs">
-                <button class="tab-btn active" onclick="setTab('topten')">Top Tens</button>
+                <button class="tab-btn active" onclick="setTab('topten')">Top 10</button>
                 <button class="tab-btn" onclick="setTab('forces')">Forces</button>
                 <button class="tab-btn" onclick="setTab('wealth')">Wealth</button>
                 <button class="tab-btn" onclick="setTab('wars')">Wars</button>
@@ -176,15 +157,18 @@
             <div id="tab-wars" class="tab-content">
                 <div id="warsList"></div>
             </div>
-        </div>
+        </aside>
 
+    </div>
+
+    <div class="footer-text" style="text-align:center; padding: 10px; color: #555; font-size: 0.8rem;">
+        CPA Archives System
     </div>
 
     <script>
         let historyData = [];
         let mapChart = null;
 
-        // --- 1. Inicialização ---
         window.onload = async function() {
             try {
                 const response = await fetch('history.json');
@@ -202,50 +186,47 @@
                 historyData.forEach((week, index) => {
                     const opt = document.createElement('option');
                     opt.value = index;
-                    opt.innerText = `${week.id} (${week.date})`;
+                    opt.innerText = `${week.id}`;
                     selector.appendChild(opt);
                 });
 
-                // Carregar a primeira semana
+                // Carregar a primeira semana (index 0)
                 loadWeek(0);
 
             } catch (e) {
                 console.error(e);
-                alert("History database is empty or missing. Run /income to generate data.");
+                alert("History database is empty. Run /income to generate data.");
             }
         };
 
-        // --- 2. Carregar Semana ---
         function loadWeek(index) {
             const week = historyData[index];
             document.getElementById('snapDate').innerText = week.date;
 
-            // A. Desenhar Mapa (Com Highcharts e dados do mapData + snapshot)
+            // 1. Desenhar Mapa
             drawMap(week.map_snapshot);
 
-            // B. Preencher Abas
+            // 2. Preencher Abas
             renderTopTen(week.top_ten || []);
             renderForces(week.map_snapshot);
             renderWealth(week.wealth || []);
             renderWars(week.wars_snapshot || {});
         }
 
-        // --- 3. Lógica do Mapa ---
+        // --- MAP LOGIC (Highcharts) ---
         function drawMap(snapshot) {
-            // Se já existe, destrói para criar novo (simples e eficaz)
-            /* Nota: mapData vem do map.js que foi importado no <head> */
+            // Nota: mapData vem do map.js importado
             
-            // Prepara os dados: fundir geometria (mapData) com donos (snapshot)
             const seriesData = mapData.map(t => {
-                const owner = snapshot[t.name] || "Freeland"; // Se não estiver no snapshot, é Freeland
+                const owner = snapshot[t.name] || "Freeland";
                 let color = stringToColor(owner);
-                if (owner === "Freeland") color = "#2a2a2a"; // Cinza escuro
+                if (owner === "Freeland") color = "#2a2a2a"; 
                 if (owner === "None") color = "#1a1a1a";
 
                 return {
-                    ...t, // Mantém paths e geometria
+                    ...t, 
                     color: color,
-                    controller: owner, // Para tooltip
+                    controller: owner, 
                     value: 1
                 };
             });
@@ -261,9 +242,10 @@
                 legend: { enabled: false },
                 tooltip: {
                     backgroundColor: 'rgba(0,0,0,0.8)',
-                    style: { color: '#fff' },
+                    style: { color: '#fff', fontFamily: 'Rajdhani' },
                     formatter: function() {
-                        return `<b>${this.point.name}</b><br>Controlled by: <span style="color:${this.point.color}">●</span> ${this.point.controller}`;
+                        return `<b style="font-size:1.1em">${this.point.name}</b><br>
+                                <span style="color:#aaa">Controlled by:</span> <span style="color:${this.point.color}; font-weight:bold;">● ${this.point.controller}</span>`;
                     }
                 },
                 series: [{
@@ -271,29 +253,27 @@
                     borderColor: 'rgba(0, 243, 255, 0.2)',
                     borderWidth: 1,
                     states: {
-                        hover: { color: '#ffffff' } // Highlight ao passar rato
+                        hover: { color: '#ffffff' }
                     }
                 }]
             });
         }
 
-        // --- 4. Renderizadores das Abas ---
+        // --- RENDERERS ---
 
         function renderTopTen(list) {
             const container = document.getElementById('topTenList');
             container.innerHTML = "";
             if (!list || list.length === 0) {
-                container.innerHTML = "<div style='text-align:center; color:#555;'>No Top Ten data for this week.</div>";
+                container.innerHTML = "<div style='text-align:center; color:#555; padding:20px;'>No Top Ten data set.</div>";
                 return;
             }
 
-            // Ordena por rank
             list.sort((a,b) => a.rank - b.rank);
 
             list.forEach(item => {
                 const isTop3 = item.rank <= 3 ? "top3" : "";
                 
-                // Formatação da mudança (Change)
                 let changeHtml = "";
                 if (item.change === "NEW") changeHtml = `<span class="change-new">NEW</span>`;
                 else {
@@ -307,7 +287,7 @@
                     <div class="rank-card ${isTop3}">
                         <div class="rank-num">${item.rank}</div>
                         <div class="rank-name">${item.name}</div>
-                        <div class="rank-score">${item.score.toFixed(2)}</div>
+                        <div class="rank-val">${item.score.toFixed(2)}</div>
                         <div class="rank-change">${changeHtml}</div>
                     </div>
                 `;
@@ -315,7 +295,6 @@
         }
 
         function renderForces(snapshot) {
-            // Calcular territórios
             const counts = {};
             for (const svr in snapshot) {
                 const owner = snapshot[svr];
@@ -324,9 +303,7 @@
                 }
             }
             
-            // Ordenar
             const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
-            
             const container = document.getElementById('forcesList');
             container.innerHTML = "";
             
@@ -334,7 +311,7 @@
                 container.innerHTML += `
                     <div class="rank-card">
                         <div class="rank-name">${army}</div>
-                        <div style="color:var(--neon-blue); font-weight:bold;">${count} Servers</div>
+                        <div class="rank-val" style="color:var(--neon-blue);">${count} Servers</div>
                     </div>
                 `;
             });
@@ -343,11 +320,10 @@
         function renderWealth(list) {
             const container = document.getElementById('wealthList');
             container.innerHTML = "";
-            
             list.forEach(item => {
-                let valHtml = "";
-                if (item.balance === -1) valHtml = "<span class='val-hidden'>HIDDEN</span>";
-                else valHtml = `<span style='color:#00ff9d'>$${item.balance.toLocaleString()}</span>`;
+                let valHtml = item.balance === -1 
+                    ? "<span class='val-hidden'>HIDDEN</span>" 
+                    : `<span style='color:#00ff9d; font-family:monospace;'>$${item.balance.toLocaleString()}</span>`;
 
                 container.innerHTML += `
                     <div class="wealth-row">
@@ -364,15 +340,15 @@
             const wars = Object.entries(warsDict);
             
             if (wars.length === 0) {
-                container.innerHTML = "<div style='text-align:center; color:#555;'>No active wars in this era.</div>";
+                container.innerHTML = "<div style='text-align:center; color:#555; padding:20px;'>No active wars.</div>";
                 return;
             }
 
             wars.forEach(([name, data]) => {
                 container.innerHTML += `
                     <div style="background:rgba(255,0,0,0.1); border:1px solid rgba(255,0,0,0.3); padding:10px; margin-bottom:10px; border-radius:4px;">
-                        <div style="color:#ff5555; font-weight:bold; text-transform:uppercase;">${name}</div>
-                        <div style="font-size:0.85em; color:#ccc;">
+                        <div style="color:#ff5555; font-weight:bold; text-transform:uppercase; font-size:0.9em;">${name}</div>
+                        <div style="font-size:0.85em; color:#ccc; margin-top:5px;">
                             ${data.side_a.join(", ")} <span style="color:#888;">VS</span> ${data.side_b.join(", ")}
                         </div>
                     </div>
@@ -380,13 +356,10 @@
             });
         }
 
-        // --- Helpers ---
+        // --- HELPERS ---
         function setTab(name) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
-            // Encontra o botão certo (hack simples via texto ou ordem, ou onclick direto)
-            // Aqui usamos o evento onclick que já passou o nome
             event.target.classList.add('active');
             document.getElementById('tab-' + name).classList.add('active');
         }
@@ -394,9 +367,7 @@
         function stringToColor(str) {
             if (!str) return "#333";
             let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                hash = str.charCodeAt(i) + ((hash << 5) - hash);
-            }
+            for (let i = 0; i < str.length; i++) { hash = str.charCodeAt(i) + ((hash << 5) - hash); }
             let color = '#';
             for (let i = 0; i < 3; i++) {
                 let value = (hash >> (i * 8)) & 0xFF;
