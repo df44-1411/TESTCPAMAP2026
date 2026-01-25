@@ -647,7 +647,6 @@ var mapData = [
     "continent": "Tundropa",
     "type": "NORMAL",
     "controller": "Freeland",
-    "effect": "bomb-active",
     "underInvasion": false
   },
   {
