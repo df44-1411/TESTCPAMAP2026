@@ -308,12 +308,12 @@ body {
 
 @keyframes invasionOverlay {
     0% { fill-opacity: 1; }
-    50% { fill-opacity: 0.6; fill: var(--attacker-color) !important; }
+    50% { fill-opacity: 0.8; fill: var(--attacker-color) !important; }
     100% { fill-opacity: 1; }
 }
 
 .invasion-flashing {
-    animation: invasionOverlay 10s infinite ease-in-out;
+    animation: invasionOverlay 8s infinite ease-in-out;
 }
 
 /* --- Mobile Responsiveness --- */
