@@ -309,7 +309,7 @@ body {
 @keyframes invasionOverlay {
     0% { fill-opacity: 1; }
     50% { fill-opacity: 1; }
-    75% { fill-opacity: 0.8; fill: var(--attacker-color) !important; }
+    75% { fill-opacity: 0.6; fill: var(--attacker-color) !important; }
     100% { fill-opacity: 1; } 
 }
 
