@@ -313,7 +313,7 @@ body {
 }
 
 .invasion-flashing {
-    animation: invasionOverlay 7s infinite ease-in-out;
+    animation: invasionOverlay 12s infinite ease-in-out;
 }
 
 /* --- Mobile Responsiveness --- */
