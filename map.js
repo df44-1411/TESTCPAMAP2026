@@ -364,7 +364,8 @@ var mapData = [
     "continent": "Tundropa",
     "type": "NORMAL",
     "controller": "Water Vikings",
-    "underInvasion": false
+    "underInvasion": false,
+    "effect": "bomb-active"
   },
   {
     "id": "id45",
