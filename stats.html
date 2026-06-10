@@ -15,23 +15,83 @@
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
 
     <style>
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
+        /* --- LEFT PANEL --- */
+        .archive-left-panel {
+            flex: 0 0 320px;
+            min-width: 280px;
+            max-width: 360px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
+        .archive-left-panel::-webkit-scrollbar { width: 6px; }
+        .archive-left-panel::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        .archive-left-panel::-webkit-scrollbar-thumb { background: #1c3d5e; border-radius: 3px; }
+
+        /* --- RIGHT PANEL (MAP) --- */
+        .archive-right-panel {
+            flex: 1;
+            background: var(--bg-mapp);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        /* --- STATS GRID (compact horizontal) --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
         .stat-card {
             background: rgba(0,0,0,0.3);
             border: 1px solid rgba(0, 243, 255, 0.1);
-            padding: 15px;
+            padding: 10px 8px;
             border-radius: 4px;
             text-align: center;
         }
+        .stat-val { font-size: 1.4em; font-weight: bold; color: #fff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.3); }
+        .stat-label { font-size: 0.65em; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        .stat-val { font-size: 1.8em; font-weight: bold; color: #fff; text-shadow: 0 0 10px rgba(0, 243, 255, 0.3); }
-        .stat-label { font-size: 0.8em; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        /* --- WEAPONS GRID (compact) --- */
+        .weapons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+        .weapon-card {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255, 0, 85, 0.15);
+            padding: 8px 4px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .weapon-icon { font-size: 1.2em; }
+        .weapon-count { font-size: 1.1em; font-weight: bold; color: #ff0055; }
+        .weapon-label { font-size: 0.6em; color: var(--text-muted); text-transform: uppercase; }
+
+        /* --- SECTION DIVIDER --- */
+        .panel-section-title {
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            font-size: 0.75em;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
 
         select.archive-selector {
             background: #051020;
@@ -42,9 +102,11 @@
             text-transform: uppercase;
             font-weight: bold;
             cursor: pointer;
+            width: 100%;
+            font-size: 0.85em;
         }
 
-        .tab-container { display: flex; gap: 5px; margin-bottom: 10px; }
+        .tab-container { display: flex; gap: 5px; margin-bottom: 6px; }
         .tab-btn { 
             background: #051020; border: 1px solid var(--neon-blue); color: var(--neon-blue);
             padding: 5px 10px; cursor: pointer; font-family: 'Rajdhani'; font-size: 0.7em;
@@ -55,29 +117,62 @@
         
         #sidebarFrame { width: 100%; flex: 1; border: none; min-height: 0; }
         
+        /* --- MAP CONTAINER (fills right panel) --- */
         #container {
-            width: 70%;
-            height: 500px;
+            flex: 1;
+            width: 100%;
+            min-height: 0;
             margin: 0 auto;
-            border: 0px solid rgba(255,255,255,0.05);
         }
 
-        .weapons-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .weapon-card {
+        /* --- MAP HEADER --- */
+        .map-header {
+            padding: 10px 20px;
             background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255, 0, 85, 0.15);
-            padding: 12px;
-            border-radius: 4px;
-            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .weapon-icon { font-size: 1.6em; }
-        .weapon-count { font-size: 1.4em; font-weight: bold; color: #ff0055; }
-        .weapon-label { font-size: 0.75em; color: var(--text-muted); text-transform: uppercase; }
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--neon-green);
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--neon-blue);
+        }
+
+        /* --- MOBILE --- */
+        @media screen and (max-width: 1024px) {
+            .dashboard-container {
+                flex-direction: column !important;
+                overflow-y: auto !important;
+                height: auto !important;
+                min-height: calc(100vh - 70px);
+            }
+            .archive-left-panel {
+                flex: none !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 10px;
+            }
+            .archive-right-panel {
+                flex: 1 !important;
+                min-height: 500px;
+            }
+            .stats-grid { grid-template-columns: repeat(4, 1fr); }
+            .weapons-grid { grid-template-columns: repeat(4, 1fr); }
+        }
     </style>
 </head>
 <body>
@@ -95,41 +190,20 @@
 
     <div class="dashboard-container">
         
-        <aside class="sidebar">
-            <div style="padding-bottom:15px; border-bottom:1px solid var(--border-color); margin-bottom:15px;">
-                <h2 style="margin:0; border:none;">Select Date</h2>
-                <select id="weekSelector" class="archive-selector" onchange="loadWeekData(this.value)" style="width:100%">
+        <!-- LEFT PANEL: Controls + Stats + Tabs + Warmonger -->
+        <aside class="archive-left-panel">
+            
+            <!-- Date Selector -->
+            <div>
+                <div class="panel-section-title">Select Date</div>
+                <select id="weekSelector" class="archive-selector" onchange="loadWeekData(this.value)">
                     <option>Loading...</option>
                 </select>
             </div>
-            
-            <div class="tab-container">
-                <button class="tab-btn active" onclick="switchTab('topten')">TOP 10</button>
-                <button class="tab-btn" onclick="switchTab('forces')">FORCES</button>
-                <button class="tab-btn" onclick="switchTab('wealth')">WEALTH</button>
-            </div>
-            
-            <div style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
-                <iframe id="sidebarFrame" src=""></iframe>
-            </div>
-            
-            <div style="margin-top:20px; padding-top:10px; border-top:1px solid var(--border-color);">
-                <div style="font-size:0.8em; color:var(--text-muted); text-transform:uppercase;">Top Warmonger</div>
-                <div id="warmongerName" style="font-size:1.4em; font-weight:bold; color:#ff0055;">-</div>
-                <div id="warmongerCount" style="color:#fff;">0 Attacks</div>
-            </div>
-        </aside>
 
-        <div class="map-wrapper" style="display:block; overflow-y:hidden;">
-            
-            <div class="map-header">
-                <span class="status-indicator">
-                    <div class="status-dot" style="background:var(--neon-blue); box-shadow:0 0 8px var(--neon-blue);"></div> 
-                    ARCHIVED DATA: <span id="archiveDate" style="color:#fff; margin-left:5px;">-</span>
-                </span>
-            </div>
-
-            <div style="padding:20px;">
+            <!-- Stats Grid -->
+            <div>
+                <div class="panel-section-title">Statistics</div>
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-val" id="totalForces">0</div>
@@ -148,16 +222,45 @@
                         <div class="stat-label">Weapons Used</div>
                     </div>
                 </div>
-
-                <h3 style="color:var(--neon-blue); text-transform:uppercase; border-bottom:1px solid var(--border-color); padding-bottom:10px;">Monthly Weapon Usage</h3>
-                <div id="weaponsGrid" class="weapons-grid"></div>
-
-                <h3 style="color:var(--neon-blue); text-transform:uppercase; border-bottom:1px solid var(--border-color); padding-bottom:10px;">Territory Snapshot</h3>
-                
-                <div id="container"></div>
-                <div id="loadingMsg" style="display:none; text-align:center; color:#0ff; padding:20px;">LOADING MAP...</div>
             </div>
 
+            <!-- Weapons Grid -->
+            <div>
+                <div class="panel-section-title">Monthly Weapon Usage</div>
+                <div id="weaponsGrid" class="weapons-grid"></div>
+            </div>
+
+            <!-- Tabs + Iframe -->
+            <div style="flex:1; display:flex; flex-direction:column; min-height:0;">
+                <div class="tab-container">
+                    <button class="tab-btn active" onclick="switchTab('topten')">TOP 10</button>
+                    <button class="tab-btn" onclick="switchTab('forces')">FORCES</button>
+                    <button class="tab-btn" onclick="switchTab('wealth')">WEALTH</button>
+                </div>
+                <div style="flex:1; overflow:hidden; display:flex; flex-direction:column; min-height:0;">
+                    <iframe id="sidebarFrame" src=""></iframe>
+                </div>
+            </div>
+
+            <!-- Warmonger -->
+            <div style="padding-top:8px; border-top:1px solid var(--border-color);">
+                <div style="font-size:0.75em; color:var(--text-muted); text-transform:uppercase;">Top Warmonger</div>
+                <div id="warmongerName" style="font-size:1.2em; font-weight:bold; color:#ff0055;">-</div>
+                <div id="warmongerCount" style="color:#fff; font-size:0.85em;">0 Attacks</div>
+            </div>
+
+        </aside>
+
+        <!-- RIGHT PANEL: Map only (fills available space) -->
+        <div class="archive-right-panel">
+            <div class="map-header">
+                <span class="status-indicator">
+                    <div class="status-dot"></div>
+                    ARCHIVED DATA: <span id="archiveDate" style="color:#fff; margin-left:5px;">-</span>
+                </span>
+            </div>
+            <div id="container"></div>
+            <div id="loadingMsg" style="display:none; text-align:center; color:#0ff; padding:20px;">LOADING MAP...</div>
         </div>
 
     </div>
