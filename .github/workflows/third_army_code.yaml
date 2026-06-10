@@ -1,0 +1,52 @@
+name: Update third Army Code
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'thirdmap.js' # Only runs when oldmap.js changes
+
+# Permissions are required to push changes back to the repo
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    # Cancels older builds if you push twice quickly (saves time)
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0 # IMPORTANTE: Necessário para permitir o rebase/pull
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Generate HTML
+      run: |
+        python third_army_code.py
+        # Creating this file tells GitHub Pages to skip the long Jekyll build process
+        touch .nojekyll 
+
+    # --- NOVO PASSO: Sincronizar antes de enviar ---
+    # Isto resolve o erro "non-fast-forward" puxando as alterações que o bot fez entretanto
+    - name: Pull Remote Changes
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git pull origin main --rebase --autostash || echo "Pull failed or nothing to pull, continuing..."
+
+    - name: Deploy (Commit & Push)
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "Update third_army_code.html"
+        file_pattern: 'third_army_code.html .nojekyll'
