@@ -2,6 +2,20 @@ import operator
 import re
 
 search_terms = {
+<<<<<<< Updated upstream
+=======
+    "Magma Clan": "#c92b1d",
+    "Steam Empire": "#dddddd",
+    "Pizzaioli of Club Penguin": "#FC7E00",
+    "Impostors of Club Penguin": "#e68a22",
+    "SnowWalkers of Club Penguin": "#87f1ff",
+    "Businessmen of Club Penguin": "#262525",
+    "The Abyssal Tide of Club Penguin": "#4863a0",
+    "Dark Pirates of Club Penguin": "#810e0e",
+    "Phantom Republic of Club Penguin": "#fddc5c",
+    "White Troops": "#ffffff",
+    "Crimson Sovereign": "#ffde21",
+>>>>>>> Stashed changes
     "Red Team": "#e00007",
     "Green Team": "#02990e",
     "Blue Team": "#0074ad",
@@ -14,9 +28,14 @@ search_terms = {
     "CPA Battleground": "#ff4d4d",
     "Club Penguin Army Judges": "#ff3366",
     "Templars": "#f1c40f",
+<<<<<<< Updated upstream
     "Army of Club Penguin": "#2b8b1f",
     "Doritos of Club Penguin": "#ff6a13",
     "Special Weapons and Tactics": "#40ff40",
+=======
+    "Army of CP": "#2b8b1f",
+    "Doritos of Club Penguin": "#ff6a13",
+>>>>>>> Stashed changes
     "Help Force": "#000dff",
     "Rebel Penguin Federation": "#060505",
     "Aliens": "#90ee90",
@@ -35,7 +54,10 @@ search_terms = {
     "Void Troops": "#3d0eac",
     "Shadow Legionaries": "#2d0b7d",
     "Marines": "#46b8ff",
+<<<<<<< Updated upstream
     "Kanye West Army": "#853082",
+=======
+>>>>>>> Stashed changes
     "Tsunamis of Club Penguin": "#0099cc",
     "Winged Hussars": "#ff3333",
     "Smart Penguins": "#ff6666",

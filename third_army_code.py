@@ -46,7 +46,7 @@ search_terms = {
     "Freeland" : "#666666"
 }
 
-with open('oldmap.js', 'r') as file:
+with open('thirdmap.js', 'r') as file:
     content = file.read()
 
 # 1. Calculate and Sort using Regex
@@ -161,10 +161,10 @@ html_content += """
 </html>
 """
 
-with open("old_army_code.html", 'w') as file:
+with open("third_army_code.html", 'w') as file:
     file.write(html_content)
-print("old_army_code.html updated. Logic fixed to exclude code comments/assignments.")
+print("third_army_code.html updated. Logic fixed to exclude code comments/assignments.")
 
-with open("old_army_code.html", 'w') as file:
+with open("third_army_code.html", 'w') as file:
     file.write(html_content)
-print("old_army_code.html updated with NO-CACHE tags.")
+print("third_army_code.html updated with NO-CACHE tags.")
