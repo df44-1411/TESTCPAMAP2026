@@ -1,4 +1,4 @@
-/* style.css - Modern CPA Map Interface by df44 */
+/* style.css - Modern CPA Map Design */
 :root {
     --bg-dark: #050510;
     --bg-mapp: #003d62;
@@ -24,7 +24,6 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    user-select: none;
     overflow: hidden; /* Evita scroll na página inteira, apenas no mapa se necessário */
 }
 
@@ -115,13 +114,6 @@ body {
     font-size: 0.8rem;
     color: var(--neon-green);
 }
-.status-indicator-offline {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.8rem;
-    color: #ffa600;
-}
 
 .status-dot {
     width: 8px;
@@ -150,7 +142,6 @@ body {
     display: flex;
     flex-direction: column;
     min-width: 250px;
-    user-select: none;
 }
 
 .sidebar h2 {
@@ -182,7 +173,6 @@ body {
     font-weight: bold;
     display: block;
     margin-bottom: 5px;
-    user-select: none;
 }
 
 .progress-bar-bg {
@@ -224,248 +214,4 @@ body {
     display: flex;
     justify-content: space-between;
     cursor: move; /* Se for arrastável */
-}
-
-/* --- Tooltip Personalizado do Mapa --- */
-/* DESIGN DO TOOLTIP (CARTÃO) */
-.map-tooltip-card {
-    background: rgba(20, 30, 50, 0.95);
-    border: 1px solid rgba(0, 243, 255, 0.2);
-    padding: 10px 15px;
-    border-radius: 4px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.8);
-    backdrop-filter: blur(5px);
-    font-family: 'Rajdhani', sans-serif;
-    color: #e0e6ed;
-    min-width: 200px;
-    z-index: 9999;
-    pointer-events: none;
-}
-
-.map-tooltip-header {
-    font-size: 1.2rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    letter-spacing: 1px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 5px;
-    text-shadow: 0 0 10px rgba(0,0,0,0.5);
-}
-
-.map-tooltip-info {
-    font-size: 0.95rem;
-    line-height: 1.5;
-    color: #94a3b8;
-}
-
-.map-tooltip-info strong {
-    color: #fff;
-    font-weight: 600;
-}
-
-/* --- ANIMAÇÕES DE ATAQUE (BOMB/NUKE) --- */
-
-/* BOMB: Pisca a vermelho (Alerta de perigo) */
-.bomb-active {
-    animation: blink-red 1s infinite alternate;
-    stroke: #ff0000 !important;
-    stroke-width: 3px !important;
-    fill-opacity: 0.9;
-}
-
-/* NUKE: Pulsação Amarela Radioativa (Toxicidade) */
-.nuke-active {
-    animation: toxic-glow 2s infinite;
-    stroke: #ccff00 !important;
-    stroke-width: 4px !important;
-    fill: #2b331a !important;
-}
-
-@keyframes blink-red {
-    from { stroke: #ff0000; fill: #500000; }
-    to { stroke: #800000; fill: #200000; }
-}
-
-@keyframes toxic-glow {
-    0% { stroke: #ccff00; filter: drop-shadow(0 0 2px #ccff00); }
-    50% { stroke: #ffff00; filter: drop-shadow(0 0 8px #ff0000); }
-    100% { stroke: #ccff00; filter: drop-shadow(0 0 2px #ccff00); }
-}
-
-/* --- HOTSPOT SERVERS --- */
-.hotspot-active {
-    animation: gold-pulse 2s infinite alternate;
-    stroke: #FFD700 !important; /* Dourado */
-    stroke-width: 3px !important;
-    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8)); /* Brilho Dourado */
-}
-
-@keyframes gold-pulse {
-    from { stroke-width: 2px; filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.5)); }
-    to { stroke-width: 4px; filter: drop-shadow(0 0 8px rgba(255, 215, 0, 1)); }
-}
-
-@keyframes invasionOverlay {
-    0% { fill-opacity: 1; }
-    50% { fill-opacity: 0.9; }
-    85% { fill-opacity: 0.8; fill: var(--attacker-color) !important; }
-    100% { fill-opacity: 1; } 
-}
-
-.invasion-flashing {
-    animation: invasionOverlay 10s infinite ease-in;
-}
-
-/* --- Mobile Responsiveness --- */
-@media screen and (max-width: 1024px) {
-    
-    /* 1. Global Reset & Box Sizing */
-    * {
-        box-sizing: border-box;
-    }
-
-    /* 2. Bloquear scroll da página inteira */
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        overflow: hidden !important; 
-    }
-
-    /* 3. Ajustar a Barra de Navegação */
-    .top-nav {
-        height: 60px;
-        padding: 0 10px;
-        flex-shrink: 0;
-        z-index: 10;
-    }
-
-    .logo-section h1 {
-        font-size: 1rem;
-        letter-spacing: 0.5px;
-        white-space: nowrap;
-    }
-
-    .nav-links a {
-        font-size: 0.7rem;
-        padding: 4px 6px;
-    }
-
-    /* 4. Container Principal com Padding e Gap */
-    .dashboard-container {
-        display: flex;
-        flex-direction: column;
-        height: calc(100dvh - 60px); 
-        padding: 10px !important; 
-        gap: 10px !important;     
-        margin: 0 !important;
-    }
-
-    /* 5. Mapa (Topo) */
-    .map-wrapper {
-        flex: none;
-        width: 100% !important;
-        height: 38%; 
-        margin: 0 !important;
-        border-radius: 8px !important; 
-        
-        /* BORDA AZUL AQUI TAMBÉM */
-        border: 1px solid var(--border-color) !important;
-        
-        overflow: hidden;
-        z-index: 1;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
-    }
-
-    /* 6. Sidebar (Fundo) */
-    .sidebar {
-        flex: 1; 
-        width: 100% !important;
-        margin: 0 !important;
-        border-radius: 8px !important;
-        
-        /* BORDA AZUL CORRIGIDA */
-        border: 1px solid var(--border-color) !important;
-        background: rgba(13, 17, 23, 0.95);
-        
-        /* Scroll interno */
-        overflow-y: auto; 
-        -webkit-overflow-scrolling: touch;
-    }
-}
-/* --- MODO HORIZONTAL (LANDSCAPE) --- */
-@media screen and (max-width: 920px) and (orientation: landscape) {
-    
-    /* 1. Bloquear Scroll Geral */
-    html, body {
-        height: 100dvh !important;
-        width: 100vw !important;
-        overflow: hidden !important;
-        display: flex !important;
-        flex-direction: column !important;
-    }
-
-    /* 2. HEADER MINIMALISTA */
-    .top-nav {
-        height: 35px !important;
-        min-height: 35px !important;
-        flex-shrink: 0; /* Não deixa encolher */
-        padding: 0 10px !important;
-        z-index: 50;
-    }
-    .logo-section h1 { font-size: 0.9rem !important; line-height: 35px; }
-    .nav-links a { font-size: 0.65rem !important; padding: 2px 5px !important; line-height: 25px; }
-
-    /* 3. O CONTAINER AJUSTA-SE SOZINHO (A MUDANÇA IMPORTANTE) */
-    .dashboard-container {
-        flex: 1 !important;        /* Ocupa exatamente o espaço entre Nav e Footer */
-        height: auto !important;   /* Removemos o calc() fixo */
-        min-height: 0 !important;  /* Crucial: permite que o conteúdo encolha se necessário */
-        
-        flex-direction: row !important;
-        align-items: stretch !important;
-        padding: 5px 10px !important;
-        gap: 10px !important;
-        overflow: hidden !important;
-    }
-
-    /* 4. MAPA (Esquerda) */
-    .map-wrapper {
-        flex: 1.4 !important;
-        width: auto !important;
-        height: auto !important; /* Deixa o flex pai controlar a altura */
-        margin: 0 !important;
-        border-radius: 6px !important;
-    }
-
-    /* 5. SIDEBAR (Direita) */
-    .sidebar {
-        flex: 1 !important;
-        width: auto !important;
-        height: auto !important; /* Deixa o flex pai controlar a altura */
-        margin: 0 !important;
-        border-radius: 6px !important;
-        
-        /* Scroll Interno */
-        overflow-y: auto !important;
-        display: block !important;
-    }
-
-    /* 6. FOOTER (Fixo em baixo) */
-    .footer-text {
-        height: 25px !important;
-        flex-shrink: 0; /* Não deixa encolher */
-        font-size: 0.65rem !important;
-        padding: 0 !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #050510;
-        z-index: 50;
-        
-        /* Proteção para iPhone (barra de baixo) */
-        padding-bottom: env(safe-area-inset-bottom) !important; 
-        height: calc(25px + env(safe-area-inset-bottom)) !important; 
-    }
 }

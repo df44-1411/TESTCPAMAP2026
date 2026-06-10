@@ -481,8 +481,7 @@ Highcharts.mapChart('container', {
         enabled: true,
         formatter: function() {
           if (this.point.type === "CAPITAL") {
-            // CORRIGIDO: Verde (#00ff00) para capitais
-            return '<span style="color: #00ff00; text-shadow: 0 0 3px #000; font-weight:bold">' + this.point.name + '</span>';
+            return '<span style="color: #ffff00; text-shadow: 0 0 3px #000; font-weight:bold">' + this.point.name + '</span>';
           } else {
             return this.point.name;
           }
@@ -499,11 +498,7 @@ Highcharts.mapChart('container', {
     const armyColors = {"Club Penguin Armies": "#87d1ff", "CPA Battleground": "#ff4d4d", "Club Penguin Army Judges": "#ff3366", "Water Vikings": "#3399ff", "Army of Club Penguin": "#00cc00", "Elite Guardians of Club Penguin": "#b0b0b0", "Special Weapons and Tactics": "#00ff00", "Silver Empire": "#ffffff", "People's Imperial Confederation": "#9966ff", "Dark Pirates": "#ff3333", "Templars": "#ffcc00", "Rebel Penguin Federation": "#ffffff", "Winged Hussars": "#ff3333", "Help Force": "#3366ff", "Smart Penguins": "#ff6666", "Warlords of Kosmos": "#888888", "Freeland": "#666666"};
     
     chart.series[0].points.forEach(function(point) {
-        // CORRIGIDO: Se for Freeland, usa a cor do fundo (Azul Escuro) ou a cor definida se preferires
-        if (point.controller === "Freeland") {
-             point.graphic.css({ fill: '#4a5568' }); // Cor para Freeland (Ajuste aqui se quiseres outra)
-        } 
-        else if (point.controller && armyColors[point.controller]) {
+        if (point.controller && armyColors[point.controller]) {
             point.graphic.css({ fill: armyColors[point.controller] });
         } else {
             point.graphic.css({ fill: '#4a5568' }); // Cor cinza padrão se sem dono

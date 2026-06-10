@@ -1,65 +1,38 @@
 import operator
-import re
 
 search_terms = {
-    "Red Team": "#e00007",
-    "Green Team": "#02990e",
-    "Blue Team": "#0074ad",
-    "Black Team": "#202024",
-    "Teutons": "#020061",
-    "Locked Land": "#051020",
-    "Dfs Testing Army": "#adbfde",
-    "Scarlet Republic": "#a51010",
     "Club Penguin Armies": "#87d1ff",
     "CPA Battleground": "#ff4d4d",
     "Club Penguin Army Judges": "#ff3366",
-    "Templars": "#f1c40f",
-    "Army of Club Penguin": "#2b8b1f",
-    "Doritos of Club Penguin": "#ff6a13",
-    "Special Weapons and Tactics": "#40ff40",
-    "Help Force": "#000dff",
-    "Rebel Penguin Federation": "#060505",
-    "Aliens": "#90ee90",
-    "Water Vikings": "#043acf",
-    "Penguins of Agartha": "#12690e",
-    "Fire Vikings": "#8b0000",
-    "Elite Guardians of Club Penguin": "#787e7f",
-    "Elite Guardians of CP": "#787e7f", 
-    "Star Force": "#000050",
-    "Dark Warriors": "#080808",
-    "Shreks of CP": "#b0c400",
-    "Peoples Imperial Confederation": "#aa54ff",
-    "wii phone": "#ffffff",
-    "Romans": "#730000",
-    "Seraphic Imperium": "#c3ccd3",
-    "Void Troops": "#3d0eac",
-    "Shadow Legionaries": "#2d0b7d",
-    "Marines": "#46b8ff",
-    "Kanye West Army": "#853082",
-    "Tsunamis of Club Penguin": "#0099cc",
+    "Water Vikings": "#3399ff",
+    "Army of Club Penguin": "#00cc00",
+    "Elite Guardians of Club Penguin": "#b0b0b0",
+    "Special Weapons and Tactics": "#00ff00",
+    "Silver Empire": "#ffffff",
+    "People's Imperial Confederation": "#9966ff",
+    "Dark Pirates": "#ff3333",
+    "Templars": "#ffcc00",
+    "Rebel Penguin Federation": "#ffffff",
     "Winged Hussars": "#ff3333",
+    "Help Force": "#3366ff",
     "Smart Penguins": "#ff6666",
+    "Warlords of Kosmos": "#888888",
     "Freeland" : "#666666"
 }
 
 with open('map.js', 'r') as file:
     content = file.read()
 
-# 1. Calculate and Sort using Regex
-# This looks strictly for '"controller": "Army Name"' to avoid counting code logic.
+# 1. Calcular e Ordenar
 army_data = []
 for term, color in search_terms.items():
-    # Regex pattern: "controller" followed by colon, whitespace, quote, Army Name, quote
-    # re.IGNORECASE ensures it captures variations in capitalization if they exist
-    pattern = r'"controller":\s*"' + re.escape(term) + r'"'
-    count = len(re.findall(pattern, content, re.IGNORECASE))
-    
+    count = content.lower().count(term.lower()) - 1
     if count >= 1:
         army_data.append({ "name": term, "count": count, "color": color })
 
 army_data.sort(key=operator.itemgetter('count'), reverse=False)
 
-# 2. Generate HTML
+# 2. Gerar HTML com NO-CACHE META TAGS
 html_content = """
 <!DOCTYPE html>
 <html>
@@ -77,7 +50,7 @@ html_content = """
     ::-webkit-scrollbar-thumb:hover { background: #00f3ff; box-shadow: 0 0 10px #00f3ff; }
     html { scrollbar-width: thin; scrollbar-color: #1c3d5e rgba(0, 0, 0, 0.2); }
 
-    /* GENERAL STYLE */
+    /* ESTILO GERAL */
     body {
         background: transparent;
         font-family: 'Rajdhani', sans-serif;
@@ -85,7 +58,6 @@ html_content = """
         padding: 5px 10px 5px 5px;
         overflow-x: hidden;
         overflow-y: auto;
-        user-select: none;
     }
 
     .army-card {
@@ -156,10 +128,6 @@ html_content += """
 </body>
 </html>
 """
-
-with open("army_code.html", 'w') as file:
-    file.write(html_content)
-print("army_code.html updated. Logic fixed to exclude code comments/assignments.")
 
 with open("army_code.html", 'w') as file:
     file.write(html_content)

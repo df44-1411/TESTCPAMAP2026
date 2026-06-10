@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
+<style>
+    /* CUSTOM SCROLLBAR */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: #1c3d5e; border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.1); }
+    html { scrollbar-width: thin; scrollbar-color: #1c3d5e rgba(0, 0, 0, 0.2); }
+
+    body { background: transparent; font-family: 'Rajdhani', sans-serif; margin: 0; padding: 5px; overflow-x: hidden; }
+    .card {
+        display: flex; justify-content: space-between; align-items: center;
+        background: rgba(20, 30, 50, 0.85); border: 1px solid rgba(255,255,255,0.1);
+        border-left-width: 5px; margin-bottom: 8px; padding: 10px 15px;
+        border-radius: 4px; color: #e0e6ed; cursor: pointer; transition: 0.2s;
+        backdrop-filter: blur(4px);
+    }
+    .card:hover { transform: translateX(5px); background: rgba(40, 50, 80, 0.95); border-color: rgba(0, 243, 255, 0.3); }
+    .name { font-weight: 700; text-transform: uppercase; font-size: 1rem; }
+    .count { background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 10px; font-weight: bold; font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+    <div class="card" style="border-left-color: #87d1ff;">
+        <span class="name">Club Penguin Armies</span>
+        <span class="count">$0</span>
+    </div>
+    <div class="card" style="border-left-color: #ff4d4d;">
+        <span class="name">CPA Battleground</span>
+        <span class="count">$0</span>
+    </div>
+    <div class="card" style="border-left-color: #ff3366;">
+        <span class="name">Club Penguin Army Judges</span>
+        <span class="count">$0</span>
+    </div>
+    <div class="card" style="border-left-color: #3399ff;">
+        <span class="name">Water Vikings</span>
+        <span class="count">$0</span>
+    </div>
+    <div class="card" style="border-left-color: #00cc00;">
+        <span class="name">Army of Club Penguin</span>
+        <span class="count">$0</span>
+    </div>
+    <div class="card" style="border-left-color: #b0b0b0;">
+        <span class="name">Elite Guardians of Club Penguin</span>
+        <span class="count">$0</span>
+    </div>
+    <div class="card" style="border-left-color: #00ff00;">
+        <span class="name">Special Weapons and Tactics</span>
+        <span class="count">$0</span>
+    </div>
+    <div class="card" style="border-left-color: #ffffff;">
+        <span class="name">Silver Empire</span>
+        <span class="count">$0</span>
+    </div>
+    <div class="card" style="border-left-color: #9966ff;">
+        <span class="name">People's Imperial Confederation</span>
+        <span class="count">$0</span>
+    </div>
+    <div class="card" style="border-left-color: #ff3333;">
+        <span class="name">Dark Pirates</span>
+        <span class="count">$0</span>
+    </div>
+    <div class="card" style="border-left-color: #ffcc00;">
+        <span class="name">Templars</span>
+        <span class="count">$0</span>
+    </div>
+    <div class="card" style="border-left-color: #ffffff;">
+        <span class="name">Rebel Penguin Federation</span>
+        <span class="count">$0</span>
+    </div>
+    <div class="card" style="border-left-color: #ff3333;">
+        <span class="name">Winged Hussars</span>
+        <span class="count">$0</span>
+    </div>
+    <div class="card" style="border-left-color: #3366ff;">
+        <span class="name">Help Force</span>
+        <span class="count">$0</span>
+    </div>
+    <div class="card" style="border-left-color: #ff6666;">
+        <span class="name">Smart Penguins</span>
+        <span class="count">$0</span>
+    </div>
+    <div class="card" style="border-left-color: #888888;">
+        <span class="name">Warlords of Kosmos</span>
+        <span class="count">$0</span>
+    </div>
+    <div class="card" style="border-left-color: #666666;">
+        <span class="name">Freeland</span>
+        <span class="count">$0</span>
+    </div>
+<script>
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(c => {
+        c.addEventListener('mouseenter', () => {
+            const name = c.querySelector('.name').innerText;
+            window.parent.postMessage({type: 'hoverArmy', army: name}, '*');
+        });
+        c.addEventListener('mouseleave', () => window.parent.postMessage({type: 'resetMap'}, '*'));
+    });
+</script>
+</body>
+</html>

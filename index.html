@@ -5,10 +5,6 @@
     .highcharts-container, .highcharts-root, #container {
         background: transparent !important;
         background-color: transparent !important;
-        flex: 1;      /* Grow to fill the space */
-        width: 100% !important;  
-        height: 100% !important;
-        display: flex;
     }
     .map-wrapper {
         background-color: #051020 !important;
@@ -28,15 +24,6 @@
         box-shadow: 0 0 10px #00ff00 !important;
         margin-right: 10px;
     }
-    .status-dot-offline {
-        display: inline-block !important;
-        width: 12px !important;
-        height: 12px !important;
-        background-color: #ffa600 !important;
-        border-radius: 50% !important;
-        box-shadow: 0 0 10px #ffa600 !important;
-        margin-right: 10px;
-     }
     
     /* 3. RESETAR O CONTAINER IFRAME */
     .iframe-container {
@@ -105,55 +92,12 @@
         padding: 20px;
     }
     .empty-state h3 { margin: 0; color: #00f3ff; }
-
-   /* 5. BOTTOM MAP TABS */
-    .map-footer-tabs {
-        display: flex;
-        background: rgba(0, 0, 0, 0.6);
-        border-top: 1px solid rgba(0, 243, 255, 0.3);
-        height: 40px; /* Fixed height for the footer */
-    }
-
-    .map-tab {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #94a3b8;
-        font-family: 'Rajdhani', sans-serif;
-        font-weight: 700;
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: all 0.2s;
-        border-top: 2px solid transparent;
-    }
-
-    .map-tab:hover {
-        color: #fff;
-        background: rgba(255, 255, 255, 0.05);
-    }
-
-    /* Active State (Blue Neon) */
-    .map-tab.active {
-        color: #00f3ff;
-        background: rgba(0, 243, 255, 0.1);
-        border-top: 2px solid #00f3ff;
-        box-shadow: 0 -5px 15px rgba(0, 243, 255, 0.1);
-    }
-
-    /* Adjust map container height to fit tabs */
-    #container {
-        height: calc(100% - 40px) !important; /* Subtract tab height */
-    }
 </style>
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=1280, user-scalable=yes">
+
     <title>Club Penguin Armies: The Map</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -169,13 +113,13 @@
 
     <nav class="top-nav">
         <div class="logo-section">
-            <h1>CPA: The Map <span style="font-size:0.5em; color:var(--neon-green); vertical-align: super;">LIVE</span></h1>
+            <h1>CPA:The Map <span style="font-size:0.5em; color:var(--neon-green); vertical-align: super;">LIVE</span></h1>
         </div>
         <div class="nav-links">
             <a href="#" class="active">Map</a>
-            <a href="https://cparmies.org/map-2025/server-map-rules/" target="_blank" rel="noopener noreferrer">Rules</a>
-            <a href="https://cparmies.org/category/top-ten-armies/" target="_blank" rel="noopener noreferrer">Top Tens</a>
-            <a href="https://discord.gg/cparmies" target="_blank" rel="noopener noreferrer">Discord</a>
+            <a href="#">Rankings</a>
+            <a href="#">League</a>
+            <a href="#">Discord</a>
         </div>
     </nav>
 
@@ -186,139 +130,79 @@
                 <span class="status-indicator"><div class="status-dot"></div> SYSTEMS ONLINE</span>
             </div>
             <div id="container" style="width:100%; height:100%;"></div>
-            <div class="map-footer-tabs">
-                <div id="tab-new" class="map-tab" onclick="switchMap('new')">
-                    New Map
-                </div>
-                <div id="tab-old" class="map-tab" onclick="switchMap('old')">
-                    Old Map
-                </div>
-             </div>
         </div>
 
         <aside class="sidebar">
-    
-    <div class="sidebar-tabs">
-        <button class="tab-btn active" onclick="openTab(event, 'forces')">Active Forces</button>
-        <button class="tab-btn" onclick="openTab(event, 'wealth')">Wealth</button>
-        <button class="tab-btn" onclick="openTab(event, 'war')">Wars</button>
-    </div>
-    
-    <div id="forces" class="tab-content active">
-        <div class="iframe-container">
-            <iframe 
-                id="armyFrame"
-                frameborder="0" 
-                style="width: 100%; height: 100%; display: block;"
-                title="Army Codes">
-            </iframe>
-        </div>
-    </div>
+            
+            <div class="sidebar-tabs">
+                <button class="tab-btn active" onclick="openTab(event, 'forces')">Active Forces</button>
+                <button class="tab-btn" onclick="openTab(event, 'wealth')">Wealth</button>
+                <button class="tab-btn" onclick="openTab(event, 'war')">Wars</button>
+            </div>
+            
+            <div id="forces" class="tab-content active">
+                <div class="iframe-container">
+                    <iframe 
+                        id="armyFrame"
+                        frameborder="0" 
+                        style="width: 100%; height: 100%; display: block;"
+                        title="Army Codes">
+                    </iframe>
+                </div>
+            </div>
 
-    <div id="wealth" class="tab-content">
-        <div class="iframe-container">
-            <iframe 
-                id="wealthFrame"
-                frameborder="0" 
-                style="width: 100%; height: 100%; display: block;"
-                title="Wealth Leaderboard">
-            </iframe>
-        </div>
-    </div>
+            <div id="wealth" class="tab-content">
+                <div class="empty-state">
+                    <h3>COMING SOON</h3>
+                    <p>Economic data offline.</p>
+                </div>
+            </div>
 
-    <div id="war" class="tab-content">
-        <div class="iframe-container">
-            <iframe 
-                id="warFrame"
-                frameborder="0" 
-                style="width: 100%; height: 100%; display: block;"
-                title="Active Wars">
-            </iframe>
-        </div>
-    </div>
-</aside>
+            <div id="war" class="tab-content">
+                <div class="empty-state">
+                    <h3 style="color: #ff3333;">PEACEFUL TIMES</h3>
+                    <p>No active conflicts detected.</p>
+                </div>
+            </div>
+            
+            <script>
+                // Cache Busting para a aba principal
+                document.getElementById('armyFrame').src = "army_code.html?v=" + new Date().getTime();
+            </script>
+        </aside>
 
     </div>
 
-    <div class="footer-text" style="text-align:center; padding: 10px; color: #555; font-size: 1rem;">
+    <div class="footer-text" style="text-align:center; padding: 10px; color: #555; font-size: 0.8rem;">
         UI by df44 | Map by Dino for CPA
     </div>
 
+    <script src="map.js"></script>
+    
     <script>
-        // 1. Tab Switching Logic (Reloads page)
-        function switchMap(version) {
-            if (version === 'old') {
-                // Reloads page with ?map=old
-                window.location.search = '?map=old'; 
-            } else {
-                // Reloads page with no params (Default)
-                window.location.href = window.location.pathname; 
-            }
-        }
-
-        // 2. Detect Version on Load
-        const urlParams = new URLSearchParams(window.location.search);
-        const isOldMap = urlParams.get('map') === 'old';
-        const timeStamp = new Date().getTime();
-
-        // 3. UI Setup based on Version
-        if (isOldMap) {
-            // Set Tabs
-            document.getElementById('tab-old').classList.add('active');
-            
-            // Load OLD Scripts & Iframes
-            loadScript('oldmap.js'); // Make sure this file exists!
-            setIframeSource('armyFrame', 'old_army_code.html'); // Old Army List
-            
-            // Update Header (Optional)
-            document.querySelector('.status-indicator').innerHTML = '<div class="status-dot-offline"></div><div style="color:#ffa600;">SYSTEMS OFFLINE - MAP IS DISABLED</div>';
-        } else {
-            // Set Tabs
-            document.getElementById('tab-new').classList.add('active');
-            
-            // Load CURRENT Scripts & Iframes
-            loadScript('map.js');
-            setIframeSource('armyFrame', 'army_code.html'); // Normal Army List
-        }
-
-        // 4. Load Other Iframes (Common to both)
-        setIframeSource('wealthFrame', 'wealth.html');
-        setIframeSource('warFrame', 'wars.html');
-
-
-        // --- Helper Functions ---
-        
-        function loadScript(src) {
-            var script = document.createElement('script');
-            script.src = src + "?v=" + timeStamp; // Prevents caching
-            document.body.appendChild(script);
-        }
-
-        function setIframeSource(id, file) {
-            const frame = document.getElementById(id);
-            if (frame) {
-                frame.src = file + "?v=" + timeStamp;
-            }
-        }
-
-        // 5. Tab Logic for Sidebar (Your original code)
+        // 1. Lógica das Abas
         function openTab(evt, tabName) {
+            // Esconde todo o conteúdo
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].style.display = "none";
                 tabcontent[i].classList.remove("active");
             }
+
+            // Remove a classe "active" de todos os botões
             tablinks = document.getElementsByClassName("tab-btn");
             for (i = 0; i < tablinks.length; i++) {
                 tablinks[i].classList.remove("active");
             }
+
+            // Mostra a aba atual e adiciona "active" ao botão clicado
             document.getElementById(tabName).style.display = "block";
             document.getElementById(tabName).classList.add("active");
-            if(evt) evt.currentTarget.classList.add("active");
+            evt.currentTarget.classList.add("active");
         }
 
-        // 6. Hover Interaction
+        // 2. Interação Hover (Mantida)
         window.addEventListener('message', function(event) {
             if (!Highcharts.charts || Highcharts.charts.length === 0) return;
             const chart = Highcharts.charts[0]; 
@@ -340,7 +224,7 @@
                 });
             } else if (event.data.type === 'resetMap') {
                 chart.series[0].points.forEach(point => {
-                    point.setState('');
+                    point.setState('normal');
                 });
             }
         });
