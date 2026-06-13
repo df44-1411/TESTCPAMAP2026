@@ -890,9 +890,6 @@ Highcharts.mapChart('container', {
         padding: 0,
         followPointer: true,
         headerFormat: '', 
-		style: {
-            whiteSpace: 'nowrap' // <--- A SOLUÇÃO ESTÁ AQUI
-        },
         formatter: function() {
             const point = this.point;
             
