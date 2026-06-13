@@ -237,9 +237,10 @@ body {
     backdrop-filter: blur(5px);
     font-family: 'Rajdhani', sans-serif;
     color: #e0e6ed;
-    max-width: 220px; 
-    white-space: normal; 
-    word-wrap: break-word;
+    
+    /* Força o balão a esticar à medida do texto, sem quebrar linhas */
+    white-space: nowrap; 
+    
     z-index: 9999;
     pointer-events: none;
 }
