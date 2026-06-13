@@ -884,13 +884,15 @@ Highcharts.mapChart('container', {
     // --- TOOLTIP INTELIGENTE (LÊ AS CORES AUTOMATICAMENTE) ---
     tooltip: {
         useHTML: true, 
-		outside: true,
         backgroundColor: 'transparent',
         borderWidth: 0,
         shadow: false,
         padding: 0,
         followPointer: true,
         headerFormat: '', 
+		style: {
+            whiteSpace: 'nowrap' // <--- A SOLUÇÃO ESTÁ AQUI
+        },
         formatter: function() {
             const point = this.point;
             
