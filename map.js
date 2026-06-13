@@ -884,6 +884,7 @@ Highcharts.mapChart('container', {
     // --- TOOLTIP INTELIGENTE (LÊ AS CORES AUTOMATICAMENTE) ---
     tooltip: {
         useHTML: true,
+        outside: true,
         backgroundColor: 'transparent',
         borderWidth: 0,
         shadow: false,
