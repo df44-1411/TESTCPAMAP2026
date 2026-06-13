@@ -237,9 +237,6 @@ body {
     backdrop-filter: blur(5px);
     font-family: 'Rajdhani', sans-serif;
     color: #e0e6ed;
-
-    display: inline-block;
-    white-space: nowrap;
     
     z-index: 9999;
     pointer-events: none;
