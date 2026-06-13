@@ -238,7 +238,7 @@ body {
     font-family: 'Rajdhani', sans-serif;
     color: #e0e6ed;
     
-    width: min-content;
+    display: inline-block;
     white-space: nowrap;
     
     z-index: 9999;
