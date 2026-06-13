@@ -237,7 +237,10 @@ body {
     backdrop-filter: blur(5px);
     font-family: 'Rajdhani', sans-serif;
     color: #e0e6ed;
-    min-width: 120px;
+    max-width: 220px; /* Limita o crescimento horizontal */
+    width: max-content; /* Ajusta o balão ao tamanho do texto (até bater no max-width) */
+    white-space: normal; /* Garante que o texto quebra para a linha de baixo */
+    word-wrap: break-word; /* Evita que palavras gigantes saiam fora do cartão */
     z-index: 9999;
     pointer-events: none;
 }
