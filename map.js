@@ -888,7 +888,7 @@ Highcharts.mapChart('container', {
         borderWidth: 0,
         shadow: false,
         padding: 0,
-        followPointer: false,
+        followPointer: true,
         headerFormat: '', 
         formatter: function() {
             const point = this.point;
