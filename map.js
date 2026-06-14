@@ -883,13 +883,13 @@ Highcharts.mapChart('container', {
 
     // --- TOOLTIP INTELIGENTE (LÊ AS CORES AUTOMATICAMENTE) ---
     tooltip: {
-        useHTML: true,
+        useHTML: true, 
         backgroundColor: 'transparent',
         borderWidth: 0,
         shadow: false,
         padding: 0,
         followPointer: true,
-        headerFormat: '',
+        headerFormat: '', 
         formatter: function() {
             const point = this.point;
             
