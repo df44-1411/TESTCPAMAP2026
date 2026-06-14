@@ -85,6 +85,41 @@
     .hidden {
         display: none;
     }
+    .map-tooltip-card {
+        background: white;
+        border: 1px solid black;
+        padding: 10px 15px;
+        border-radius: 4px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+        backdrop-filter: blur(5px);
+        font-family: 'Arial', sans-serif;
+        color: black;
+        min-width: 200px;
+        z-index: 9999;
+        pointer-events: none;
+    }
+    
+    .map-tooltip-header {
+        font-size: 1.2rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+        letter-spacing: 1px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding-bottom: 5px;
+        text-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    
+    .map-tooltip-info {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: #94a3b8;
+    }
+    
+    .map-tooltip-info strong {
+        color: #fff;
+        font-weight: 600;
+    }
 </style>
 
 <script>
