@@ -3,9 +3,9 @@
     "1": {
       "team_a": "Romans",
       "team_b": "SWCP",
-      "score": "2-1-0",
+      "score": "2-0-1",
       "status": "Completed",
-      "winner": null
+      "winner": "Romans"
     }
   },
   "Quarter Finals": {
