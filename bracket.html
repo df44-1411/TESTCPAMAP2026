@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Legends Cup Bracket</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon-blue: #00f3ff;
-            --neon-green: #00ff9d;
-            --text-main: #e0e6ed;
-            --text-muted: #94a3b8;
-            --border-color: rgba(0, 243, 255, 0.2);
-            --card-bg: rgba(20, 30, 45, 0.85);
+            --gold-primary: #b49155;
+            --gold-dark: #8b6f47;
+            --bg-dark: #6b5d45;
+            --bg-lighter: #8b7d5e;
+            --text-light: #ffffff;
+            --text-muted: #d0d0d0;
+            --border-color: #a89968;
         }
 
         * {
@@ -24,23 +25,23 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            background: #b49155; /* Fixes any rogue white canvas glitches */
-            font-family: 'Rajdhani', sans-serif;
-            color: var(--text-main);
-            overflow: hidden; /* Strict no scroll viewport restriction */
+            background: linear-gradient(135deg, #7a6b52 0%, #6b5d45 50%, #7a6b52 100%);
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-light);
+            overflow: hidden;
         }
 
-        /* Centered Tilted Logo Watermark Layer */
+        /* Centered Logo Watermark Layer */
         .watermark-container {
             position: absolute;
-            top: 50%;
+            top: 45%;
             left: 50%;
-            width: 65vh;
-            height: 65vh;
+            width: 60vh;
+            height: 60vh;
             background: url('assets/cpalclogo.png') no-repeat center center;
             background-size: contain;
-            opacity: 0.12;
-            transform: translate(-50%, -50%) rotate(-12deg);
+            opacity: 0.08;
+            transform: translate(-50%, -50%);
             pointer-events: none;
             z-index: 0;
         }
@@ -51,133 +52,145 @@
             flex-direction: column;
             width: 100%;
             height: 100%;
-            padding: 20px 25px 30px 25px;
+            padding: 20px 30px;
             z-index: 1;
+        }
+
+        /* Logo do torneio no topo */
+        .tournament-header {
+            text-align: center;
+            margin-bottom: 20px;
+            z-index: 10;
+        }
+
+        .tournament-logo {
+            max-height: 80px;
+            width: auto;
         }
 
         /* Horizontal Layout Alignment Matrix */
         .bracket-tree {
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: space-around;
+            align-items: stretch;
             flex: 1;
             width: 100%;
-            height: calc(100% - 40px);
-            gap: 25px;
+            gap: 15px;
         }
 
         .bracket-column {
             display: flex;
             flex-direction: column;
             justify-content: space-around;
+            align-items: center;
             height: 100%;
             flex: 1;
-            max-width: 290px;
+            min-width: 160px;
         }
 
         .column-title {
-            color: var(--neon-blue);
+            color: var(--text-light);
             text-transform: uppercase;
-            font-size: 1.15em;
-            letter-spacing: 2px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 6px;
-            margin-bottom: 10px;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+            border: 3px solid var(--border-color);
+            padding: 8px 12px;
+            margin-bottom: 12px;
             text-align: center;
-            text-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
             font-weight: 700;
+            background: rgba(139, 111, 71, 0.4);
+            min-width: 140px;
         }
 
-        /* Map Components Replica Card Design */
+        /* Match Card Design */
         .match-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            padding: 10px 14px;
+            background: rgba(80, 70, 55, 0.6);
+            border: 3px solid var(--border-color);
+            border-radius: 2px;
+            padding: 8px 10px;
             width: 100%;
-            backdrop-filter: blur(4px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            transition: transform 0.2s ease, border-color 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            transition: transform 0.2s ease, background 0.2s ease;
+            min-width: 140px;
         }
 
         .match-card:hover {
-            transform: translateX(3px);
-            border-color: rgba(0, 243, 255, 0.4);
+            background: rgba(100, 85, 65, 0.7);
+            transform: translateY(-2px);
         }
 
         .match-id-header {
-            font-size: 0.8em;
+            font-size: 0.75em;
             color: var(--text-muted);
             display: flex;
             justify-content: space-between;
-            margin-bottom: 6px;
-            letter-spacing: 1px;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
             font-weight: 700;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 4px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 3px;
         }
 
-        /* MasterDS Vertical Score Split Matrix Layout */
+        /* Match Rows */
         .match-rows {
             display: flex;
             flex-direction: column;
-            gap: 1px;
+            gap: 2px;
         }
 
         .team-row, .vs-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 26px;
+            height: 22px;
+            font-size: 0.95em;
         }
 
         .team-name {
             font-weight: 600;
-            font-size: 1.1em;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 210px;
+            max-width: 100px;
+            flex: 1;
         }
 
         .vs-label {
             color: var(--text-muted);
-            font-size: 0.85em;
+            font-size: 0.8em;
             font-style: italic;
-            padding-left: 12px;
-            text-transform: lowercase;
+            padding: 0 6px;
         }
 
         .score-num {
-            font-family: monospace;
+            font-family: 'Roboto', sans-serif;
             font-weight: 700;
-            font-size: 1.25em;
-            color: #ffffff;
+            font-size: 1.1em;
+            color: var(--text-light);
+            min-width: 20px;
+            text-align: right;
         }
 
         .score-num.tie {
-            color: #ffaa00;
-            text-shadow: 0 0 4px rgba(255, 170, 0, 0.3);
+            color: #d4af37;
+            font-weight: 900;
         }
 
-        /* Winner Status Accent Adjustments */
+        /* Winner Status Accent */
         .team-row.winner .team-name {
-            color: var(--neon-green);
-            text-shadow: 0 0 8px rgba(0, 255, 157, 0.4);
-        }
-        .team-row.winner .score-num {
-            color: var(--neon-green);
+            color: #d4af37;
+            font-weight: 700;
         }
 
-        /* Credits Disclaimer Footer */
+        /* Credits Footer */
         .bracket-credits {
             text-align: center;
-            font-size: 0.8em;
+            font-size: 0.75em;
             color: var(--text-muted);
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             margin-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid var(--border-color);
             padding-top: 8px;
         }
     </style>
@@ -187,6 +200,9 @@
     <div class="watermark-container"></div>
 
     <div class="bracket-container">
+        <div class="tournament-header">
+            <img src="assets/lclogo.png" alt="Legends Cup" class="tournament-logo">
+        </div>
         <div class="bracket-tree">
         <div class="bracket-column"><h2 class="column-title">Qualifiers</h2>
             <div class="match-card">
@@ -196,7 +212,7 @@
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
-                        <span class="team-name" style="color: #87f1ff;">SnowWalkers of Club Penguin</span>
+                        <span class="team-name" style="color: #730000;">Romans</span>
                         <span class="score-num">2</span>
                     </div>
                     <div class="vs-row">
@@ -204,28 +220,7 @@
                         <span class="score-num tie">1</span>
                     </div>
                     <div class="team-row">
-                        <span class="team-name" style="color: #ff6666;">Smart Penguins</span>
-                        <span class="score-num">0</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="match-card">
-                <div class="match-id-header">
-                    <span>ID: #2</span>
-                    <span>Scheduled</span>
-                </div>
-                <div class="match-rows">
-                    <div class="team-row">
-                        <span class="team-name" style="color: #000050;">Star Force</span>
-                        <span class="score-num">0</span>
-                    </div>
-                    <div class="vs-row">
-                        <span class="vs-label">vs</span>
-                        <span class="score-num tie">0</span>
-                    </div>
-                    <div class="team-row">
-                        <span class="team-name" style="color: #aa54ff;">Peoples Imperial Confederation</span>
+                        <span class="team-name" style="color: #e0e6ed;">SWCP</span>
                         <span class="score-num">0</span>
                     </div>
                 </div>
@@ -233,12 +228,12 @@
             </div><div class="bracket-column"><h2 class="column-title">Quarter Finals</h2>
             <div class="match-card">
                 <div class="match-id-header">
-                    <span>ID: #3</span>
+                    <span>ID: #2</span>
                     <span>Pending</span>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
-                        <span class="team-name" style="color: #060505;">Rebel Penguin Federation</span>
+                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 1</span>
                         <span class="score-num">0</span>
                     </div>
                     <div class="vs-row">
@@ -246,7 +241,28 @@
                         <span class="score-num tie">0</span>
                     </div>
                     <div class="team-row">
-                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 1</span>
+                        <span class="team-name" style="color: #e0e6ed;">ACP</span>
+                        <span class="score-num">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="match-card">
+                <div class="match-id-header">
+                    <span>ID: #3</span>
+                    <span>Pending</span>
+                </div>
+                <div class="match-rows">
+                    <div class="team-row">
+                        <span class="team-name" style="color: #080808;">Dark Warriors</span>
+                        <span class="score-num">0</span>
+                    </div>
+                    <div class="vs-row">
+                        <span class="vs-label">vs</span>
+                        <span class="score-num tie">0</span>
+                    </div>
+                    <div class="team-row">
+                        <span class="team-name" style="color: #000dff;">Help Force</span>
                         <span class="score-num">0</span>
                     </div>
                 </div>
@@ -255,7 +271,7 @@
             <div class="match-card">
                 <div class="match-id-header">
                     <span>ID: #4</span>
-                    <span>Scheduled</span>
+                    <span>Pending</span>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
@@ -267,7 +283,7 @@
                         <span class="score-num tie">0</span>
                     </div>
                     <div class="team-row">
-                        <span class="team-name" style="color: #e0e6ed;">Special Weapons and Tactics</span>
+                        <span class="team-name" style="color: #000050;">Star Force</span>
                         <span class="score-num">0</span>
                     </div>
                 </div>
@@ -280,7 +296,7 @@
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
-                        <span class="team-name" style="color: #f1c40f;">Templars</span>
+                        <span class="team-name" style="color: #060505;">Rebel Penguin Federation</span>
                         <span class="score-num">0</span>
                     </div>
                     <div class="vs-row">
@@ -288,28 +304,7 @@
                         <span class="score-num tie">0</span>
                     </div>
                     <div class="team-row">
-                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 2</span>
-                        <span class="score-num">0</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="match-card">
-                <div class="match-id-header">
-                    <span>ID: #6</span>
-                    <span>Scheduled</span>
-                </div>
-                <div class="match-rows">
-                    <div class="team-row">
-                        <span class="team-name" style="color: #e0e6ed;">Army of Club Penguin</span>
-                        <span class="score-num">0</span>
-                    </div>
-                    <div class="vs-row">
-                        <span class="vs-label">vs</span>
-                        <span class="score-num tie">0</span>
-                    </div>
-                    <div class="team-row">
-                        <span class="team-name" style="color: #787e7f;">Elite Guardians of CP</span>
+                        <span class="team-name" style="color: #aa54ff;">Peoples Imperial Confederation</span>
                         <span class="score-num">0</span>
                     </div>
                 </div>
@@ -317,12 +312,12 @@
             </div><div class="bracket-column"><h2 class="column-title">Semi Finals</h2>
             <div class="match-card">
                 <div class="match-id-header">
-                    <span>ID: #7</span>
+                    <span>ID: #6</span>
                     <span>Pending</span>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
-                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 3</span>
+                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 2</span>
                         <span class="score-num">0</span>
                     </div>
                     <div class="vs-row">
@@ -330,7 +325,7 @@
                         <span class="score-num tie">0</span>
                     </div>
                     <div class="team-row">
-                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 4</span>
+                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 3</span>
                         <span class="score-num">0</span>
                     </div>
                 </div>
@@ -338,41 +333,41 @@
             
             <div class="match-card">
                 <div class="match-id-header">
+                    <span>ID: #7</span>
+                    <span>Pending</span>
+                </div>
+                <div class="match-rows">
+                    <div class="team-row">
+                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 4</span>
+                        <span class="score-num">0</span>
+                    </div>
+                    <div class="vs-row">
+                        <span class="vs-label">vs</span>
+                        <span class="score-num tie">0</span>
+                    </div>
+                    <div class="team-row">
+                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 5</span>
+                        <span class="score-num">0</span>
+                    </div>
+                </div>
+            </div>
+            </div><div class="bracket-column"><h2 class="column-title">Championship</h2>
+            <div class="match-card">
+                <div class="match-id-header">
                     <span>ID: #8</span>
                     <span>Pending</span>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
-                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 5</span>
-                        <span class="score-num">0</span>
-                    </div>
-                    <div class="vs-row">
-                        <span class="vs-label">vs</span>
-                        <span class="score-num tie">0</span>
-                    </div>
-                    <div class="team-row">
                         <span class="team-name" style="color: #e0e6ed;">Winner of Match 6</span>
                         <span class="score-num">0</span>
                     </div>
-                </div>
-            </div>
-            </div><div class="bracket-column"><h2 class="column-title">Grand Final</h2>
-            <div class="match-card">
-                <div class="match-id-header">
-                    <span>ID: #9</span>
-                    <span>Pending</span>
-                </div>
-                <div class="match-rows">
-                    <div class="team-row">
-                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 7</span>
-                        <span class="score-num">0</span>
-                    </div>
                     <div class="vs-row">
                         <span class="vs-label">vs</span>
                         <span class="score-num tie">0</span>
                     </div>
                     <div class="team-row">
-                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 8</span>
+                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 7</span>
                         <span class="score-num">0</span>
                     </div>
                 </div>
@@ -380,7 +375,7 @@
             </div>
         </div>
         <div class="bracket-credits">
-            Logo by Zambi, Design by MasterDS and UI by df44
+            Bracket Design by MasterDS • Logo by Zambi • UI by df44
         </div>
     </div>
 
