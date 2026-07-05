@@ -1,27 +1,43 @@
 {
-  "Quarter Finals": {
+  "Qualifiers": {
     "1": {
-      "team_a": "Rebel Penguin Federation",
-      "team_b": "Special Weapons and Tactics",
+      "team_a": "SnowWalkers of Club Penguin",
+      "team_b": "Smart Penguins",
       "score": "0-0-0",
       "status": "Scheduled",
       "winner": null
     },
     "2": {
-      "team_a": "Water Vikings",
-      "team_b": "Smart Penguins",
-      "score": "2-1-0",
-      "status": "Completed",
-      "winner": null
-    },
-    "3": {
-      "team_a": "Templars",
+      "team_a": "Star Force",
       "team_b": "Peoples Imperial Confederation",
       "score": "0-0-0",
       "status": "Scheduled",
       "winner": null
+    }
+  },
+  "Quarter Finals": {
+    "3": {
+      "team_a": "Rebel Penguin Federation",
+      "team_b": "Winner of Match 1",
+      "score": "0-0-0",
+      "status": "Pending",
+      "winner": null
     },
     "4": {
+      "team_a": "Water Vikings",
+      "team_b": "Special Weapons and Tactics",
+      "score": "0-0-0",
+      "status": "Scheduled",
+      "winner": null
+    },
+    "5": {
+      "team_a": "Templars",
+      "team_b": "Winner of Match 2",
+      "score": "0-0-0",
+      "status": "Pending",
+      "winner": null
+    },
+    "6": {
       "team_a": "Army of Club Penguin",
       "team_b": "Elite Guardians of CP",
       "score": "0-0-0",
@@ -30,25 +46,25 @@
     }
   },
   "Semi Finals": {
-    "5": {
-      "team_a": "TBD",
-      "team_b": "TBD",
+    "7": {
+      "team_a": "Winner of Match 3",
+      "team_b": "Winner of Match 4",
       "score": "0-0-0",
       "status": "Pending",
       "winner": null
     },
-    "6": {
-      "team_a": "TBD",
-      "team_b": "TBD",
+    "8": {
+      "team_a": "Winner of Match 5",
+      "team_b": "Winner of Match 6",
       "score": "0-0-0",
       "status": "Pending",
       "winner": null
     }
   },
   "Grand Final": {
-    "7": {
-      "team_a": "TBD",
-      "team_b": "TBD",
+    "9": {
+      "team_a": "Winner of Match 7",
+      "team_b": "Winner of Match 8",
       "score": "0-0-0",
       "status": "Pending",
       "winner": null
