@@ -188,55 +188,196 @@
 
     <div class="bracket-container">
         <div class="bracket-tree">
-        """
-    
-    for round_name, matches in bracket_data.items():
-        html += f'<div class="bracket-column"><h2 class="column-title">{round_name}</h2>'
-        
-        for match_id, match in matches.items():
-            team_a = match.get('team_a', 'TBD')
-            team_b = match.get('team_b', 'TBD')
-            score = match.get('score', '0-0-0')
-            winner = match.get('winner')
-            status = match.get('status', 'Pending')
-
-            # Parse out the strict W-T-L split string configuration
-            try:
-                w, t, l = score.split('-')
-            except ValueError:
-                w, t, l = '0', '0', '0'
-
-            color_a = get_army_color(team_a)
-            color_b = get_army_color(team_b)
-
-            class_a = "team-row winner" if winner == team_a and winner is not None else "team-row"
-            class_b = "team-row winner" if winner == team_b and winner is not None else "team-row"
-
-            html += f"""
+        <div class="bracket-column"><h2 class="column-title">Qualifiers</h2>
             <div class="match-card">
                 <div class="match-id-header">
-                    <span>ID: #{match_id}</span>
-                    <span>{status}</span>
+                    <span>ID: #1</span>
+                    <span>Completed</span>
                 </div>
                 <div class="match-rows">
-                    <div class="{class_a}">
-                        <span class="team-name" style="color: {color_a};">{team_a}</span>
-                        <span class="score-num">{w}</span>
+                    <div class="team-row">
+                        <span class="team-name" style="color: #87f1ff;">SnowWalkers of Club Penguin</span>
+                        <span class="score-num">2</span>
                     </div>
                     <div class="vs-row">
                         <span class="vs-label">vs</span>
-                        <span class="score-num tie">{t}</span>
+                        <span class="score-num tie">1</span>
                     </div>
-                    <div class="{class_b}">
-                        <span class="team-name" style="color: {color_b};">{team_b}</span>
-                        <span class="score-num">{l}</span>
+                    <div class="team-row">
+                        <span class="team-name" style="color: #ff6666;">Smart Penguins</span>
+                        <span class="score-num">0</span>
                     </div>
                 </div>
             </div>
-            """
-        html += "</div>"
-    
-    html += """
+            
+            <div class="match-card">
+                <div class="match-id-header">
+                    <span>ID: #2</span>
+                    <span>Scheduled</span>
+                </div>
+                <div class="match-rows">
+                    <div class="team-row">
+                        <span class="team-name" style="color: #000050;">Star Force</span>
+                        <span class="score-num">0</span>
+                    </div>
+                    <div class="vs-row">
+                        <span class="vs-label">vs</span>
+                        <span class="score-num tie">0</span>
+                    </div>
+                    <div class="team-row">
+                        <span class="team-name" style="color: #aa54ff;">Peoples Imperial Confederation</span>
+                        <span class="score-num">0</span>
+                    </div>
+                </div>
+            </div>
+            </div><div class="bracket-column"><h2 class="column-title">Quarter Finals</h2>
+            <div class="match-card">
+                <div class="match-id-header">
+                    <span>ID: #3</span>
+                    <span>Pending</span>
+                </div>
+                <div class="match-rows">
+                    <div class="team-row">
+                        <span class="team-name" style="color: #060505;">Rebel Penguin Federation</span>
+                        <span class="score-num">0</span>
+                    </div>
+                    <div class="vs-row">
+                        <span class="vs-label">vs</span>
+                        <span class="score-num tie">0</span>
+                    </div>
+                    <div class="team-row">
+                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 1</span>
+                        <span class="score-num">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="match-card">
+                <div class="match-id-header">
+                    <span>ID: #4</span>
+                    <span>Scheduled</span>
+                </div>
+                <div class="match-rows">
+                    <div class="team-row">
+                        <span class="team-name" style="color: #043acf;">Water Vikings</span>
+                        <span class="score-num">0</span>
+                    </div>
+                    <div class="vs-row">
+                        <span class="vs-label">vs</span>
+                        <span class="score-num tie">0</span>
+                    </div>
+                    <div class="team-row">
+                        <span class="team-name" style="color: #e0e6ed;">Special Weapons and Tactics</span>
+                        <span class="score-num">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="match-card">
+                <div class="match-id-header">
+                    <span>ID: #5</span>
+                    <span>Pending</span>
+                </div>
+                <div class="match-rows">
+                    <div class="team-row">
+                        <span class="team-name" style="color: #f1c40f;">Templars</span>
+                        <span class="score-num">0</span>
+                    </div>
+                    <div class="vs-row">
+                        <span class="vs-label">vs</span>
+                        <span class="score-num tie">0</span>
+                    </div>
+                    <div class="team-row">
+                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 2</span>
+                        <span class="score-num">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="match-card">
+                <div class="match-id-header">
+                    <span>ID: #6</span>
+                    <span>Scheduled</span>
+                </div>
+                <div class="match-rows">
+                    <div class="team-row">
+                        <span class="team-name" style="color: #e0e6ed;">Army of Club Penguin</span>
+                        <span class="score-num">0</span>
+                    </div>
+                    <div class="vs-row">
+                        <span class="vs-label">vs</span>
+                        <span class="score-num tie">0</span>
+                    </div>
+                    <div class="team-row">
+                        <span class="team-name" style="color: #787e7f;">Elite Guardians of CP</span>
+                        <span class="score-num">0</span>
+                    </div>
+                </div>
+            </div>
+            </div><div class="bracket-column"><h2 class="column-title">Semi Finals</h2>
+            <div class="match-card">
+                <div class="match-id-header">
+                    <span>ID: #7</span>
+                    <span>Pending</span>
+                </div>
+                <div class="match-rows">
+                    <div class="team-row">
+                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 3</span>
+                        <span class="score-num">0</span>
+                    </div>
+                    <div class="vs-row">
+                        <span class="vs-label">vs</span>
+                        <span class="score-num tie">0</span>
+                    </div>
+                    <div class="team-row">
+                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 4</span>
+                        <span class="score-num">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="match-card">
+                <div class="match-id-header">
+                    <span>ID: #8</span>
+                    <span>Pending</span>
+                </div>
+                <div class="match-rows">
+                    <div class="team-row">
+                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 5</span>
+                        <span class="score-num">0</span>
+                    </div>
+                    <div class="vs-row">
+                        <span class="vs-label">vs</span>
+                        <span class="score-num tie">0</span>
+                    </div>
+                    <div class="team-row">
+                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 6</span>
+                        <span class="score-num">0</span>
+                    </div>
+                </div>
+            </div>
+            </div><div class="bracket-column"><h2 class="column-title">Grand Final</h2>
+            <div class="match-card">
+                <div class="match-id-header">
+                    <span>ID: #9</span>
+                    <span>Pending</span>
+                </div>
+                <div class="match-rows">
+                    <div class="team-row">
+                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 7</span>
+                        <span class="score-num">0</span>
+                    </div>
+                    <div class="vs-row">
+                        <span class="vs-label">vs</span>
+                        <span class="score-num tie">0</span>
+                    </div>
+                    <div class="team-row">
+                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 8</span>
+                        <span class="score-num">0</span>
+                    </div>
+                </div>
+            </div>
+            </div>
         </div>
         <div class="bracket-credits">
             Logo by Zambi, Design by MasterDS and UI by df44
