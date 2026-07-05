@@ -1,0 +1,57 @@
+{
+  "Quarter Finals": {
+    "1": {
+      "team_a": "Rebel Penguin Federation",
+      "team_b": "Special Weapons and Tactics",
+      "score": "0-0-0",
+      "status": "Scheduled",
+      "winner": null
+    },
+    "2": {
+      "team_a": "Water Vikings",
+      "team_b": "Smart Penguins",
+      "score": "0-0-0",
+      "status": "Scheduled",
+      "winner": null
+    },
+    "3": {
+      "team_a": "Templars",
+      "team_b": "Peoples Imperial Confederation",
+      "score": "0-0-0",
+      "status": "Scheduled",
+      "winner": null
+    },
+    "4": {
+      "team_a": "Army of Club Penguin",
+      "team_b": "Elite Guardians of CP",
+      "score": "0-0-0",
+      "status": "Scheduled",
+      "winner": null
+    }
+  },
+  "Semi Finals": {
+    "5": {
+      "team_a": "TBD",
+      "team_b": "TBD",
+      "score": "0-0-0",
+      "status": "Pending",
+      "winner": null
+    },
+    "6": {
+      "team_a": "TBD",
+      "team_b": "TBD",
+      "score": "0-0-0",
+      "status": "Pending",
+      "winner": null
+    }
+  },
+  "Grand Final": {
+    "7": {
+      "team_a": "TBD",
+      "team_b": "TBD",
+      "score": "0-0-0",
+      "status": "Pending",
+      "winner": null
+    }
+  }
+}
