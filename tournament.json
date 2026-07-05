@@ -1,70 +1,63 @@
 {
   "Qualifiers": {
     "1": {
-      "team_a": "SnowWalkers of Club Penguin",
-      "team_b": "Smart Penguins",
-      "score": "2-1-0",
-      "status": "Completed",
-      "winner": null
-    },
-    "2": {
-      "team_a": "Star Force",
-      "team_b": "Peoples Imperial Confederation",
+      "team_a": "Romans",
+      "team_b": "SWCP",
       "score": "0-0-0",
-      "status": "Scheduled",
+      "status": "Pending",
       "winner": null
     }
   },
   "Quarter Finals": {
+    "2": {
+      "team_a": "Winner of Match 1",
+      "team_b": "ACP",
+      "score": "0-0-0",
+      "status": "Pending",
+      "winner": null
+    },
     "3": {
-      "team_a": "Rebel Penguin Federation",
-      "team_b": "Winner of Match 1",
+      "team_a": "Dark Warriors",
+      "team_b": "Help Force",
       "score": "0-0-0",
       "status": "Pending",
       "winner": null
     },
     "4": {
       "team_a": "Water Vikings",
-      "team_b": "Special Weapons and Tactics",
-      "score": "0-0-0",
-      "status": "Scheduled",
-      "winner": null
-    },
-    "5": {
-      "team_a": "Templars",
-      "team_b": "Winner of Match 2",
+      "team_b": "Star Force",
       "score": "0-0-0",
       "status": "Pending",
       "winner": null
     },
-    "6": {
-      "team_a": "Army of Club Penguin",
-      "team_b": "Elite Guardians of CP",
+    "5": {
+      "team_a": "Rebel Penguin Federation",
+      "team_b": "Peoples Imperial Confederation",
       "score": "0-0-0",
-      "status": "Scheduled",
+      "status": "Pending",
       "winner": null
     }
   },
   "Semi Finals": {
-    "7": {
-      "team_a": "Winner of Match 3",
-      "team_b": "Winner of Match 4",
+    "6": {
+      "team_a": "Winner of Match 2",
+      "team_b": "Winner of Match 3",
       "score": "0-0-0",
       "status": "Pending",
       "winner": null
     },
-    "8": {
-      "team_a": "Winner of Match 5",
-      "team_b": "Winner of Match 6",
+    "7": {
+      "team_a": "Winner of Match 4",
+      "team_b": "Winner of Match 5",
       "score": "0-0-0",
       "status": "Pending",
       "winner": null
     }
   },
-  "Grand Final": {
-    "9": {
-      "team_a": "Winner of Match 7",
-      "team_b": "Winner of Match 8",
+  "Championship": {
+    "8": {
+      "team_a": "Winner of Match 6",
+      "team_b": "Winner of Match 7",
       "score": "0-0-0",
       "status": "Pending",
       "winner": null
