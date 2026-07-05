@@ -3,209 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tournament Bracket</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
+    <title>Legends Cup Bracket</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            background: transparent; 
-            padding: 10px; 
-            margin: 0;
-            font-family: 'Rajdhani', sans-serif;
-            color: var(--text-main, #e0e6ed);
-            overflow-y: auto;
-        }
-        
-        /* Header & Logo styling */
-        .bracket-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .tournament-logo {
-            max-width: 280px;
-            height: auto;
-            display: block;
-            margin: 0 auto 10px auto;
-            filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.3));
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-green: #00ff9d;
+            --text-main: #e0e6ed;
+            --text-muted: #94a3b8;
+            --border-color: rgba(0, 243, 255, 0.2);
+            --card-bg: rgba(20, 30, 45, 0.85);
         }
 
-        /* Horizontal Tree Layout */
-        .bracket-wrapper {
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent; /* Fixes any rogue white canvas glitches */
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--text-main);
+            overflow: hidden; /* Strict no scroll viewport restriction */
+        }
+
+        /* Centered Tilted Logo Watermark Layer */
+        .watermark-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 65vh;
+            height: 65vh;
+            background: url('assets/cpalclogo.png') no-repeat center center;
+            background-size: contain;
+            opacity: 0.12;
+            transform: translate(-50%, -50%) rotate(-12deg);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bracket-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            padding: 20px 25px 30px 25px;
+            z-index: 1;
+        }
+
+        /* Horizontal Layout Alignment Matrix */
+        .bracket-tree {
             display: flex;
             flex-direction: row;
-            gap: 50px;
-            padding: 20px 10px;
-            overflow-x: auto;
-            align-items: stretch;
-            min-height: 550px;
+            justify-content: space-between;
+            align-items: center;
+            flex: 1;
+            width: 100%;
+            height: calc(100% - 40px);
+            gap: 25px;
         }
-        
-        .bracket-round {
+
+        .bracket-column {
             display: flex;
             flex-direction: column;
             justify-content: space-around;
+            height: 100%;
             flex: 1;
-            min-width: 260px;
-        }
-        
-        .round-name {
-            color: var(--neon-blue, #00f3ff);
-            text-transform: uppercase;
-            font-size: 1.1em;
-            letter-spacing: 1px;
-            border-bottom: 2px solid rgba(0, 243, 255, 0.2);
-            padding-bottom: 5px;
-            margin-bottom: 20px;
-            text-align: center;
-            text-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
+            max-width: 290px;
         }
 
-        /* Match Cards */
-        .match-card { 
-            background: rgba(15, 22, 38, 0.9); 
-            border: 1px solid rgba(0, 243, 255, 0.15); 
-            border-left: 4px solid var(--neon-blue, #00f3ff);
-            padding: 12px 16px; 
-            border-radius: 6px; 
-            margin: 15px 0;
-            backdrop-filter: blur(6px);
+        .column-title {
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            font-size: 1.15em;
+            letter-spacing: 2px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+            text-align: center;
+            text-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+            font-weight: 700;
+        }
+
+        /* Map Components Replica Card Design */
+        .match-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 10px 14px;
+            width: 100%;
+            backdrop-filter: blur(4px);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.2s ease, border-color 0.2s ease;
         }
+
         .match-card:hover {
-            border-color: var(--neon-green, #00ff9d);
-            box-shadow: 0 0 12px rgba(0, 243, 255, 0.2);
+            transform: translateX(3px);
+            border-color: rgba(0, 243, 255, 0.4);
         }
-        
-        .match-header { 
-            font-size: 0.85em; 
-            color: var(--text-muted, #94a3b8); 
-            margin-bottom: 8px; 
-            display: flex; 
+
+        .match-id-header {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            display: flex;
             justify-content: space-between;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+            font-weight: 700;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             padding-bottom: 4px;
         }
-        
-        .team-row { 
-            display: flex; 
-            justify-content: space-between; 
-            margin: 4px 0; 
-            color: #e0e6ed; 
-            font-size: 1.05em; 
-        }
-        .team-row.winner { 
-            color: var(--neon-green, #00ff9d); 
-            text-shadow: 0 0 8px rgba(0, 255, 157, 0.4); 
-            font-weight: bold;
-        }
-        
-        .score-box { 
-            background: rgba(0, 0, 0, 0.6); 
-            padding: 3px 0; 
-            border-radius: 4px; 
-            font-family: monospace; 
-            color: #ffaa00; 
-            font-size: 1.1em; 
-            text-align: center; 
-            margin: 8px 0;
-            border: 1px solid rgba(255, 170, 0, 0.2);
+
+        /* MasterDS Vertical Score Split Matrix Layout */
+        .match-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
         }
 
-        /* Disclaimer Footer */
-        .bracket-footer {
-            text-align: center;
-            margin-top: 40px;
-            padding: 15px;
+        .team-row, .vs-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 26px;
+        }
+
+        .team-name {
+            font-weight: 600;
+            font-size: 1.1em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 210px;
+        }
+
+        .vs-label {
+            color: var(--text-muted);
             font-size: 0.85em;
-            color: var(--text-muted, #94a3b8);
+            font-style: italic;
+            padding-left: 12px;
+            text-transform: lowercase;
+        }
+
+        .score-num {
+            font-family: monospace;
+            font-weight: 700;
+            font-size: 1.25em;
+            color: #ffffff;
+        }
+
+        .score-num.tie {
+            color: #ffaa00;
+            text-shadow: 0 0 4px rgba(255, 170, 0, 0.3);
+        }
+
+        /* Winner Status Accent Adjustments */
+        .team-row.winner .team-name {
+            color: var(--neon-green);
+            text-shadow: 0 0 8px rgba(0, 255, 157, 0.4);
+        }
+        .team-row.winner .score-num {
+            color: var(--neon-green);
+        }
+
+        /* Credits Disclaimer Footer */
+        .bracket-credits {
+            text-align: center;
+            font-size: 0.8em;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin-top: 15px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            letter-spacing: 0.5px;
+            padding-top: 8px;
         }
     </style>
 </head>
 <body>
 
-    <div class="bracket-header">
-        <img src="assets/lclogo.png" class="tournament-logo" alt="Legends Cup Logo">
-    </div>
+    <div class="watermark-container"></div>
 
-    <div class="bracket-wrapper">
-<div class="bracket-round"><h2 class="round-name">Quarter Finals</h2>
-            <div class="match-card">
-                <div class="match-header">
-                    <span>MATCH #1</span>
-                    <span>Scheduled</span>
-                </div>
-                <div class="team-row"><span>Rebel Penguin Federation</span></div>
-                <div class="score-box">0-0-0</div>
-                <div class="team-row"><span>Special Weapons and Tactics</span></div>
-            </div>
-            
-            <div class="match-card">
-                <div class="match-header">
-                    <span>MATCH #2</span>
-                    <span>Completed</span>
-                </div>
-                <div class="team-row"><span>Water Vikings</span></div>
-                <div class="score-box">2-1-0</div>
-                <div class="team-row"><span>Smart Penguins</span></div>
-            </div>
-            
-            <div class="match-card">
-                <div class="match-header">
-                    <span>MATCH #3</span>
-                    <span>Scheduled</span>
-                </div>
-                <div class="team-row"><span>Templars</span></div>
-                <div class="score-box">0-0-0</div>
-                <div class="team-row"><span>Peoples Imperial Confederation</span></div>
-            </div>
-            
-            <div class="match-card">
-                <div class="match-header">
-                    <span>MATCH #4</span>
-                    <span>Scheduled</span>
-                </div>
-                <div class="team-row"><span>Army of Club Penguin</span></div>
-                <div class="score-box">0-0-0</div>
-                <div class="team-row"><span>Elite Guardians of CP</span></div>
-            </div>
-            </div><div class="bracket-round"><h2 class="round-name">Semi Finals</h2>
-            <div class="match-card">
-                <div class="match-header">
-                    <span>MATCH #5</span>
-                    <span>Pending</span>
-                </div>
-                <div class="team-row"><span>TBD</span></div>
-                <div class="score-box">0-0-0</div>
-                <div class="team-row"><span>TBD</span></div>
-            </div>
-            
-            <div class="match-card">
-                <div class="match-header">
-                    <span>MATCH #6</span>
-                    <span>Pending</span>
-                </div>
-                <div class="team-row"><span>TBD</span></div>
-                <div class="score-box">0-0-0</div>
-                <div class="team-row"><span>TBD</span></div>
-            </div>
-            </div><div class="bracket-round"><h2 class="round-name">Grand Final</h2>
-            <div class="match-card">
-                <div class="match-header">
-                    <span>MATCH #7</span>
-                    <span>Pending</span>
-                </div>
-                <div class="team-row"><span>TBD</span></div>
-                <div class="score-box">0-0-0</div>
-                <div class="team-row"><span>TBD</span></div>
-            </div>
-            </div>
-    </div>
+    <div class="bracket-container">
+        <div class="bracket-tree">
+        """
+    
+    for round_name, matches in bracket_data.items():
+        html += f'<div class="bracket-column"><h2 class="column-title">{round_name}</h2>'
+        
+        for match_id, match in matches.items():
+            team_a = match.get('team_a', 'TBD')
+            team_b = match.get('team_b', 'TBD')
+            score = match.get('score', '0-0-0')
+            winner = match.get('winner')
+            status = match.get('status', 'Pending')
 
-    <div class="bracket-footer">
-        Logo by Zambi, Design by MasterDS and UI by df44
+            # Parse out the strict W-T-L split string configuration
+            try:
+                w, t, l = score.split('-')
+            except ValueError:
+                w, t, l = '0', '0', '0'
+
+            color_a = get_army_color(team_a)
+            color_b = get_army_color(team_b)
+
+            class_a = "team-row winner" if winner == team_a and winner is not None else "team-row"
+            class_b = "team-row winner" if winner == team_b and winner is not None else "team-row"
+
+            html += f"""
+            <div class="match-card">
+                <div class="match-id-header">
+                    <span>ID: #{match_id}</span>
+                    <span>{status}</span>
+                </div>
+                <div class="match-rows">
+                    <div class="{class_a}">
+                        <span class="team-name" style="color: {color_a};">{team_a}</span>
+                        <span class="score-num">{w}</span>
+                    </div>
+                    <div class="vs-row">
+                        <span class="vs-label">vs</span>
+                        <span class="score-num tie">{t}</span>
+                    </div>
+                    <div class="{class_b}">
+                        <span class="team-name" style="color: {color_b};">{team_b}</span>
+                        <span class="score-num">{l}</span>
+                    </div>
+                </div>
+            </div>
+            """
+        html += "</div>"
+    
+    html += """
+        </div>
+        <div class="bracket-credits">
+            Logo by Zambi, Design by MasterDS and UI by df44
+        </div>
     </div>
 
 </body>
