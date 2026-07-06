@@ -25,7 +25,7 @@
             padding: 0;
             width: 100%;
             min-height: 100%;
-            overflow: visible;
+            overflow: hidden;
             background: var(--frame-color);
             font-family: 'Rajdhani', sans-serif;
             color: var(--text-light);
@@ -39,7 +39,7 @@
             display: flex;
             flex-direction: column;
             z-index: 5;
-            overflow: auto;
+            overflow: hidden;
             width: 100%;
             max-width: 100%;
             min-width: 0;
@@ -111,6 +111,7 @@
             overflow-x: hidden;
             padding: 6px 6px;
             min-width: 0;
+            min-height: 0;
         }
 
         .bracket-column {
@@ -139,6 +140,7 @@
 
         .match-card {
             background: rgba(60, 50, 40, 0.96);
+            background-color: rgba(60, 50, 40, 0.96);
             border: 3px solid var(--border-color);
             border-radius: 2px;
             padding: 10px 12px;
@@ -151,6 +153,14 @@
             overflow: visible;
             min-height: auto;
             cursor: pointer;
+        }
+
+        .match-card.live,
+        .match-card.pending,
+        .match-card.completed,
+        .match-card.postponed {
+            background: rgba(60, 50, 40, 0.96);
+            background-color: rgba(60, 50, 40, 0.96);
         }
 
         .status-label {
@@ -329,15 +339,24 @@
         }
 
         @media (max-width: 900px) {
+            html, body {
+                overflow: auto;
+            }
+
+            .bracket-wrapper {
+                overflow: auto;
+            }
+
             .bracket-tree {
                 flex-direction: column;
                 gap: 10px;
                 padding: 8px;
+                overflow-y: visible;
             }
 
             .bracket-column {
                 width: 100%;
-                max-width: none;
+                max-width: 100%;
                 min-width: 0;
             }
 
@@ -354,6 +373,11 @@
                 width: 36vw;
                 max-width: 320px;
                 min-width: 140px;
+            }
+
+            .watermark-container {
+                width: 60vw;
+                height: 60vw;
             }
         }
 
@@ -426,12 +450,12 @@
 
         <div class="bracket-tree" id="bracket-tree">
 <div class="bracket-column" data-round="Qualifiers"><h2 class="column-title">Qualifiers</h2>
-            <div class="match-card pending" data-match-id="1">
+            <div class="match-card live" data-match-id="1">
                 <div class="match-id-header">
                     <span>ID: #1</span>
                     <div class="match-id-meta">
                         <time class="match-time-inline" datetime="2026-07-11T18:00:00+00:00">2026-07-11T18:00:00+00:00</time>
-                        <span class="status-label">Pending</span>
+                        <span class="status-label">Live</span>
                     </div>
                 </div>
                 <div class="match-rows">
