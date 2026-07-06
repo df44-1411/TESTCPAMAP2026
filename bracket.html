@@ -36,7 +36,7 @@
         .bracket-wrapper {
             position: absolute;
             inset: 0; /* fill viewport */
-            padding: 20px;
+            padding: 12px;
             border: 8px solid var(--frame-color); /* white outline at page edge */
             display: flex;
             flex-direction: column;
@@ -82,7 +82,7 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             z-index: 6; /* above watermark */
         }
 
@@ -98,15 +98,15 @@
         .bracket-tree {
             display: flex;
             flex-direction: row;
-            justify-content: space-around;
+            justify-content: space-between;
             align-items: flex-start;
             flex: 1 1 auto;
             width: 100%;
-            gap: 18px;
+            gap: 10px;
             position: relative;
             z-index: 3;
             overflow: hidden; /* internal scrolling, no cropping outside wrapper */
-            padding: 18px 12px;
+            padding: 6px 4px;
         }
 
         .bracket-column {
@@ -115,23 +115,24 @@
             justify-content: flex-start;
             align-items: center;
             height: auto;
-            flex: 1 1 0;
-            min-width: 160px;
-            gap: 16px;
+            flex: 0 1 180px;
+            min-width: 140px;
+            max-width: 190px;
+            gap: 8px;
         }
 
         .column-title {
             color: var(--text-light);
             text-transform: uppercase;
-            font-size: 1.2em;
-            letter-spacing: 3px;
+            font-size: 0.95em;
+            letter-spacing: 2px;
             font-family: 'Righteous', sans-serif;
             font-weight: 900;
             background: transparent;
             border: none;
             box-shadow: none;
-            padding: 6px 0;
-            margin-bottom: 6px;
+            padding: 4px 0;
+            margin-bottom: 2px;
             text-align: center;
         }
 
@@ -140,35 +141,41 @@
             background: rgba(60, 50, 40, 0.96);
             border: 3px solid var(--border-color);
             border-radius: 2px;
-            padding: 14px 18px;
-            width: calc(100% - 6px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.45);
-            transition: background 0.15s ease;
-            min-width: 240px;
+            padding: 8px 10px;
+            width: 100%;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.42);
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+            min-width: 0;
             position: relative;
             z-index: 4;
             overflow: visible; /* card contents must be visible */
             min-height: auto;
+            cursor: pointer;
         }
 
-        /* removed hover transform to avoid layout shifts */
+        .match-card:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 10px 22px rgba(0,0,0,0.55);
+            border-color: #ffd36a;
+            background: rgba(80, 66, 48, 0.98);
+        }
 
         .match-id-header {
-            font-size: 0.75em;
+            font-size: 0.66em;
             color: var(--text-muted);
             display:flex;
             justify-content:space-between;
-            margin-bottom:8px;
+            margin-bottom:6px;
             letter-spacing:0.5px;
             font-weight:700;
             border-bottom:1px solid var(--border-color);
-            padding-bottom:6px;
+            padding-bottom:4px;
         }
 
-        .match-rows { display:flex; flex-direction:column; gap:6px; }
-        .team-row, .vs-row { display:flex; justify-content:space-between; align-items:center; height:auto; font-size:0.95em; padding:2px 0; }
-        .vs-label { color:var(--text-muted); font-size:0.85em; font-style:italic; padding:0 6px; }
-        .score-num { font-family:'Rajdhani',sans-serif; font-weight:700; font-size:1.05em; color:var(--text-light); min-width:20px; text-align:right; }
+        .match-rows { display:flex; flex-direction:column; gap:4px; }
+        .team-row, .vs-row { display:flex; justify-content:space-between; align-items:center; height:auto; font-size:0.82em; padding:1px 0; }
+        .vs-label { color:var(--text-muted); font-size:0.78em; font-style:italic; padding:0 6px; }
+        .score-num { font-family:'Rajdhani',sans-serif; font-weight:700; font-size:0.92em; color:var(--text-light); min-width:20px; text-align:right; }
         .team-row.winner .team-name { color:#d4af37; font-weight:700; }
 
         .team-name {
@@ -181,14 +188,15 @@
             flex: 1;
             font-family: 'Rajdhani', sans-serif;
             display: block;
+            font-size: 0.9em;
         }
 
         .bracket-credits {
             text-align: left;
-            font-size: 0.75em;
+            font-size: 0.72em;
             color: #ffffff; /* white credits */
             letter-spacing: 0.5px;
-            margin-top: 20px;
+            margin-top: 8px;
             padding: 0;
             border-top: none; /* remove separating line */
             position: relative;
@@ -196,8 +204,9 @@
         }
 
         @media (max-width: 900px) {
-            .bracket-tree { flex-direction:column; gap:18px; padding: 12px; }
-            .bracket-column { width:100%; }
+            .bracket-tree { flex-direction:column; gap:10px; padding: 8px; }
+            .bracket-column { width:100%; max-width:none; min-width:0; }
+            .match-card { padding: 7px 8px; }
             .legends-watermark { font-size:80px; top: 8%; }
             .tournament-logo { width: 36vw; max-width: 320px; min-width: 140px; }
         }
@@ -216,7 +225,7 @@
             <div class="match-card" data-match-id="1">
                 <div class="match-id-header">
                     <span>ID: #1</span>
-                    <span>Completed</span>
+                    <span>Live</span>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
@@ -383,7 +392,7 @@
             </div>
         </div>
         <div class="bracket-credits">
-            Bracket Design by MasterDS • Logo by Zambi • UI by df44
+            <b>Bracket Design by MasterDS • Logo by Zambi • UI by df44</b>
         </div>
     </div>
 </body>
