@@ -3,14 +3,14 @@
     "1": {
       "team_a": "Romans",
       "team_b": "SWCP",
-      "score": "1-0-2",
-      "status": "Completed",
-      "winner": "Romans"
+      "score": "0-0-0",
+      "status": "Pending",
+      "winner": null
     }
   },
   "Quarter Finals": {
     "2": {
-      "team_a": "Romans",
+      "team_a": "Winner of Match 1",
       "team_b": "ACP",
       "score": "0-0-0",
       "status": "Pending",
@@ -32,7 +32,7 @@
     },
     "5": {
       "team_a": "Rebel Penguin Federation",
-      "team_b": "Peoples Imperial Confederation",
+      "team_b": "Pizzaioli of Club Penguin",
       "score": "0-0-0",
       "status": "Pending",
       "winner": null
