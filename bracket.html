@@ -29,6 +29,7 @@
             background: var(--frame-color);
             font-family: 'Rajdhani', sans-serif;
             color: var(--text-light);
+            overflow-x: hidden;
         }
 
         .bracket-wrapper {
@@ -45,14 +46,15 @@
             min-width: 0;
             min-height: 100vh;
             background: linear-gradient(to bottom, var(--bg-mid) 0%, #d8b25a 45%, var(--bg-light) 100%);
+            overflow-x: hidden;
         }
 
         .watermark-container {
             position: absolute;
             top: 60%;
             left: 50%;
-            width: 80vh;
-            height: 80vh;
+            width: clamp(160px, 40vh, 60vh);
+            height: clamp(160px, 40vh, 60vh);
             background: url('assets/cpalclogo.png') no-repeat center center;
             background-size: contain;
             opacity: 0.08;
@@ -67,13 +69,15 @@
             left: 50%;
             transform: translate(-50%, 0);
             font-family: 'Righteous', sans-serif;
-            font-size: 100px;
+            font-size: clamp(36px, 8vw, 100px);
             font-weight: 900;
             letter-spacing: 10px;
             color: transparent;
             -webkit-text-stroke: 3px rgba(255,255,255,0.09);
             text-stroke: 3px rgba(255,255,255,0.09);
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: clip;
             pointer-events: none;
             z-index: 0;
         }
@@ -457,12 +461,12 @@
 
         <div class="bracket-tree" id="bracket-tree">
 <div class="bracket-column" data-round="Qualifiers"><h2 class="column-title">Qualifiers</h2>
-            <div class="match-card pending" data-match-id="1">
+            <div class="match-card live" data-match-id="1">
                 <div class="match-id-header">
                     <span>ID: #1</span>
                     <div class="match-id-meta">
                         <time class="match-time-inline" datetime="2026-07-11T18:00:00+00:00">2026-07-11T18:00:00+00:00</time>
-                        <span class="status-label">Pending</span>
+                        <span class="status-label">Live</span>
                     </div>
                 </div>
                 <div class="match-rows">
