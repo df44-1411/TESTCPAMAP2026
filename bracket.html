@@ -20,32 +20,29 @@
 
         * { box-sizing: border-box; }
 
-        /* Page locked, white outline is the page border */
         html, body {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden; /* nothing outside viewport */
-            background: var(--frame-color); /* white page outline */
+            overflow: hidden;
+            background: var(--frame-color);
             font-family: 'Rajdhani', sans-serif;
             color: var(--text-light);
         }
 
-        /* Main framed box — fills viewport so white border sits on the page edge */
         .bracket-wrapper {
             position: absolute;
-            inset: 0; /* fill viewport */
+            inset: 0;
             padding: 12px;
-            border: 8px solid var(--frame-color); /* white outline at page edge */
+            border: 8px solid var(--frame-color);
             display: flex;
             flex-direction: column;
             z-index: 5;
-            overflow: hidden; /* nothing can render outside this box */
-            background: linear-gradient(to bottom, var(--bg-mid) 0%, #d8b25a 45%, var(--bg-light) 100%); /* darker top → lighter bottom */
+            overflow: hidden;
+            background: linear-gradient(to bottom, var(--bg-mid) 0%, #d8b25a 45%, var(--bg-light) 100%);
         }
 
-        /* watermark (kept inside wrapper and clipped) */
         .watermark-container {
             position: absolute;
             top: 60%;
@@ -62,7 +59,7 @@
 
         .legends-watermark {
             position: absolute;
-            top: 12px;
+            top: 6px;
             left: 50%;
             transform: translate(-50%, 0);
             font-family: 'Righteous', sans-serif;
@@ -82,8 +79,9 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            margin-bottom: 4px;
-            z-index: 6; /* above watermark */
+            margin-top: 10px;
+            margin-bottom: 6px;
+            z-index: 6;
         }
 
         .tournament-logo {
@@ -94,13 +92,13 @@
             display: block;
         }
 
-        /* content container — scrollable internally when needed */
         .bracket-tree {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            justify-content: space-evenly;
+            justify-content: center;
             align-items: flex-start;
+            align-content: flex-start;
             flex: 1 1 auto;
             min-height: 0;
             width: 100%;
@@ -108,7 +106,8 @@
             position: relative;
             z-index: 3;
             overflow-y: auto;
-            padding: 8px 6px;
+            overflow-x: hidden;
+            padding: 6px 6px;
             min-width: 0;
         }
 
@@ -118,9 +117,9 @@
             justify-content: flex-start;
             align-items: center;
             height: auto;
-            flex: 1 1 clamp(280px, 22vw, 420px);
+            flex: 1 1 280px;
             min-width: 240px;
-            max-width: 420px;
+            max-width: 360px;
             gap: 10px;
         }
 
@@ -131,15 +130,11 @@
             letter-spacing: 2px;
             font-family: 'Righteous', sans-serif;
             font-weight: 900;
-            background: transparent;
-            border: none;
-            box-shadow: none;
             padding: 4px 0;
             margin-bottom: 2px;
             text-align: center;
         }
 
-        /* Match Card - show full info, wrap long names */
         .match-card {
             background: rgba(60, 50, 40, 0.96);
             border: 3px solid var(--border-color);
@@ -151,7 +146,7 @@
             min-width: 0;
             position: relative;
             z-index: 4;
-            overflow: visible; /* card contents must be visible */
+            overflow: visible;
             min-height: auto;
             cursor: pointer;
         }
@@ -224,24 +219,54 @@
         .match-id-header {
             font-size: 0.66em;
             color: var(--text-muted);
-            display:flex;
-            justify-content:space-between;
-            margin-bottom:6px;
-            letter-spacing:0.5px;
-            font-weight:700;
-            border-bottom:1px solid var(--border-color);
-            padding-bottom:4px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 4px;
         }
 
-        .match-rows { display:flex; flex-direction:column; gap:4px; }
-        .team-row, .vs-row { display:flex; justify-content:space-between; align-items:center; height:auto; font-size:0.82em; padding:1px 0; }
-        .vs-label { color:var(--text-muted); font-size:0.78em; font-style:italic; padding:0 6px; }
-        .score-num { font-family:'Rajdhani',sans-serif; font-weight:700; font-size:0.92em; color:var(--text-light); min-width:20px; text-align:right; }
-        .team-row.winner .team-name { color:#d4af37; font-weight:700; }
+        .match-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .team-row, .vs-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: auto;
+            font-size: 0.82em;
+            padding: 1px 0;
+        }
+
+        .vs-label {
+            color: var(--text-muted);
+            font-size: 0.78em;
+            font-style: italic;
+            padding: 0 6px;
+        }
+
+        .score-num {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 0.92em;
+            color: var(--text-light);
+            min-width: 20px;
+            text-align: right;
+        }
+
+        .team-row.winner .team-name {
+            color: #d4af37;
+            font-weight: 700;
+        }
 
         .team-name {
             font-weight: 600;
-            white-space: normal;       /* allow wrapping so full names show */
+            white-space: normal;
             word-break: break-word;
             overflow: visible;
             text-overflow: clip;
@@ -252,24 +277,65 @@
             font-size: 0.9em;
         }
 
+        .match-time-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            font-size: 0.80em;
+            color: var(--text-muted);
+        }
+
+        .match-time-label {
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .match-time {
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
         .bracket-credits {
             text-align: left;
             font-size: 0.72em;
-            color: #ffffff; /* white credits */
+            color: #ffffff;
             letter-spacing: 0.5px;
             margin-top: 8px;
             padding: 0;
-            border-top: none; /* remove separating line */
+            border-top: none;
             position: relative;
             z-index: 10;
         }
 
         @media (max-width: 900px) {
-            .bracket-tree { flex-direction:column; gap:10px; padding: 8px; }
-            .bracket-column { width:100%; max-width:none; min-width:0; }
-            .match-card { padding: 7px 8px; }
-            .legends-watermark { font-size:50px; top: 8%; }
-            .tournament-logo { width: 36vw; max-width: 320px; min-width: 140px; }
+            .bracket-tree {
+                flex-direction: column;
+                gap: 10px;
+                padding: 8px;
+            }
+
+            .bracket-column {
+                width: 100%;
+                max-width: none;
+                min-width: 0;
+            }
+
+            .match-card {
+                padding: 7px 8px;
+            }
+
+            .legends-watermark {
+                font-size: 50px;
+                top: 8%;
+            }
+
+            .tournament-logo {
+                width: 36vw;
+                max-width: 320px;
+                min-width: 140px;
+            }
         }
     </style>
 </head>
@@ -283,10 +349,10 @@
 
         <div class="bracket-tree" id="bracket-tree">
 <div class="bracket-column" data-round="Qualifiers"><h2 class="column-title">Qualifiers</h2>
-            <div class="match-card live" data-match-id="1">
+            <div class="match-card pending" data-match-id="1">
                 <div class="match-id-header">
                     <span>ID: #1</span>
-                    <span class="status-label">Live</span>
+                    <span class="status-label">Pending</span>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
@@ -301,6 +367,10 @@
                         <span class="team-name" style="color: #87f1ff;">SnowWalkers of Club Penguin</span>
                         <span class="score-num">0</span>
                     </div>
+                </div>
+                <div class="match-time-row">
+                    <span class="match-time-label">Time</span>
+                    <time class="match-time" datetime="">TBD</time>
                 </div>
             </div>
             </div><div class="bracket-column" data-round="Quarter Finals"><h2 class="column-title">Quarter Finals</h2>
@@ -323,6 +393,10 @@
                         <span class="score-num">0</span>
                     </div>
                 </div>
+                <div class="match-time-row">
+                    <span class="match-time-label">Time</span>
+                    <time class="match-time" datetime="">TBD</time>
+                </div>
             </div>
             
             <div class="match-card pending" data-match-id="3">
@@ -343,6 +417,10 @@
                         <span class="team-name" style="color: #000dff;">Help Force</span>
                         <span class="score-num">0</span>
                     </div>
+                </div>
+                <div class="match-time-row">
+                    <span class="match-time-label">Time</span>
+                    <time class="match-time" datetime="">TBD</time>
                 </div>
             </div>
             
@@ -365,6 +443,10 @@
                         <span class="score-num">0</span>
                     </div>
                 </div>
+                <div class="match-time-row">
+                    <span class="match-time-label">Time</span>
+                    <time class="match-time" datetime="">TBD</time>
+                </div>
             </div>
             
             <div class="match-card pending" data-match-id="5">
@@ -385,6 +467,10 @@
                         <span class="team-name" style="color: #FC7E00;">Pizzaioli of Club Penguin</span>
                         <span class="score-num">0</span>
                     </div>
+                </div>
+                <div class="match-time-row">
+                    <span class="match-time-label">Time</span>
+                    <time class="match-time" datetime="">TBD</time>
                 </div>
             </div>
             </div><div class="bracket-column" data-round="Semi Finals"><h2 class="column-title">Semi Finals</h2>
@@ -407,6 +493,10 @@
                         <span class="score-num">0</span>
                     </div>
                 </div>
+                <div class="match-time-row">
+                    <span class="match-time-label">Time</span>
+                    <time class="match-time" datetime="">TBD</time>
+                </div>
             </div>
             
             <div class="match-card pending" data-match-id="7">
@@ -427,6 +517,10 @@
                         <span class="team-name" style="color: #e0e6ed;">Winner of Match 5</span>
                         <span class="score-num">0</span>
                     </div>
+                </div>
+                <div class="match-time-row">
+                    <span class="match-time-label">Time</span>
+                    <time class="match-time" datetime="">TBD</time>
                 </div>
             </div>
             </div><div class="bracket-column" data-round="Championship"><h2 class="column-title">Championship</h2>
@@ -449,6 +543,10 @@
                         <span class="score-num">0</span>
                     </div>
                 </div>
+                <div class="match-time-row">
+                    <span class="match-time-label">Time</span>
+                    <time class="match-time" datetime="">TBD</time>
+                </div>
             </div>
             </div>
         </div>
@@ -456,5 +554,33 @@
             <b>Bracket Design by MasterDS • Logo by Zambi • UI by df44</b>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("time.match-time").forEach((el) => {
+                const raw = (el.getAttribute("datetime") || el.textContent || "").trim();
+                if (!raw || raw === "TBD") return;
+
+                let date = new Date(raw);
+                if (Number.isNaN(date.getTime())) {
+                    const num = Number(raw);
+                    if (!Number.isNaN(num)) {
+                        date = new Date(raw.length === 10 ? num * 1000 : num);
+                    }
+                }
+
+                if (Number.isNaN(date.getTime())) return;
+
+                el.textContent = date.toLocaleString(undefined, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    timeZoneName: "short"
+                });
+            });
+        });
+    </script>
 </body>
 </html>
