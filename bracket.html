@@ -47,14 +47,24 @@
             min-height: 100vh;
             background: linear-gradient(to bottom, var(--bg-mid) 0%, #d8b25a 45%, var(--bg-light) 100%);
             overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        /* prevent any child from forcing horizontal scroll */
+        .bracket-tree, .bracket-column, .match-card, .match-id-meta, .legends-watermark, .watermark-container, .tournament-logo {
+            min-width: 0;
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         .watermark-container {
             position: absolute;
             top: 60%;
             left: 50%;
-            width: clamp(160px, 40vh, 60vh);
-            height: clamp(160px, 40vh, 60vh);
+            width: min(40vh, 60vh);
+            height: min(40vh, 60vh);
+            max-width: calc(100% - 40px);
+            max-height: calc(100% - 40px);
             background: url('assets/cpalclogo.png') no-repeat center center;
             background-size: contain;
             opacity: 0.08;
@@ -80,22 +90,12 @@
             text-overflow: clip;
             pointer-events: none;
             z-index: 0;
-        }
-
-        .tournament-header {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            margin-top: 10px;
-            margin-bottom: 6px;
-            z-index: 6;
+            max-width: calc(100% - 40px);
         }
 
         .tournament-logo {
-            width: 16vw;
-            max-width: 420px;
-            min-width: 160px;
+            width: clamp(120px, 18%, 420px);
+            max-width: 80%;
             height: auto;
             display: block;
         }
@@ -104,7 +104,7 @@
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: flex-start;
             align-content: flex-start;
             flex: 1 1 auto;
@@ -125,22 +125,35 @@
             justify-content: flex-start;
             align-items: center;
             height: auto;
-            flex: 1 1 clamp(220px, 24vw, 340px);
-            min-width: 200px;
+            flex: 1 1 clamp(200px, 24vw, 340px);
+            min-width: 0;
             max-width: 340px;
             gap: 10px;
         }
 
-        .column-title {
+        .match-id-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: nowrap;
+            min-width: 0;
+        }
+
+        .match-time-inline {
             color: var(--text-light);
-            text-transform: uppercase;
-            font-size: 0.95em;
-            letter-spacing: 2px;
-            font-family: 'Righteous', sans-serif;
-            font-weight: 900;
-            padding: 4px 0;
-            margin-bottom: 2px;
-            text-align: center;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
+            flex-shrink: 0;
+        }
+
+        .status-label {
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .match-card {
@@ -252,14 +265,18 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            flex-wrap: wrap;
-            justify-content: flex-end;
+            flex-wrap: nowrap;
+            min-width: 0;
         }
 
         .match-time-inline {
             color: var(--text-light);
             font-weight: 600;
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
+            flex-shrink: 0;
         }
 
         .match-rows {
@@ -345,22 +362,24 @@
 
         @media (max-width: 900px) {
             html, body {
-                overflow: auto;
+                overflow-x: hidden;
+                overflow-y: auto;
                 min-height: 100vh;
             }
 
             .bracket-wrapper {
-                overflow: visible;
-                max-height: none;
+                overflow-x: hidden;
+                overflow-y: auto;
+                max-height: 100vh;
             }
 
             .bracket-tree {
                 flex-direction: column;
                 gap: 0;
                 padding: 6px 0;
-                overflow: visible;
-                max-height: none;
-                min-height: 0;
+                overflow-y: auto;
+                max-height: calc(100vh - 160px);
+                width: 100%;
             }
 
             .bracket-column {
@@ -368,27 +387,21 @@
                 max-width: 100%;
                 min-width: 0;
                 margin: 0;
-                padding: 0;
-            }
-
-            .match-card {
-                padding: 7px 8px;
-            }
-
-            .legends-watermark {
-                font-size: 50px;
-                top: 8%;
-            }
-
-            .tournament-logo {
-                width: 36vw;
-                max-width: 320px;
-                min-width: 140px;
+                padding: 0 8px;
             }
 
             .watermark-container {
-                width: 60vw;
-                height: 60vw;
+                position: absolute;
+                top: 55%;
+                left: 50%;
+                width: min(28vh, 38vh);
+                height: min(28vh, 38vh);
+                opacity: 0.06;
+            }
+
+            .legends-watermark {
+                font-size: 48px;
+                top: 10px;
             }
         }
 
@@ -461,12 +474,12 @@
 
         <div class="bracket-tree" id="bracket-tree">
 <div class="bracket-column" data-round="Qualifiers"><h2 class="column-title">Qualifiers</h2>
-            <div class="match-card live" data-match-id="1">
+            <div class="match-card postponed" data-match-id="1">
                 <div class="match-id-header">
                     <span>ID: #1</span>
                     <div class="match-id-meta">
                         <time class="match-time-inline" datetime="2026-07-11T18:00:00+00:00">2026-07-11T18:00:00+00:00</time>
-                        <span class="status-label">Live</span>
+                        <span class="status-label">Postponed</span>
                     </div>
                 </div>
                 <div class="match-rows">
