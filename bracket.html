@@ -221,11 +221,28 @@
             color: var(--text-muted);
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
             margin-bottom: 6px;
             letter-spacing: 0.5px;
             font-weight: 700;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 4px;
+        }
+
+        .match-id-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .match-time-inline {
+            color: var(--text-light);
+            font-weight: 600;
+            white-space: nowrap;
         }
 
         .match-rows {
@@ -352,7 +369,10 @@
             <div class="match-card pending" data-match-id="1">
                 <div class="match-id-header">
                     <span>ID: #1</span>
-                    <span class="status-label">Pending</span>
+                    <div class="match-id-meta">
+                        <time class="match-time-inline" datetime="2026-07-11T18:00:00+00:00">2026-07-11T18:00:00+00:00</time>
+                        <span class="status-label">Pending</span>
+                    </div>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
@@ -377,7 +397,10 @@
             <div class="match-card pending" data-match-id="2">
                 <div class="match-id-header">
                     <span>ID: #2</span>
-                    <span class="status-label">Pending</span>
+                    <div class="match-id-meta">
+                        <time class="match-time-inline" datetime="">TBD</time>
+                        <span class="status-label">Pending</span>
+                    </div>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
@@ -402,7 +425,10 @@
             <div class="match-card pending" data-match-id="3">
                 <div class="match-id-header">
                     <span>ID: #3</span>
-                    <span class="status-label">Pending</span>
+                    <div class="match-id-meta">
+                        <time class="match-time-inline" datetime="">TBD</time>
+                        <span class="status-label">Pending</span>
+                    </div>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
@@ -427,7 +453,10 @@
             <div class="match-card pending" data-match-id="4">
                 <div class="match-id-header">
                     <span>ID: #4</span>
-                    <span class="status-label">Pending</span>
+                    <div class="match-id-meta">
+                        <time class="match-time-inline" datetime="">TBD</time>
+                        <span class="status-label">Pending</span>
+                    </div>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
@@ -452,7 +481,10 @@
             <div class="match-card pending" data-match-id="5">
                 <div class="match-id-header">
                     <span>ID: #5</span>
-                    <span class="status-label">Pending</span>
+                    <div class="match-id-meta">
+                        <time class="match-time-inline" datetime="">TBD</time>
+                        <span class="status-label">Pending</span>
+                    </div>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
@@ -477,7 +509,10 @@
             <div class="match-card pending" data-match-id="6">
                 <div class="match-id-header">
                     <span>ID: #6</span>
-                    <span class="status-label">Pending</span>
+                    <div class="match-id-meta">
+                        <time class="match-time-inline" datetime="">TBD</time>
+                        <span class="status-label">Pending</span>
+                    </div>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
@@ -502,7 +537,10 @@
             <div class="match-card pending" data-match-id="7">
                 <div class="match-id-header">
                     <span>ID: #7</span>
-                    <span class="status-label">Pending</span>
+                    <div class="match-id-meta">
+                        <time class="match-time-inline" datetime="">TBD</time>
+                        <span class="status-label">Pending</span>
+                    </div>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
@@ -527,7 +565,10 @@
             <div class="match-card pending" data-match-id="8">
                 <div class="match-id-header">
                     <span>ID: #8</span>
-                    <span class="status-label">Pending</span>
+                    <div class="match-id-meta">
+                        <time class="match-time-inline" datetime="">TBD</time>
+                        <span class="status-label">Pending</span>
+                    </div>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
@@ -557,7 +598,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            document.querySelectorAll("time.match-time").forEach((el) => {
+            document.querySelectorAll("time.match-time-inline").forEach((el) => {
                 const raw = (el.getAttribute("datetime") || el.textContent || "").trim();
                 if (!raw || raw === "TBD") return;
 
