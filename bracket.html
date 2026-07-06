@@ -142,7 +142,17 @@
         .vs-label { color:var(--text-muted); font-size:0.8em; font-style:italic; padding:0 6px; }
         .score-num { font-family:'Rajdhani',sans-serif; font-weight:700; font-size:1.1em; color:var(--text-light); min-width:20px; text-align:right; }
         .team-row.winner .team-name { color:#d4af37; font-weight:700; }
-        .bracket-credits { text-align:center; font-size:0.75em; color:var(--text-muted); letter-spacing:0.5px; margin-top:20px; padding-top:15px; border-top:1px solid var(--border-color); position:relative; z-index:10; }
+        .bracket-credits {
+            text-align: left;
+            font-size: 0.75em;
+            color: #ffffff; /* white credits */
+            letter-spacing: 0.5px;
+            margin-top: 20px;
+            padding: 0;
+            border-top: none; /* remove the separating line */
+            position: relative;
+            z-index: 10;
+        }
 
         @media (max-width: 900px) {
             .bracket-tree { flex-direction:column; gap:18px; }
@@ -164,7 +174,7 @@
             <div class="match-card" data-match-id="1" data-match-key="Qualifiers_1">
                 <div class="match-id-header">
                     <span>ID: #1</span>
-                    <span>Live</span>
+                    <span>Pending</span>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
