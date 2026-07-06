@@ -19,39 +19,36 @@
 
         * { box-sizing: border-box; }
 
+        /* Lock page sizing and prevent anything from appearing outside the wrapper */
         html, body {
             margin: 0;
             padding: 0;
             width: 100%;
-            min-height: 100vh;
-            height: auto;
-            /* top-to-bottom gold gradient */
-            background: linear-gradient(to bottom, #fffaf0 0%, #f9e3a8 25%, #d8b25a 55%, #8c6726 100%);
+            height: 100%;
+            overflow: hidden; /* prevent scroll / content outside the box */
+            background: #ece2d0; /* neutral page background behind the framed box */
             font-family: 'Rajdhani', sans-serif;
             color: var(--text-light);
-            overflow-x: hidden;
         }
 
-        /* LEGENDS Watermark - White Outline Only */
-        .legends-watermark {
-            position: fixed;
-            top: 10%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: 'Righteous', sans-serif;
-            font-size: 140px;
-            font-weight: 900;
-            letter-spacing: 12px;
-            color: transparent;
-            -webkit-text-stroke: 3px rgba(255, 255, 255, 0.12);
-            text-stroke: 3px rgba(255, 255, 255, 0.12);
-            white-space: nowrap;
-            pointer-events: none;
-            z-index: 1;
+        /* Main framed box -- fills viewport with a small margin so white border is at the page outline */
+        .bracket-wrapper {
+            position: relative;
+            width: calc(100vw - 40px);      /* slightly bigger frame */
+            height: calc(100vh - 40px);     /* match display size */
+            margin: 20px auto;              /* white border will sit on page outline */
+            padding: 20px;
+            border: 6px solid var(--frame-color); /* prominent white outline */
+            display: flex;
+            flex-direction: column;
+            z-index: 5;
+            overflow: hidden;              /* guarantee no child renders outside the box */
+            background: linear-gradient(to bottom, #8c6726 0%, #d8b25a 45%, #f9e3a8 75%, #fffaf0 100%); /* darker top → lighter bottom */
         }
 
+        /* watermark elements must be inside the wrapper and clipped by overflow:hidden */
         .watermark-container {
-            position: fixed;
+            position: absolute; /* not fixed — kept inside the wrapper and clipped */
             top: 45%;
             left: 50%;
             width: 60vh;
@@ -64,21 +61,24 @@
             z-index: 0;
         }
 
-        .bracket-wrapper {
-            position: relative;
-            width: 100%;
-            max-width: 1400px;
-            min-height: calc(100vh - 80px); /* keep it within viewport but allow content */
-            margin: 20px auto;
-            padding: 20px;
-            border: 3px solid var(--frame-color);
-            display: flex;
-            flex-direction: column;
-            z-index: 5;
-            background: rgba(0, 0, 0, 0.12); /* slightly darker to contrast gold */
-            overflow: auto;
+        .legends-watermark {
+            position: absolute; /* inside wrapper so it's clipped */
+            top: 8%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Righteous', sans-serif;
+            font-size: 140px;
+            font-weight: 900;
+            letter-spacing: 12px;
+            color: transparent;
+            -webkit-text-stroke: 3px rgba(255,255,255,0.12);
+            text-stroke: 3px rgba(255,255,255,0.12);
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 1;
         }
 
+        /* keep the rest of your styles unchanged */
         .bracket-container {
             position: relative;
             display: flex;
@@ -86,9 +86,10 @@
             width: 100%;
             padding: 20px 30px;
             z-index: 5;
+            height: 100%;
+            overflow: auto; /* internal scrolling if content exceeds frame */
         }
 
-        /* SVG for connecting lines */
         .bracket-svg {
             position: absolute;
             top: 0;
@@ -402,16 +403,15 @@
     </style>
 </head>
 <body>
-    <div class="watermark-container"></div>
-    <div class="legends-watermark">LEGENDS</div>
-
     <div class="bracket-wrapper">
+        <div class="watermark-container"></div>
+        <div class="legends-watermark">LEGENDS</div>
         <div class="tournament-header">
             <img src="assets/lclogo.png" alt="Legends Cup" class="tournament-logo">
         </div>
-        
+
         <svg class="bracket-svg" id="bracket-svg"></svg>
-        
+
         <div class="bracket-tree" id="bracket-tree">
 <div class="bracket-column" data-round="Qualifiers"><h2 class="column-title">Qualifiers</h2>
             <div class="match-card" data-match-id="1" data-match-key="Qualifiers_1">
@@ -422,15 +422,15 @@
                 <div class="match-rows">
                     <div class="team-row winner">
                         <span class="team-name" style="color: #730000;">Romans</span>
-                        <span class="score-num">2</span>
+                        <span class="score-num">1</span>
                     </div>
                     <div class="vs-row">
                         <span class="vs-label">vs</span>
-                        <span class="score-num tie">1</span>
+                        <span class="score-num tie">0</span>
                     </div>
                     <div class="team-row">
                         <span class="team-name" style="color: #dddddd;">SWCP</span>
-                        <span class="score-num">0</span>
+                        <span class="score-num">2</span>
                     </div>
                 </div>
             </div>
@@ -442,7 +442,7 @@
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
-                        <span class="team-name" style="color: #e0e6ed;">Winner of Match 1</span>
+                        <span class="team-name" style="color: #730000;">Romans</span>
                         <span class="score-num">0</span>
                     </div>
                     <div class="vs-row">

@@ -3,14 +3,14 @@
     "1": {
       "team_a": "Romans",
       "team_b": "SWCP",
-      "score": "2-1-0",
+      "score": "1-0-2",
       "status": "Completed",
       "winner": "Romans"
     }
   },
   "Quarter Finals": {
     "2": {
-      "team_a": "Winner of Match 1",
+      "team_a": "Romans",
       "team_b": "ACP",
       "score": "0-0-0",
       "status": "Pending",
