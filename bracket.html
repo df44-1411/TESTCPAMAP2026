@@ -24,26 +24,22 @@
             margin: 0;
             padding: 0;
             width: 100%;
-            min-height: 100%;
-            overflow-x: hidden;
-            overflow-y: auto;
+            height: 100%;
+            overflow: hidden;
             background: var(--frame-color);
             font-family: 'Rajdhani', sans-serif;
             color: var(--text-light);
-            -webkit-overflow-scrolling: touch;
         }
 
         .bracket-wrapper {
-            position: relative;
-            width: 100%;
-            min-height: 100vh;
-            min-height: 100dvh;
+            position: absolute;
+            inset: 0;
             padding: 10px;
             border: 8px solid var(--frame-color);
             display: flex;
             flex-direction: column;
             z-index: 5;
-            overflow: visible;
+            overflow: hidden;
             background: linear-gradient(to bottom, var(--bg-mid) 0%, #d8b25a 45%, var(--bg-light) 100%);
         }
 
@@ -115,8 +111,6 @@
             padding: 6px 6px;
             min-width: 0;
             min-height: 0;
-            -webkit-overflow-scrolling: touch;
-            overscroll-behavior: contain;
         }
 
         .bracket-column {
@@ -353,8 +347,16 @@
         }
 
         @media (max-width: 900px) {
+            html, body {
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
             .bracket-wrapper {
-                overflow: auto;
+                position: relative;
+                min-height: 100vh;
+                min-height: 100dvh;
+                overflow: visible;
             }
 
             .bracket-tree {
@@ -540,12 +542,12 @@
 
         <div class="bracket-tree" id="bracket-tree">
 <div class="bracket-column" data-round="Qualifiers"><h2 class="column-title">Qualifiers</h2>
-            <div class="match-card pending" data-match-id="1">
+            <div class="match-card postponed" data-match-id="1">
                 <div class="match-id-header">
                     <span>ID: #1</span>
                     <div class="match-id-meta">
                         <time class="match-time-inline" datetime="2026-07-11T18:00:00+00:00">2026-07-11T18:00:00+00:00</time>
-                        <span class="status-label">Pending</span>
+                        <span class="status-label">Postponed</span>
                     </div>
                 </div>
                 <div class="match-rows">
