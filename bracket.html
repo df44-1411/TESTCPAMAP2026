@@ -62,7 +62,7 @@
 
         .legends-watermark {
             position: absolute;
-            top: 3%; /* added top padding */
+            top: 0%; /* added top padding */
             left: 50%;
             transform: translate(-50%, 0);
             font-family: 'Righteous', sans-serif;
@@ -115,9 +115,9 @@
             justify-content: flex-start;
             align-items: center;
             height: auto;
-            flex: 0 1 210px;
-            min-width: 180px;
-            max-width: 230px;
+            flex: 0 1 240px;
+            min-width: 220px;
+            max-width: 280px;
             gap: 10px;
         }
 
@@ -141,9 +141,9 @@
             background: rgba(60, 50, 40, 0.96);
             border: 3px solid var(--border-color);
             border-radius: 2px;
-            padding: 10px 12px;
+            padding: 10px 14px;
             width: 100%;
-            box-shadow: 0 6px 14px rgba(0,0,0,0.42);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.42);
             transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
             min-width: 0;
             position: relative;
@@ -153,11 +153,44 @@
             cursor: pointer;
         }
 
+        .match-card.live {
+            border-color: #5fc973;
+        }
+
+        .match-card.pending {
+            border-color: #ffb347;
+        }
+
+        .match-card.completed {
+            border-color: #c0392b;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+        }
+
+        .match-card.postponed {
+            border-color: #8e44ad;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+        }
+
         .match-card:hover {
             transform: translateY(-3px) scale(1.01);
-            box-shadow: 0 10px 22px rgba(0,0,0,0.55);
             border-color: #ffd36a;
             background: rgba(80, 66, 48, 0.98);
+        }
+
+        .match-card.live:hover {
+            box-shadow: 0 10px 30px rgba(95,201,115,0.45);
+            border-color: #5fc973;
+        }
+
+        .match-card.pending:hover {
+            box-shadow: 0 10px 30px rgba(255,179,71,0.45);
+            border-color: #ffb347;
+        }
+
+        .match-card.completed:hover,
+        .match-card.postponed:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.35);
         }
 
         .match-id-header {
@@ -207,7 +240,7 @@
             .bracket-tree { flex-direction:column; gap:10px; padding: 8px; }
             .bracket-column { width:100%; max-width:none; min-width:0; }
             .match-card { padding: 7px 8px; }
-            .legends-watermark { font-size:80px; top: 8%; }
+            .legends-watermark { font-size:50px; top: 8%; }
             .tournament-logo { width: 36vw; max-width: 320px; min-width: 140px; }
         }
     </style>
@@ -222,10 +255,10 @@
 
         <div class="bracket-tree" id="bracket-tree">
 <div class="bracket-column" data-round="Qualifiers"><h2 class="column-title">Qualifiers</h2>
-            <div class="match-card" data-match-id="1">
+            <div class="match-card live" data-match-id="1">
                 <div class="match-id-header">
                     <span>ID: #1</span>
-                    <span>Pending</span>
+                    <span>Live</span>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
@@ -243,7 +276,7 @@
                 </div>
             </div>
             </div><div class="bracket-column" data-round="Quarter Finals"><h2 class="column-title">Quarter Finals</h2>
-            <div class="match-card" data-match-id="2">
+            <div class="match-card pending" data-match-id="2">
                 <div class="match-id-header">
                     <span>ID: #2</span>
                     <span>Pending</span>
@@ -264,7 +297,7 @@
                 </div>
             </div>
             
-            <div class="match-card" data-match-id="3">
+            <div class="match-card pending" data-match-id="3">
                 <div class="match-id-header">
                     <span>ID: #3</span>
                     <span>Pending</span>
@@ -285,7 +318,7 @@
                 </div>
             </div>
             
-            <div class="match-card" data-match-id="4">
+            <div class="match-card pending" data-match-id="4">
                 <div class="match-id-header">
                     <span>ID: #4</span>
                     <span>Pending</span>
@@ -306,7 +339,7 @@
                 </div>
             </div>
             
-            <div class="match-card" data-match-id="5">
+            <div class="match-card pending" data-match-id="5">
                 <div class="match-id-header">
                     <span>ID: #5</span>
                     <span>Pending</span>
@@ -327,7 +360,7 @@
                 </div>
             </div>
             </div><div class="bracket-column" data-round="Semi Finals"><h2 class="column-title">Semi Finals</h2>
-            <div class="match-card" data-match-id="6">
+            <div class="match-card pending" data-match-id="6">
                 <div class="match-id-header">
                     <span>ID: #6</span>
                     <span>Pending</span>
@@ -348,7 +381,7 @@
                 </div>
             </div>
             
-            <div class="match-card" data-match-id="7">
+            <div class="match-card pending" data-match-id="7">
                 <div class="match-id-header">
                     <span>ID: #7</span>
                     <span>Pending</span>
@@ -369,7 +402,7 @@
                 </div>
             </div>
             </div><div class="bracket-column" data-round="Championship"><h2 class="column-title">Championship</h2>
-            <div class="match-card" data-match-id="8">
+            <div class="match-card pending" data-match-id="8">
                 <div class="match-id-header">
                     <span>ID: #8</span>
                     <span>Pending</span>
