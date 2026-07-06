@@ -29,7 +29,6 @@
             background: var(--frame-color);
             font-family: 'Rajdhani', sans-serif;
             color: var(--text-light);
-            overflow-x: hidden;
         }
 
         .bracket-wrapper {
@@ -44,27 +43,15 @@
             width: 100%;
             max-width: 100%;
             min-width: 0;
-            min-height: 100vh;
             background: linear-gradient(to bottom, var(--bg-mid) 0%, #d8b25a 45%, var(--bg-light) 100%);
-            overflow-x: hidden;
-            box-sizing: border-box;
-        }
-
-        /* prevent any child from forcing horizontal scroll */
-        .bracket-tree, .bracket-column, .match-card, .match-id-meta, .legends-watermark, .watermark-container, .tournament-logo {
-            min-width: 0;
-            max-width: 100%;
-            box-sizing: border-box;
         }
 
         .watermark-container {
             position: absolute;
             top: 60%;
             left: 50%;
-            width: min(40vh, 60vh);
-            height: min(40vh, 60vh);
-            max-width: calc(100% - 40px);
-            max-height: calc(100% - 40px);
+            width: 80vh;
+            height: 80vh;
             background: url('assets/cpalclogo.png') no-repeat center center;
             background-size: contain;
             opacity: 0.08;
@@ -79,23 +66,31 @@
             left: 50%;
             transform: translate(-50%, 0);
             font-family: 'Righteous', sans-serif;
-            font-size: clamp(36px, 8vw, 100px);
+            font-size: 100px;
             font-weight: 900;
             letter-spacing: 10px;
             color: transparent;
             -webkit-text-stroke: 3px rgba(255,255,255,0.09);
             text-stroke: 3px rgba(255,255,255,0.09);
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: clip;
             pointer-events: none;
             z-index: 0;
-            max-width: calc(100% - 40px);
+        }
+
+        .tournament-header {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 10px;
+            margin-bottom: 6px;
+            z-index: 6;
         }
 
         .tournament-logo {
-            width: clamp(120px, 18%, 420px);
-            max-width: 80%;
+            width: 16vw;
+            max-width: 420px;
+            min-width: 160px;
             height: auto;
             display: block;
         }
@@ -104,7 +99,7 @@
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: flex-start;
             align-content: flex-start;
             flex: 1 1 auto;
@@ -125,35 +120,22 @@
             justify-content: flex-start;
             align-items: center;
             height: auto;
-            flex: 1 1 clamp(200px, 24vw, 340px);
-            min-width: 0;
+            flex: 1 1 clamp(220px, 24vw, 340px);
+            min-width: 200px;
             max-width: 340px;
             gap: 10px;
         }
 
-        .match-id-meta {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: nowrap;
-            min-width: 0;
-        }
-
-        .match-time-inline {
+        .column-title {
             color: var(--text-light);
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 140px;
-            flex-shrink: 0;
-        }
-
-        .status-label {
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-            flex-shrink: 0;
+            text-transform: uppercase;
+            font-size: 0.95em;
+            letter-spacing: 2px;
+            font-family: 'Righteous', sans-serif;
+            font-weight: 900;
+            padding: 4px 0;
+            margin-bottom: 2px;
+            text-align: center;
         }
 
         .match-card {
@@ -265,18 +247,14 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            flex-wrap: nowrap;
-            min-width: 0;
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
 
         .match-time-inline {
             color: var(--text-light);
             font-weight: 600;
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 140px;
-            flex-shrink: 0;
         }
 
         .match-rows {
@@ -362,46 +340,44 @@
 
         @media (max-width: 900px) {
             html, body {
-                overflow-x: hidden;
-                overflow-y: auto;
-                min-height: 100vh;
+                overflow: auto;
             }
 
             .bracket-wrapper {
-                overflow-x: hidden;
-                overflow-y: auto;
-                max-height: 100vh;
+                overflow: auto;
             }
 
             .bracket-tree {
                 flex-direction: column;
-                gap: 0;
-                padding: 6px 0;
-                overflow-y: auto;
-                max-height: calc(100vh - 160px);
-                width: 100%;
+                gap: 10px;
+                padding: 8px;
+                overflow-y: visible;
             }
 
             .bracket-column {
                 width: 100%;
                 max-width: 100%;
                 min-width: 0;
-                margin: 0;
-                padding: 0 8px;
             }
 
-            .watermark-container {
-                position: absolute;
-                top: 55%;
-                left: 50%;
-                width: min(28vh, 38vh);
-                height: min(28vh, 38vh);
-                opacity: 0.06;
+            .match-card {
+                padding: 7px 8px;
             }
 
             .legends-watermark {
-                font-size: 48px;
-                top: 10px;
+                font-size: 50px;
+                top: 8%;
+            }
+
+            .tournament-logo {
+                width: 36vw;
+                max-width: 320px;
+                min-width: 140px;
+            }
+
+            .watermark-container {
+                width: 60vw;
+                height: 60vw;
             }
         }
 
@@ -474,12 +450,12 @@
 
         <div class="bracket-tree" id="bracket-tree">
 <div class="bracket-column" data-round="Qualifiers"><h2 class="column-title">Qualifiers</h2>
-            <div class="match-card live" data-match-id="1">
+            <div class="match-card pending" data-match-id="1">
                 <div class="match-id-header">
                     <span>ID: #1</span>
                     <div class="match-id-meta">
                         <time class="match-time-inline" datetime="2026-07-11T18:00:00+00:00">2026-07-11T18:00:00+00:00</time>
-                        <span class="status-label">Live</span>
+                        <span class="status-label">Pending</span>
                     </div>
                 </div>
                 <div class="match-rows">
