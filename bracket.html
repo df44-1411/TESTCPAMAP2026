@@ -133,6 +133,24 @@
             overflow: hidden;
         }
 
+        .tournament-header {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            z-index: 6; /* ensure logo sits above watermark */
+        }
+
+        .tournament-logo {
+            width: 18vw;
+            max-width: 420px;
+            min-width: 180px;
+            height: auto;
+            display: block;
+        }
+
+
         /* rest of existing styles unchanged (kept for brevity) */
         .match-card:hover { transform: translateY(-2px); }
         .match-id-header { font-size: 0.75em; color: var(--text-muted); display:flex; justify-content:space-between; margin-bottom:5px; letter-spacing:0.5px; font-weight:700; border-bottom:1px solid var(--border-color); padding-bottom:3px; }
@@ -174,7 +192,7 @@
             <div class="match-card" data-match-id="1" data-match-key="Qualifiers_1">
                 <div class="match-id-header">
                     <span>ID: #1</span>
-                    <span>Pending</span>
+                    <span>Live</span>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
