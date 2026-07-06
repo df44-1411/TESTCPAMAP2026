@@ -23,9 +23,10 @@
             margin: 0;
             padding: 0;
             width: 100%;
-            min-height: 100vh; /* allow page to grow */
+            min-height: 100vh;
             height: auto;
-            background: linear-gradient(135deg, #fffaf0 0%, #f9e3a8 25%, #d8b25a 55%, #8c6726 100%);
+            /* top-to-bottom gold gradient */
+            background: linear-gradient(to bottom, #fffaf0 0%, #f9e3a8 25%, #d8b25a 55%, #8c6726 100%);
             font-family: 'Rajdhani', sans-serif;
             color: var(--text-light);
             overflow-x: hidden;
@@ -156,17 +157,18 @@
 
         /* Match Card */
         .match-card {
-            background: rgba(80, 70, 55, 0.7);
+            background: rgba(80, 70, 55, 0.9); /* stronger so color stays inside */
             border: 3px solid var(--border-color);
             border-radius: 2px;
-            padding: 10px 12px;
+            padding: 12px 14px; /* larger box */
             width: 100%;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             transition: transform 0.2s ease, background 0.2s ease;
-            min-width: 160px;
+            min-width: 220px; /* make box bigger */
             position: relative;
             z-index: 3;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            overflow: hidden; /* ensure no color/text escapes the box */
         }
 
         .match-card:hover {
@@ -209,6 +211,7 @@
             max-width: 180px;
             flex: 1;
             font-family: 'Rajdhani', sans-serif;
+            display: inline-block; /* contain the colored text */
         }
 
         .vs-label {
@@ -423,11 +426,11 @@
                     </div>
                     <div class="vs-row">
                         <span class="vs-label">vs</span>
-                        <span class="score-num tie">0</span>
+                        <span class="score-num tie">1</span>
                     </div>
                     <div class="team-row">
                         <span class="team-name" style="color: #dddddd;">SWCP</span>
-                        <span class="score-num">1</span>
+                        <span class="score-num">0</span>
                     </div>
                 </div>
             </div>
@@ -586,86 +589,65 @@
     </div>
 
     <script>
-        // Draw connecting lines between matches
+        // Draw connecting lines between matches (use getBoundingClientRect so lines align)
         function drawBracketLines() {
             const svg = document.getElementById('bracket-svg');
             const bracketTree = document.getElementById('bracket-tree');
-            
+
             // Clear previous lines
-            while (svg.firstChild) {
-                svg.removeChild(svg.firstChild);
-            }
-            
-            svg.setAttribute('width', bracketTree.offsetWidth);
-            svg.setAttribute('height', bracketTree.offsetHeight);
-            
+            while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+            const treeRect = bracketTree.getBoundingClientRect();
+            svg.setAttribute('width', treeRect.width);
+            svg.setAttribute('height', treeRect.height);
+            svg.style.width = treeRect.width + 'px';
+            svg.style.height = treeRect.height + 'px';
+
             const rounds = Array.from(document.querySelectorAll('.bracket-column'));
-            
-            // Only draw lines if we have enough width (not mobile)
+
             if (window.innerWidth > 900) {
-                // Draw lines from each round to the next
                 for (let i = 0; i < rounds.length - 1; i++) {
-                    const currentRound = rounds[i];
-                    const nextRound = rounds[i + 1];
-                    
-                    const currentMatches = currentRound.querySelectorAll('.match-card');
-                    const nextMatches = nextRound.querySelectorAll('.match-card');
-                    
+                    const currentMatches = rounds[i].querySelectorAll('.match-card');
+                    const nextMatches = rounds[i + 1].querySelectorAll('.match-card');
+
                     currentMatches.forEach((card, idx) => {
                         const nextIdx = Math.floor(idx / 2);
                         if (nextIdx < nextMatches.length) {
                             const nextCard = nextMatches[nextIdx];
-                            
-                            const y1 = card.offsetTop + card.offsetHeight / 2;
-                            const y2 = nextCard.offsetTop + nextCard.offsetHeight / 2;
-                            const x1 = card.offsetLeft + card.offsetWidth;
-                            const x2 = nextCard.offsetLeft;
-                            
+
+                            const r1 = card.getBoundingClientRect();
+                            const r2 = nextCard.getBoundingClientRect();
+
+                            const y1 = r1.top + r1.height / 2 - treeRect.top;
+                            const y2 = r2.top + r2.height / 2 - treeRect.top;
+                            const x1 = r1.left + r1.width - treeRect.left;
+                            const x2 = r2.left - treeRect.left;
+
                             const midX = (x1 + x2) / 2;
-                            
-                            // Horizontal line from match
-                            const line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                            line1.setAttribute('x1', x1);
-                            line1.setAttribute('y1', y1);
-                            line1.setAttribute('x2', midX);
-                            line1.setAttribute('y2', y1);
-                            line1.setAttribute('stroke', '#a89968');
-                            line1.setAttribute('stroke-width', '2');
-                            line1.setAttribute('opacity', '0.6');
-                            svg.appendChild(line1);
-                            
-                            // Vertical line
-                            const line2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                            line2.setAttribute('x1', midX);
-                            line2.setAttribute('y1', y1);
-                            line2.setAttribute('x2', midX);
-                            line2.setAttribute('y2', y2);
-                            line2.setAttribute('stroke', '#a89968');
-                            line2.setAttribute('stroke-width', '2');
-                            line2.setAttribute('opacity', '0.6');
-                            svg.appendChild(line2);
-                            
-                            // Line to next match
-                            const line3 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                            line3.setAttribute('x1', midX);
-                            line3.setAttribute('y1', y2);
-                            line3.setAttribute('x2', x2);
-                            line3.setAttribute('y2', y2);
-                            line3.setAttribute('stroke', '#a89968');
-                            line3.setAttribute('stroke-width', '2');
-                            line3.setAttribute('opacity', '0.6');
-                            svg.appendChild(line3);
+
+                            const makeLine = (xA, yA, xB, yB) => {
+                                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                                line.setAttribute('x1', xA);
+                                line.setAttribute('y1', yA);
+                                line.setAttribute('x2', xB);
+                                line.setAttribute('y2', yB);
+                                line.setAttribute('stroke', '#a89968');
+                                line.setAttribute('stroke-width', '2');
+                                line.setAttribute('opacity', '0.6');
+                                svg.appendChild(line);
+                            };
+
+                            makeLine(x1, y1, midX, y1);
+                            makeLine(midX, y1, midX, y2);
+                            makeLine(midX, y2, x2, y2);
                         }
                     });
                 }
             }
         }
-        
-        // Draw lines on load and on resize
+
         window.addEventListener('load', drawBracketLines);
         window.addEventListener('resize', drawBracketLines);
-        
-        // Redraw after images load
         setTimeout(drawBracketLines, 500);
     </script>
 </body>
