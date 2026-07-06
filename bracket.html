@@ -48,10 +48,10 @@
         /* watermark (kept inside wrapper and clipped) */
         .watermark-container {
             position: absolute;
-            top: 46%;
+            top: 60%;
             left: 50%;
-            width: 70vh;
-            height: 70vh;
+            width: 80vh;
+            height: 80vh;
             background: url('assets/cpalclogo.png') no-repeat center center;
             background-size: contain;
             opacity: 0.08;
@@ -62,7 +62,7 @@
 
         .legends-watermark {
             position: absolute;
-            top: 14%; /* added top padding */
+            top: 10%; /* added top padding */
             left: 50%;
             transform: translate(-50%, 0);
             font-family: 'Righteous', sans-serif;
@@ -105,7 +105,7 @@
             gap: 18px;
             position: relative;
             z-index: 3;
-            overflow: auto; /* internal scrolling, no cropping outside wrapper */
+            overflow: hidden; /* internal scrolling, no cropping outside wrapper */
             padding: 18px 12px;
         }
 
@@ -216,7 +216,7 @@
             <div class="match-card" data-match-id="1">
                 <div class="match-id-header">
                     <span>ID: #1</span>
-                    <span>Pending</span>
+                    <span>Completed</span>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
