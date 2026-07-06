@@ -4,12 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Legends Cup Bracket</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- AKIRA Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&Righteous&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap');
-        
         :root {
             --gold-primary: #b49155;
             --gold-dark: #8b6f47;
@@ -18,6 +14,7 @@
             --text-light: #ffffff;
             --text-muted: #d0d0d0;
             --border-color: #a89968;
+            --frame-color: #ffffff;
         }
 
         * {
@@ -28,33 +25,34 @@
             margin: 0;
             padding: 0;
             width: 100%;
-            height: 100%;
+            min-height: 100vh;
             background: linear-gradient(135deg, #7a6b52 0%, #6b5d45 50%, #7a6b52 100%);
             font-family: 'Rajdhani', sans-serif;
             color: var(--text-light);
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* LEGENDS Watermark Text Behind Logo */
+        /* LEGENDS Watermark - White Outline Only */
         .legends-watermark {
-            position: absolute;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 120px;
+            font-family: 'Righteous', sans-serif;
+            font-size: 140px;
             font-weight: 900;
-            color: rgba(255, 255, 255, 0.03);
-            letter-spacing: 8px;
+            letter-spacing: 12px;
+            color: transparent;
+            -webkit-text-stroke: 3px rgba(255, 255, 255, 0.12);
+            text-stroke: 3px rgba(255, 255, 255, 0.12);
             white-space: nowrap;
             pointer-events: none;
-            z-index: 0;
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+            z-index: 1;
         }
 
         /* Centered Tilted Logo Watermark Layer */
         .watermark-container {
-            position: absolute;
+            position: fixed;
             top: 45%;
             left: 50%;
             width: 60vh;
@@ -67,30 +65,56 @@
             z-index: 0;
         }
 
+        .bracket-wrapper {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            border: 3px solid var(--frame-color);
+            display: flex;
+            flex-direction: column;
+            z-index: 5;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
         .bracket-container {
             position: relative;
             display: flex;
             flex-direction: column;
             width: 100%;
-            height: 100%;
             padding: 20px 30px;
             z-index: 5;
         }
 
-        /* Logo do torneio no topo */
+        /* SVG for connecting lines */
+        .bracket-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Tournament Header */
         .tournament-header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             z-index: 10;
+            position: relative;
         }
 
         .tournament-logo {
             max-height: 100px;
             width: auto;
             filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));
+            position: relative;
+            z-index: 10;
         }
 
-        /* Horizontal Layout Alignment Matrix */
+        /* Bracket Tree */
         .bracket-tree {
             display: flex;
             flex-direction: row;
@@ -99,6 +123,8 @@
             flex: 1;
             width: 100%;
             gap: 15px;
+            position: relative;
+            z-index: 3;
         }
 
         .bracket-column {
@@ -114,32 +140,36 @@
         .column-title {
             color: var(--text-light);
             text-transform: uppercase;
-            font-size: 1.1em;
-            letter-spacing: 2px;
-            font-family: 'Bebas Neue', sans-serif;
-            font-weight: 700;
+            font-size: 1.2em;
+            letter-spacing: 3px;
+            font-family: 'Righteous', sans-serif;
+            font-weight: 900;
             border: 3px solid var(--border-color);
-            padding: 8px 12px;
-            margin-bottom: 12px;
+            padding: 10px 14px;
+            margin-bottom: 15px;
             text-align: center;
-            background: rgba(139, 111, 71, 0.4);
+            background: rgba(139, 111, 71, 0.5);
             min-width: 140px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
-        /* Match Card Design */
+        /* Match Card */
         .match-card {
-            background: rgba(80, 70, 55, 0.6);
+            background: rgba(80, 70, 55, 0.7);
             border: 3px solid var(--border-color);
             border-radius: 2px;
-            padding: 8px 10px;
+            padding: 10px 12px;
             width: 100%;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             transition: transform 0.2s ease, background 0.2s ease;
-            min-width: 140px;
+            min-width: 160px;
+            position: relative;
+            z-index: 3;
+            margin-bottom: 10px;
         }
 
         .match-card:hover {
-            background: rgba(100, 85, 65, 0.7);
+            background: rgba(100, 85, 65, 0.8);
             transform: translateY(-2px);
         }
 
@@ -148,7 +178,7 @@
             color: var(--text-muted);
             display: flex;
             justify-content: space-between;
-            margin-bottom: 4px;
+            margin-bottom: 5px;
             letter-spacing: 0.5px;
             font-weight: 700;
             border-bottom: 1px solid var(--border-color);
@@ -167,7 +197,7 @@
             justify-content: space-between;
             align-items: center;
             height: 22px;
-            font-size: 0.95em;
+            font-size: 0.9em;
         }
 
         .team-name {
@@ -177,6 +207,7 @@
             text-overflow: ellipsis;
             max-width: 180px;
             flex: 1;
+            font-family: 'Rajdhani', sans-serif;
         }
 
         .vs-label {
@@ -187,7 +218,7 @@
         }
 
         .score-num {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Rajdhani', sans-serif;
             font-weight: 700;
             font-size: 1.1em;
             color: var(--text-light);
@@ -200,36 +231,186 @@
             font-weight: 900;
         }
 
-        /* Winner Status Accent */
         .team-row.winner .team-name {
             color: #d4af37;
             font-weight: 700;
         }
 
-        /* Credits Footer */
+        /* Footer */
         .bracket-credits {
             text-align: center;
             font-size: 0.75em;
             color: var(--text-muted);
             letter-spacing: 0.5px;
-            margin-top: 15px;
+            margin-top: 20px;
+            padding-top: 15px;
             border-top: 1px solid var(--border-color);
-            padding-top: 8px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1600px) {
+            .match-card {
+                min-width: 140px;
+                padding: 8px 10px;
+            }
+            
+            .team-name {
+                max-width: 150px;
+                font-size: 0.85em;
+            }
+            
+            .column-title {
+                font-size: 1em;
+                letter-spacing: 2px;
+                padding: 8px 10px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .bracket-tree {
+                gap: 10px;
+            }
+            
+            .bracket-wrapper {
+                padding: 15px;
+            }
+            
+            .bracket-container {
+                padding: 15px 20px;
+            }
+            
+            .column-title {
+                font-size: 0.95em;
+                padding: 7px 9px;
+                margin-bottom: 10px;
+            }
+            
+            .match-card {
+                min-width: 130px;
+                padding: 7px 8px;
+            }
+            
+            .team-row, .vs-row {
+                height: 20px;
+                font-size: 0.85em;
+            }
+            
+            .team-name {
+                max-width: 120px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .bracket-tree {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 20px;
+            }
+            
+            .bracket-column {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            
+            .tournament-logo {
+                max-height: 80px;
+            }
+            
+            .column-title {
+                font-size: 1.1em;
+                margin-bottom: 15px;
+            }
+            
+            .match-card {
+                min-width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .legends-watermark {
+                font-size: 80px;
+                letter-spacing: 6px;
+            }
+            
+            .bracket-svg {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .bracket-wrapper {
+                padding: 10px;
+                border-width: 2px;
+            }
+            
+            .bracket-container {
+                padding: 15px;
+            }
+            
+            .tournament-header {
+                margin-bottom: 20px;
+            }
+            
+            .tournament-logo {
+                max-height: 70px;
+            }
+            
+            .column-title {
+                font-size: 1em;
+                letter-spacing: 1px;
+                padding: 6px 8px;
+                margin-bottom: 10px;
+            }
+            
+            .match-card {
+                padding: 6px 8px;
+                margin-bottom: 8px;
+            }
+            
+            .team-row, .vs-row {
+                height: 18px;
+                font-size: 0.8em;
+            }
+            
+            .match-id-header {
+                font-size: 0.7em;
+            }
+            
+            .team-name {
+                max-width: 100px;
+                font-size: 0.8em;
+            }
+            
+            .score-num {
+                font-size: 1em;
+            }
+            
+            .legends-watermark {
+                font-size: 50px;
+                letter-spacing: 4px;
+            }
+            
+            .bracket-credits {
+                font-size: 0.7em;
+            }
         }
     </style>
 </head>
 <body>
-
     <div class="watermark-container"></div>
     <div class="legends-watermark">LEGENDS</div>
 
-    <div class="bracket-container">
+    <div class="bracket-wrapper">
         <div class="tournament-header">
             <img src="assets/lclogo.png" alt="Legends Cup" class="tournament-logo">
         </div>
-        <div class="bracket-tree">
-        <div class="bracket-column"><h2 class="column-title">Qualifiers</h2>
-            <div class="match-card">
+        
+        <svg class="bracket-svg" id="bracket-svg"></svg>
+        
+        <div class="bracket-tree" id="bracket-tree">
+<div class="bracket-column" data-round="Qualifiers"><h2 class="column-title">Qualifiers</h2>
+            <div class="match-card" data-match-id="1" data-match-key="Qualifiers_1">
                 <div class="match-id-header">
                     <span>ID: #1</span>
                     <span>Completed</span>
@@ -237,20 +418,20 @@
                 <div class="match-rows">
                     <div class="team-row winner">
                         <span class="team-name" style="color: #730000;">Romans</span>
-                        <span class="score-num">2</span>
+                        <span class="score-num">1</span>
                     </div>
                     <div class="vs-row">
                         <span class="vs-label">vs</span>
                         <span class="score-num tie">0</span>
                     </div>
                     <div class="team-row">
-                        <span class="team-name" style="color: #e0e6ed;">SWCP</span>
-                        <span class="score-num">1</span>
+                        <span class="team-name" style="color: #dddddd;">SWCP</span>
+                        <span class="score-num">2</span>
                     </div>
                 </div>
             </div>
-            </div><div class="bracket-column"><h2 class="column-title">Quarter Finals</h2>
-            <div class="match-card">
+            </div><div class="bracket-column" data-round="Quarter Finals"><h2 class="column-title">Quarter Finals</h2>
+            <div class="match-card" data-match-id="2" data-match-key="Quarter Finals_2">
                 <div class="match-id-header">
                     <span>ID: #2</span>
                     <span>Pending</span>
@@ -265,13 +446,13 @@
                         <span class="score-num tie">0</span>
                     </div>
                     <div class="team-row">
-                        <span class="team-name" style="color: #e0e6ed;">ACP</span>
+                        <span class="team-name" style="color: #87d1ff;">ACP</span>
                         <span class="score-num">0</span>
                     </div>
                 </div>
             </div>
             
-            <div class="match-card">
+            <div class="match-card" data-match-id="3" data-match-key="Quarter Finals_3">
                 <div class="match-id-header">
                     <span>ID: #3</span>
                     <span>Pending</span>
@@ -292,7 +473,7 @@
                 </div>
             </div>
             
-            <div class="match-card">
+            <div class="match-card" data-match-id="4" data-match-key="Quarter Finals_4">
                 <div class="match-id-header">
                     <span>ID: #4</span>
                     <span>Pending</span>
@@ -313,7 +494,7 @@
                 </div>
             </div>
             
-            <div class="match-card">
+            <div class="match-card" data-match-id="5" data-match-key="Quarter Finals_5">
                 <div class="match-id-header">
                     <span>ID: #5</span>
                     <span>Pending</span>
@@ -333,8 +514,8 @@
                     </div>
                 </div>
             </div>
-            </div><div class="bracket-column"><h2 class="column-title">Semi Finals</h2>
-            <div class="match-card">
+            </div><div class="bracket-column" data-round="Semi Finals"><h2 class="column-title">Semi Finals</h2>
+            <div class="match-card" data-match-id="6" data-match-key="Semi Finals_6">
                 <div class="match-id-header">
                     <span>ID: #6</span>
                     <span>Pending</span>
@@ -355,7 +536,7 @@
                 </div>
             </div>
             
-            <div class="match-card">
+            <div class="match-card" data-match-id="7" data-match-key="Semi Finals_7">
                 <div class="match-id-header">
                     <span>ID: #7</span>
                     <span>Pending</span>
@@ -375,8 +556,8 @@
                     </div>
                 </div>
             </div>
-            </div><div class="bracket-column"><h2 class="column-title">Championship</h2>
-            <div class="match-card">
+            </div><div class="bracket-column" data-round="Championship"><h2 class="column-title">Championship</h2>
+            <div class="match-card" data-match-id="8" data-match-key="Championship_8">
                 <div class="match-id-header">
                     <span>ID: #8</span>
                     <span>Pending</span>
@@ -403,5 +584,88 @@
         </div>
     </div>
 
+    <script>
+        // Draw connecting lines between matches
+        function drawBracketLines() {
+            const svg = document.getElementById('bracket-svg');
+            const bracketTree = document.getElementById('bracket-tree');
+            
+            // Clear previous lines
+            while (svg.firstChild) {
+                svg.removeChild(svg.firstChild);
+            }
+            
+            svg.setAttribute('width', bracketTree.offsetWidth);
+            svg.setAttribute('height', bracketTree.offsetHeight);
+            
+            const rounds = Array.from(document.querySelectorAll('.bracket-column'));
+            
+            // Only draw lines if we have enough width (not mobile)
+            if (window.innerWidth > 900) {
+                // Draw lines from each round to the next
+                for (let i = 0; i < rounds.length - 1; i++) {
+                    const currentRound = rounds[i];
+                    const nextRound = rounds[i + 1];
+                    
+                    const currentMatches = currentRound.querySelectorAll('.match-card');
+                    const nextMatches = nextRound.querySelectorAll('.match-card');
+                    
+                    currentMatches.forEach((card, idx) => {
+                        const nextIdx = Math.floor(idx / 2);
+                        if (nextIdx < nextMatches.length) {
+                            const nextCard = nextMatches[nextIdx];
+                            
+                            const y1 = card.offsetTop + card.offsetHeight / 2;
+                            const y2 = nextCard.offsetTop + nextCard.offsetHeight / 2;
+                            const x1 = card.offsetLeft + card.offsetWidth;
+                            const x2 = nextCard.offsetLeft;
+                            
+                            const midX = (x1 + x2) / 2;
+                            
+                            // Horizontal line from match
+                            const line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                            line1.setAttribute('x1', x1);
+                            line1.setAttribute('y1', y1);
+                            line1.setAttribute('x2', midX);
+                            line1.setAttribute('y2', y1);
+                            line1.setAttribute('stroke', '#a89968');
+                            line1.setAttribute('stroke-width', '2');
+                            line1.setAttribute('opacity', '0.6');
+                            svg.appendChild(line1);
+                            
+                            // Vertical line
+                            const line2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                            line2.setAttribute('x1', midX);
+                            line2.setAttribute('y1', y1);
+                            line2.setAttribute('x2', midX);
+                            line2.setAttribute('y2', y2);
+                            line2.setAttribute('stroke', '#a89968');
+                            line2.setAttribute('stroke-width', '2');
+                            line2.setAttribute('opacity', '0.6');
+                            svg.appendChild(line2);
+                            
+                            // Line to next match
+                            const line3 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                            line3.setAttribute('x1', midX);
+                            line3.setAttribute('y1', y2);
+                            line3.setAttribute('x2', x2);
+                            line3.setAttribute('y2', y2);
+                            line3.setAttribute('stroke', '#a89968');
+                            line3.setAttribute('stroke-width', '2');
+                            line3.setAttribute('opacity', '0.6');
+                            svg.appendChild(line3);
+                        }
+                    });
+                }
+            }
+        }
+        
+        // Draw lines on load and on resize
+        window.addEventListener('load', drawBracketLines);
+        window.addEventListener('resize', drawBracketLines);
+        
+        // Redraw after images load
+        setTimeout(drawBracketLines, 500);
+    </script>
 </body>
 </html>
