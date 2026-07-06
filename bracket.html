@@ -8,25 +8,24 @@
     <style>
         :root {
             --gold-primary: #b49155;
-            --gold-dark: #8b6f47;
-            --bg-dark: #6b5d45;
-            --bg-lighter: #8b7d5e;
+            --gold-dark: #8c6726;
+            --bg-dark: #cfae57;
+            --bg-lighter: #f4d9a0;
             --text-light: #ffffff;
-            --text-muted: #d0d0d0;
-            --border-color: #a89968;
+            --text-muted: #d0c9b8;
+            --border-color: #b49155;
             --frame-color: #ffffff;
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         html, body {
             margin: 0;
             padding: 0;
             width: 100%;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #7a6b52 0%, #6b5d45 50%, #7a6b52 100%);
+            min-height: 100vh; /* allow page to grow */
+            height: auto;
+            background: linear-gradient(135deg, #fffaf0 0%, #f9e3a8 25%, #d8b25a 55%, #8c6726 100%);
             font-family: 'Rajdhani', sans-serif;
             color: var(--text-light);
             overflow-x: hidden;
@@ -35,7 +34,7 @@
         /* LEGENDS Watermark - White Outline Only */
         .legends-watermark {
             position: fixed;
-            top: 50%;
+            top: 10%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-family: 'Righteous', sans-serif;
@@ -50,7 +49,6 @@
             z-index: 1;
         }
 
-        /* Centered Tilted Logo Watermark Layer */
         .watermark-container {
             position: fixed;
             top: 45%;
@@ -68,14 +66,16 @@
         .bracket-wrapper {
             position: relative;
             width: 100%;
-            min-height: 100vh;
-            margin: 0;
+            max-width: 1400px;
+            min-height: calc(100vh - 80px); /* keep it within viewport but allow content */
+            margin: 20px auto;
             padding: 20px;
             border: 3px solid var(--frame-color);
             display: flex;
             flex-direction: column;
             z-index: 5;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.12); /* slightly darker to contrast gold */
+            overflow: auto;
         }
 
         .bracket-container {
@@ -144,13 +144,14 @@
             letter-spacing: 3px;
             font-family: 'Righteous', sans-serif;
             font-weight: 900;
-            border: 3px solid var(--border-color);
-            padding: 10px 14px;
+            /* plain text only — remove box, border and background */
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 6px 0;
             margin-bottom: 15px;
             text-align: center;
-            background: rgba(139, 111, 71, 0.5);
             min-width: 140px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
         /* Match Card */
@@ -418,7 +419,7 @@
                 <div class="match-rows">
                     <div class="team-row winner">
                         <span class="team-name" style="color: #730000;">Romans</span>
-                        <span class="score-num">1</span>
+                        <span class="score-num">2</span>
                     </div>
                     <div class="vs-row">
                         <span class="vs-label">vs</span>
@@ -426,7 +427,7 @@
                     </div>
                     <div class="team-row">
                         <span class="team-name" style="color: #dddddd;">SWCP</span>
-                        <span class="score-num">2</span>
+                        <span class="score-num">1</span>
                     </div>
                 </div>
             </div>
