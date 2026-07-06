@@ -48,13 +48,13 @@
         /* watermark elements inside wrapper and clipped by overflow:hidden */
         .watermark-container {
             position: absolute;
-            top: 45%;
+            top: 50%;
             left: 50%;
-            width: 60vh;
-            height: 60vh;
+            width: 80vh;
+            height: 80vh;
             background: url('assets/cpalclogo.png') no-repeat center center;
             background-size: contain;
-            opacity: 0.07;
+            opacity: 0.08;
             transform: translate(-50%, -50%) rotate(-15deg);
             pointer-events: none;
             z-index: 0;
@@ -62,11 +62,11 @@
 
         .legends-watermark {
             position: absolute;
-            top: 6%;
+            top: 12%; /* add top padding so watermark sits lower */
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, 0);
             font-family: 'Righteous', sans-serif;
-            font-size: 140px;
+            font-size: 160px;
             font-weight: 900;
             letter-spacing: 12px;
             color: transparent;
@@ -118,45 +118,37 @@
             text-align: center;
         }
 
-        /* Match Card */
+        /* Match Card - allow full content to display and wrap long names */
         .match-card {
-            background: rgba(60, 50, 40, 0.94);
+            background: rgba(60, 50, 40, 0.96);
             border: 3px solid var(--border-color);
             border-radius: 2px;
-            padding: 12px 14px;
+            padding: 16px 18px;
             width: calc(100% - 6px);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.45);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.45);
             transition: transform 0.15s ease, background 0.15s ease;
-            min-width: 220px;
+            min-width: 240px;
             position: relative;
             z-index: 4;
-            overflow: hidden;
+            overflow: visible; /* show full content, don't crop */
+            min-height: 84px;   /* give enough vertical space for rows */
         }
 
-        .tournament-header {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            margin-bottom: 8px;
-            z-index: 6; /* ensure logo sits above watermark */
-        }
-
-        .tournament-logo {
-            width: 18vw;
-            max-width: 420px;
-            min-width: 180px;
-            height: auto;
+        .team-name {
+            font-weight: 600;
+            white-space: normal;       /* allow wrapping so full names show */
+            word-break: break-word;
+            overflow: visible;
+            text-overflow: clip;
+            max-width: none;
+            flex: 1;
+            font-family: 'Rajdhani', sans-serif;
             display: block;
         }
 
-
-        /* rest of existing styles unchanged (kept for brevity) */
-        .match-card:hover { transform: translateY(-2px); }
         .match-id-header { font-size: 0.75em; color: var(--text-muted); display:flex; justify-content:space-between; margin-bottom:5px; letter-spacing:0.5px; font-weight:700; border-bottom:1px solid var(--border-color); padding-bottom:3px; }
         .match-rows { display:flex; flex-direction:column; gap:2px; }
         .team-row, .vs-row { display:flex; justify-content:space-between; align-items:center; height:22px; font-size:0.9em; }
-        .team-name { font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px; flex:1; font-family:'Rajdhani',sans-serif; display:inline-block; }
         .vs-label { color:var(--text-muted); font-size:0.8em; font-style:italic; padding:0 6px; }
         .score-num { font-family:'Rajdhani',sans-serif; font-weight:700; font-size:1.1em; color:var(--text-light); min-width:20px; text-align:right; }
         .team-row.winner .team-name { color:#d4af37; font-weight:700; }
@@ -192,7 +184,7 @@
             <div class="match-card" data-match-id="1" data-match-key="Qualifiers_1">
                 <div class="match-id-header">
                     <span>ID: #1</span>
-                    <span>Live</span>
+                    <span>Pending</span>
                 </div>
                 <div class="match-rows">
                     <div class="team-row">
@@ -204,7 +196,7 @@
                         <span class="score-num tie">0</span>
                     </div>
                     <div class="team-row">
-                        <span class="team-name" style="color: #dddddd;">SWCP</span>
+                        <span class="team-name" style="color: #87f1ff;">SnowWalkers of Club Penguin</span>
                         <span class="score-num">0</span>
                     </div>
                 </div>
