@@ -30,6 +30,14 @@
             font-weight: 300;
             src: url(https://cparmies.org/wp-content/themes/Penguin/assets/fonts/BurbankSmall-Light.otf) format("OpenType");
         }
+        /** Akira **/
+        @font-face {
+            font-family: 'Akira Expanded';
+            src: url('https://cparmies.org/wp-content/themes/Penguin/assets/fonts/AkiraExpanded-SuperBold.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
         :root {
             --gold-primary: #b49155;
             --gold-dark: #8c6726;
@@ -51,7 +59,7 @@
             height: 100%;
             overflow: hidden;
             background: var(--frame-color);
-            font-family: 'Rajdhani', sans-serif;
+            font-family: 'BurbankSmall', sans-serif;
             color: var(--text-light);
         }
 
@@ -88,7 +96,7 @@
             top: 3px;
             left: 50%;
             transform: translate(-50%, 0);
-            font-family: 'Righteous', sans-serif;
+            font-family: 'Akira Expanded', sans-serif;
             font-size: clamp(48px, 12vw, 100px);
             font-weight: 900;
             letter-spacing: 10px;
@@ -154,7 +162,7 @@
             text-transform: uppercase;
             font-size: 0.95em;
             letter-spacing: 2px;
-            font-family: 'Righteous', sans-serif;
+            font-family: 'Akira Expanded', sans-serif;
             font-weight: 900;
             padding: 4px 0;
             margin-bottom: 2px;
@@ -570,12 +578,12 @@
 
         <div class="bracket-tree" id="bracket-tree">
 <div class="bracket-column" data-round="Qualifiers"><h2 class="column-title">Qualifiers</h2>
-            <div class="match-card pending" data-match-id="1">
+            <div class="match-card postponed" data-match-id="1">
                 <div class="match-id-header">
                     <span>ID: #1</span>
                     <div class="match-id-meta">
                         <time class="match-time-inline" datetime="2026-07-11T18:00:00+00:00">2026-07-11T18:00:00+00:00</time>
-                        <span class="status-label">Pending</span>
+                        <span class="status-label">Postponed</span>
                     </div>
                 </div>
                 <div class="match-rows">
