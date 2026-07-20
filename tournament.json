@@ -63,5 +63,44 @@
       "status": "Pending",
       "winner": null
     }
-  }
+  },
+  "3rd Place": {
+    "9": {
+      "team_a": "Loser of Match 6",
+      "team_b": "Loser of Match 7",
+      "score": "0-0-0",
+      "status": "Pending",
+      "winner": null
+    }
+  },
+  "5-9 Repêchage": {
+    "10": {
+      "team_a": "Loser of Match 2",
+      "team_b": "Loser of Match 3",
+      "score": "0-0-0",
+      "status": "Pending",
+      "winner": null
+    },
+    "11": {
+      "team_a": "Loser of Match 4",
+      "team_b": "Loser of Match 5",
+      "score": "0-0-0",
+      "status": "Pending",
+      "winner": null
+    },
+    "12": {
+      "team_a": "Loser of Match 10",
+      "team_b": "Loser of Match 11",
+      "score": "0-0-0",
+      "status": "Pending",
+      "winner": null
+    },
+    "13": {
+      "team_a": "Winner of Match 10",
+      "team_b": "Winner of Match 11",
+      "score": "0-0-0",
+      "status": "Pending",
+      "winner": null
+    }
+  },
 }
