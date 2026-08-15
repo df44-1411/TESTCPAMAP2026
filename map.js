@@ -80,7 +80,8 @@ var mapData = [
     "continent": "Mammothica",
     "type": "NORMAL",
     "controller": "Shadow Legionaries",
-    "underInvasion": false
+    "underInvasion": false,
+    "hotspot": true
   },
   {
     "id": "id9",
@@ -525,7 +526,8 @@ var mapData = [
     "continent": "Tundropa",
     "type": "NORMAL",
     "controller": "Shadow Legionaries",
-    "underInvasion": false
+    "underInvasion": false,
+    "hotspot": true
   },
   {
     "id": "id59",
@@ -724,7 +726,8 @@ var mapData = [
     "continent": "Tundropa",
     "type": "NORMAL",
     "controller": "Fire Vikings",
-    "underInvasion": false
+    "underInvasion": false,
+    "hotspot": true
   },
   {
     "id": "id81",
