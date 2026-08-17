@@ -1,103 +1,54 @@
 {
-  "Qualifiers": {
-    "1": {
-      "team_a": "Romans",
-      "team_b": "SnowWalkers of Club Penguin",
-      "score": "0-0-0",
-      "status": "Pending",
-      "winner": null,
-      "match_time": "2026-07-11T18:00:00+00:00"
-    }
-  },
   "Quarter Finals": {
+    "1": {
+      "team_a": "Shadow Legionaries",
+      "team_b": "The Abyssal Tide of Club Penguin",
+      "score": "0-0-0",
+      "status": "Pending",
+      "winner": null
+    },
     "2": {
-      "team_a": "Winner of Match 1",
-      "team_b": "Army of CP",
-      "score": "0-0-0",
-      "status": "Pending",
-      "winner": null
-    },
-    "3": {
-      "team_a": "Dark Warriors",
-      "team_b": "Help Force",
-      "score": "0-0-0",
-      "status": "Pending",
-      "winner": null
-    },
-    "4": {
-      "team_a": "Water Vikings",
+      "team_a": "Fire Warriors",
       "team_b": "Star Force",
       "score": "0-0-0",
       "status": "Pending",
       "winner": null
     },
-    "5": {
-      "team_a": "Rebel Penguin Federation",
-      "team_b": "Pizzaioli of Club Penguin",
+    "3": {
+      "team_a": "Masked Bandits",
+      "team_b": "Magicians of Club Penguin",
+      "score": "0-0-0",
+      "status": "Pending",
+      "winner": null
+    },
+    "4": {
+      "team_a": "SnowWalkers of Club Penguin",
+      "team_b": "Fire Vikings",
       "score": "0-0-0",
       "status": "Pending",
       "winner": null
     }
   },
   "Semi Finals": {
-    "6": {
-      "team_a": "Winner of Match 2",
-      "team_b": "Winner of Match 3",
+    "5": {
+      "team_a": "Winner of Match 1",
+      "team_b": "Winner of Match 2",
       "score": "0-0-0",
       "status": "Pending",
       "winner": null
     },
-    "7": {
-      "team_a": "Winner of Match 4",
-      "team_b": "Winner of Match 5",
+    "6": {
+      "team_a": "Winner of Match 3",
+      "team_b": "Winner of Match 4",
       "score": "0-0-0",
       "status": "Pending",
       "winner": null
     }
   },
   "Championship": {
-    "8": {
-      "team_a": "Winner of Match 6",
-      "team_b": "Winner of Match 7",
-      "score": "0-0-0",
-      "status": "Pending",
-      "winner": null
-    }
-  },
-  "3rd Place": {
-    "9": {
-      "team_a": "Loser of Match 6",
-      "team_b": "Loser of Match 7",
-      "score": "0-0-0",
-      "status": "Pending",
-      "winner": null
-    }
-  },
-  "5-9 Repêchage": {
-    "10": {
-      "team_a": "Loser of Match 2",
-      "team_b": "Loser of Match 3",
-      "score": "0-0-0",
-      "status": "Pending",
-      "winner": null
-    },
-    "11": {
-      "team_a": "Loser of Match 4",
-      "team_b": "Loser of Match 5",
-      "score": "0-0-0",
-      "status": "Pending",
-      "winner": null
-    },
-    "12": {
-      "team_a": "Loser of Match 10",
-      "team_b": "Loser of Match 11",
-      "score": "0-0-0",
-      "status": "Pending",
-      "winner": null
-    },
-    "13": {
-      "team_a": "Winner of Match 10",
-      "team_b": "Winner of Match 11",
+    "7": {
+      "team_a": "Winner of Match 5",
+      "team_b": "Winner of Match 6",
       "score": "0-0-0",
       "status": "Pending",
       "winner": null
