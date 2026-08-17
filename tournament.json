@@ -5,7 +5,8 @@
       "team_b": "The Abyssal Tide of Club Penguin",
       "score": "0-0-0",
       "status": "Pending",
-      "winner": null
+      "winner": null,
+      "match_time": "2026-08-22T18:00:00+00:00"
     },
     "2": {
       "team_a": "Fire Warriors",
