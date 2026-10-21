@@ -500,8 +500,7 @@ var mapData = [
     "continent": "Tundropa",
     "type": "CAPITAL",
     "controller": "Pizzaioli of Club Penguin",
-    "underInvasion": true,
-    "attackerColor": "#043acf"
+    "underInvasion": false
   },
   {
     "id": "id56",
